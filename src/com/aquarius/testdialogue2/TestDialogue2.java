@@ -1,5 +1,7 @@
 package com.aquarius.testdialogue2;
 
+import com.aquarius.rpg1.DialogueBlock;
+
 public class TestDialogue2 {
 
 	public TestDialogue2() {
@@ -11,11 +13,11 @@ public class TestDialogue2 {
 			<endpart> -> Okay then -> See you later! -> <end>
 		*/
 
-		Dialogue begin = new Dialogue("Hello");
-		begin.add(new Dialogue("Want some candy?"))
-				.addAnswer("No", new Dialogue("Well suit yourself").jumpTo("endpart"))
-				.addAnswer("Yes", new Dialogue("Here is some candy").jumpTo("endpart"))
-			.addJumpPoint("endpart", new Dialogue("Okay then")).add(new Dialogue("See you later!"));
+		DialogueBlock begin = new DialogueBlock("Hello");
+		begin.add(new DialogueBlock("Want some candy?"))
+				.addAnswer("No", new DialogueBlock("Well suit yourself").jumpTo("endpart"))
+				.addAnswer("Yes", new DialogueBlock("Here is some candy").jumpTo("endpart"))
+			.addJumpPoint("endpart", new DialogueBlock("Okay then")).add(new DialogueBlock("See you later!"));
 
 		begin.run();
 	}

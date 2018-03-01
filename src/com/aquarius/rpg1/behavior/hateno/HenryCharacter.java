@@ -2,10 +2,14 @@ package com.aquarius.rpg1.behavior.hateno;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.aquarius.rpg1.CharacterPosition;
 import com.aquarius.rpg1.CharacterTileSet;
+import com.aquarius.rpg1.DialogStyle;
+import com.aquarius.rpg1.Dialogue;
+import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameCharacter;
 import com.aquarius.rpg1.Int2d;
@@ -20,9 +24,12 @@ import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
 public class HenryCharacter extends GameCharacter
 {
-	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
-		super(position, characterTileSet, direction);
+	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction, ArrayList<DialogStyle> dialogStyles) {
+		super(position, characterTileSet, direction, dialogStyles);
 		getInteractionPossibilities().add(InteractionPossibility.TALK);
+		
+		DialogueBlock dialogueBlock = new DialogueBlock("Hello");
+		dialogue = new Dialogue(dialogueBlock , dialogStyles.get(0));
 	}
 
 	private final static int STANDINGAROUND_DURATION = 10000;

@@ -3,6 +3,7 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.aquarius.rpg1.behavior.CharacterAction;
@@ -18,8 +19,10 @@ public class GameCharacter implements CharacterBehavior
 	private Int2d movement;
 	private HashSet<InteractionPossibility> interactionPossibilities;
 	float health;
+	private ArrayList<DialogStyle> dialogStyles;
+	protected Dialogue dialogue = null;
 	
-	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
+	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction, ArrayList<DialogStyle> dialogStyles) {
 		super();
 		this.position = position;
 		this.characterTileSet = characterTileSet;
@@ -29,6 +32,7 @@ public class GameCharacter implements CharacterBehavior
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
+		this.dialogStyles = dialogStyles;
 	}
 	
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
@@ -103,5 +107,10 @@ public class GameCharacter implements CharacterBehavior
 		Int2d topleft = new Int2d(position.x - viewright.x*maxdistance2 + view.x*maxdistance, position.y - viewright.y*maxdistance2 + view.y*maxdistance);
 		Int2d bottomright = new Int2d(position.x + viewright.x*maxdistance2, position.y + viewright.y*maxdistance2);
 		return pos2.inRect(topleft, bottomright);
+	}
+
+	public Dialogue startDialog() {
+
+		return dialogue ;
 	}	
 }

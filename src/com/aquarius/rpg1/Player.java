@@ -8,7 +8,7 @@ public class Player extends GameCharacter {
 	Vector<CarryableItem> itemsCarried;
 	private GameCharacter talkActionCharacter = null;
 	public Player(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
-		super(position, characterTileSet, direction);
+		super(position, characterTileSet, direction, null);
 	}
 	public GameCharacter getTalkActionCharacter() {
 		return talkActionCharacter;

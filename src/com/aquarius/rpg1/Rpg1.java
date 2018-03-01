@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -62,28 +63,32 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private Player player;
 	private LevelState levelState;
 	private WorldState worldState;
-	private Dialog dialog;
+	private Dialogue dialogue;
+	private ArrayList<DialogStyle> dialogStyles;
+	private TileSet levelTileSet;
 
 	public Rpg1()
 	{
 		frameCounter = 0;
 		mouseInFrame = true;
 		editorState = new EditorState();
-		TileSet tileSet = new TileSet("/roguelikeSheet_transparent.png", 16, 16, 1, 1);
-		tileSelectorFrame = new TileSelectorFrame("TileSet", tileSet, editorState);
+		levelTileSet = new TileSet("/roguelikeSheet_transparent.png", 16, 16, 1, 1);
+		tileSelectorFrame = new TileSelectorFrame("TileSet", levelTileSet, editorState);
 		characterTileSet = new TileSet("/characters1.png", 26, 36, 0, 0);
-		bottom_layer = new Layer(tileSet);
-		top_layer = new Layer(tileSet);
+		bottom_layer = new Layer(levelTileSet);
+		top_layer = new Layer(levelTileSet);
 		levelStack = new LevelStack(bottom_layer, top_layer);
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogStyles = new ArrayList<DialogStyle>();
-		dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(0)));
-		henry = new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 10)), new CharacterTileSet(new Int2d(3,0), characterTileSet, dialogStyles), Direction.SOUTH);
+		dialogue = null;
+
+		readFromFile(DEFAULT_SAVE_FILENAME);
+		
+		henry = new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 10)), new CharacterTileSet(new Int2d(3,0), characterTileSet), Direction.SOUTH, dialogStyles);
 		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0), characterTileSet), Direction.SOUTH);
 		levelState = new LevelState(bottom_layer, top_layer);
 		levelState.allCharacters.add(henry);
 		worldState = new WorldState();
-		dialog = null;
 
 		JFrame frame = new JFrame("Rpg");
 		//frame.setLayout(new BorderLayout());
@@ -133,8 +138,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		menuBar.add(fileMenu);
 		frame.setJMenuBar(menuBar);
 		
-		
-		readFromFile(DEFAULT_SAVE_FILENAME);
 	}
 	public void start()
 	{
@@ -165,8 +168,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(keyCode == KeyEvent.VK_A)
 		{
 			System.out.println("Do action");
-			if(dialog != null) {
-				dialog.confirm();
+			if(dialogue != null) {
+				dialogue.confirm();
 			}else {
 				if(player.getTalkActionCharacter() != null)
 				{
@@ -176,21 +179,22 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		if(keyCode == KeyEvent.VK_UP)
 		{
-			if(dialog != null)
+			if(dialogue != null)
 			{
-				dialog.up();
+				dialogue.up();
 			}
 		}
 		if(keyCode == KeyEvent.VK_DOWN)
 		{
-			if(dialog != null)
+			if(dialogue != null)
 			{
-				dialog.down();
+				dialogue.down();
 			}
 		}
 	}
 	private void startDialog() {
-		dialog = player.getTalkActionCharacter().startDialog();
+		System.out.println("Starting dialogue");
+		dialogue = player.getTalkActionCharacter().startDialog();
 		
 	}
 	@Override
@@ -312,8 +316,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 6, charDirection + 4), 160, 140, null);
 		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 9, charDirection + 4), 190, 140, null);
 		*/
-		if(dialog != null) {
-			dialog.draw(imageGraphics);
+		if(dialogue != null) {
+			//System.out.println("Drawing dialogue");
+			dialogue.draw(imageGraphics, 50, imageHeight-100, imageWidth-100, 64);
 		}else {		
 			if(player.getTalkActionCharacter() != null) {
 				imageGraphics.setColor(Color.BLUE);
@@ -351,7 +356,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				if(character.getInteractionPossibilities().contains(InteractionPossibility.TALK))
 				{
 					player.setTalkActionCharacter(character);
-					System.out.println("Player has in sight!");
+					//System.out.println("Player has in sight!");
 				}
 			}
 		}
@@ -394,6 +399,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			top_layer.readFromFileInputStream(fileInputStream);
 			tileSelectorFrame.readTilePatternsFromOutputStream(fileInputStream);
 			levelStack = new LevelStack(bottom_layer, top_layer);
+			dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

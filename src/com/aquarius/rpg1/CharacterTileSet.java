@@ -1,6 +1,7 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class CharacterTileSet {
 	private Int2d tilesetPosition;

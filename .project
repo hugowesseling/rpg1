@@ -3,7 +3,6 @@
 	<name>Rpg1</name>
 	<comment></comment>
 	<projects>
-		<project>Common2DGraphics</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
