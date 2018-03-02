@@ -169,7 +169,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			System.out.println("Do action");
 			if(dialogue != null) {
-				dialogue.confirm();
+				if(!dialogue.confirm()) {
+					dialogue = null;
+				}
 			}else {
 				if(player.getTalkActionCharacter() != null)
 				{
@@ -318,7 +320,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		*/
 		if(dialogue != null) {
 			//System.out.println("Drawing dialogue");
-			dialogue.draw(imageGraphics, 50, imageHeight-100, imageWidth-100, 64);
+			dialogue.draw(imageGraphics, 
+					50, imageHeight-100, 
+					imageWidth-100, 2 * Constant.TILE_HEIGHT);
 		}else {		
 			if(player.getTalkActionCharacter() != null) {
 				imageGraphics.setColor(Color.BLUE);

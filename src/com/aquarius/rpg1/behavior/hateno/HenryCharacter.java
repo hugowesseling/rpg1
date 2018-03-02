@@ -29,6 +29,9 @@ public class HenryCharacter extends GameCharacter
 		getInteractionPossibilities().add(InteractionPossibility.TALK);
 		
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello");
+		dialogueBlock.add(new DialogueBlock("How are you doing?"))
+					 .add(new DialogueBlock("I'm doing great!"))
+				     .add(new DialogueBlock("See you later!"));
 		dialogue = new Dialogue(dialogueBlock , dialogStyles.get(0));
 	}
 
