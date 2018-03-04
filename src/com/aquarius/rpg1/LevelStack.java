@@ -14,6 +14,7 @@ public class LevelStack
 		}
 	}
 	Layer layer1, layer2;
+	LevelState levelState;
 	Stack<StackLayer> stack = new Stack<StackLayer>();
 	
 	public LevelStack(Layer layer1, Layer layer2) 

@@ -1,5 +1,10 @@
 package com.aquarius.rpg1;
 
+import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -59,5 +64,54 @@ public class LevelState {
 		}else {
 			return null;			
 		}
+	}
+
+	public int getWidth() {
+		return bottom_layer.getWidth();
+	}
+
+	public int getHeight() {
+		return bottom_layer.getHeight();
+	}
+
+	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter) {
+		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false);
+		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true);
+		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
+		for(GameCharacter gameCharacter: allCharacters){
+			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny);
+		}
+			}
+
+	public void doActions(WorldState worldState) {
+		// Do actions and thinking
+		for(GameCharacter gameCharacter: allCharacters) {
+			gameCharacter.doAction(worldState);
+			gameCharacter.doMovement();
+		}
+	}
+
+	public void think(Player player, WorldState worldState, LevelState levelState) {
+		for(GameCharacter gameCharacter: levelState.allCharacters) {
+			gameCharacter.think(player, worldState, levelState);
+		}
+	}
+
+	public void writeToFileOutputStream(FileOutputStream fileOutputStream) {
+		bottom_layer.writeToFileOutputStream(fileOutputStream);
+		top_layer.writeToFileOutputStream(fileOutputStream);
+		ObjectOutputStream objectOutputStream;
+		try {
+			objectOutputStream = new  ObjectOutputStream(fileOutputStream);
+			objectOutputStream.writeObject(allCharacters);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void readFromFileInputStream(FileInputStream fileInputStream) {
+		bottom_layer.readFromFileInputStream(fileInputStream);
+		top_layer.readFromFileInputStream(fileInputStream);		
 	}
 }

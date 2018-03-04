@@ -16,6 +16,7 @@ import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.Resources;
 import com.aquarius.rpg1.TileObjectIndex;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.WaitAction;
@@ -24,15 +25,15 @@ import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
 public class HenryCharacter extends GameCharacter
 {
-	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction, ArrayList<DialogStyle> dialogStyles) {
-		super(position, characterTileSet, direction, dialogStyles);
+	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
+		super(position, characterTileSet, direction);
 		getInteractionPossibilities().add(InteractionPossibility.TALK);
 		
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello");
 		dialogueBlock.add(new DialogueBlock("How are you doing?"))
 					 .add(new DialogueBlock("I'm doing great!"))
 				     .add(new DialogueBlock("See you later!"));
-		dialogue = new Dialogue(dialogueBlock , dialogStyles.get(0));
+		dialogue = new Dialogue(dialogueBlock, Resources.dialogStyles.get(0));
 	}
 
 	private final static int STANDINGAROUND_DURATION = 10000;

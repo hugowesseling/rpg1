@@ -51,20 +51,16 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private int screenx;
 	private int screeny;
 	private EditorState editorState;
-	private Layer bottom_layer, top_layer;
 	private TileSelectorFrame tileSelectorFrame;
 	private LevelStack levelStack;
-	private TileSet characterTileSet;
 	Int2d mouseStart = new Int2d(0,0);
 	int mouseX=0, mouseY=0;
 	int frameCounter;
 	private boolean mouseInFrame;
-	private HenryCharacter henry;
 	private Player player;
 	private LevelState levelState;
 	private WorldState worldState;
 	private Dialogue dialogue;
-	private ArrayList<DialogStyle> dialogStyles;
 	private TileSet levelTileSet;
 
 	public Rpg1()
@@ -74,20 +70,20 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState = new EditorState();
 		levelTileSet = new TileSet("/roguelikeSheet_transparent.png", 16, 16, 1, 1);
 		tileSelectorFrame = new TileSelectorFrame("TileSet", levelTileSet, editorState);
-		characterTileSet = new TileSet("/characters1.png", 26, 36, 0, 0);
+		Layer bottom_layer, top_layer;
 		bottom_layer = new Layer(levelTileSet);
 		top_layer = new Layer(levelTileSet);
 		levelStack = new LevelStack(bottom_layer, top_layer);
 		input=new com.aquarius.common2dgraphics.util.Input();
-		dialogStyles = new ArrayList<DialogStyle>();
 		dialogue = null;
+
+		levelState = new LevelState(bottom_layer, top_layer);
 
 		readFromFile(DEFAULT_SAVE_FILENAME);
 		
-		henry = new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 10)), new CharacterTileSet(new Int2d(3,0), characterTileSet), Direction.SOUTH, dialogStyles);
-		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0), characterTileSet), Direction.SOUTH);
-		levelState = new LevelState(bottom_layer, top_layer);
-		levelState.allCharacters.add(henry);
+		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
+		levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
+		levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
 
 		JFrame frame = new JFrame("Rpg");
@@ -235,15 +231,12 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		Graphics2D imageGraphics=image.createGraphics();
 		imageGraphics.setColor(Color.WHITE);
 		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
-		//imageG.setFont(new Font("Courier",10,10));
-		//System.out.println("Print tiles here");
-		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false);
-		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true);
+
+		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter);
+
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
-		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
-		henry.draw(imageGraphics, frameCounter, screenx, screeny);
 		player.draw(imageGraphics, frameCounter, screenx, screeny);
-		
+
 		if(dialogue != null) {
 			//System.out.println("Drawing dialogue");
 			dialogue.draw(imageGraphics, 
@@ -270,26 +263,12 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		frameCounter++;
 
-		// Do actions and thinking
-		player.setTalkActionCharacter(null);
-		henry.doAction(worldState);
-		henry.doMovement();
-		if(frameCounter %10 == 0)
-		{
-			henry.think(player, worldState, levelState);
+		levelState.doActions(worldState);
+		if(frameCounter %10 == 0) {
+			levelState.think(player, worldState, levelState);
 		}
-		
-		for(GameCharacter character: levelState.allCharacters)
-		{
-			if(player.hasInSight(character.getPosition(), 64))
-			{
-				if(character.getInteractionPossibilities().contains(InteractionPossibility.TALK))
-				{
-					player.setTalkActionCharacter(character);
-					//System.out.println("Player has in sight!");
-				}
-			}
-		}
+
+		player.determineTalkActionCharacter(levelState.allCharacters);
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
@@ -323,11 +302,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 			if(screenx<0)screenx=0;
 			if(screeny<0)screeny=0;
-			if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH) {
-				screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
+			if(screenx > levelState.getWidth() * Constant.TILE_WIDTH) {
+				screenx = levelState.getWidth()*Constant.TILE_WIDTH;
 			}
-			if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT) {
-				screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
+			if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT) {
+				screeny = levelState.getHeight() * Constant.TILE_HEIGHT;
 			}				
 			// TODO: get rid of screenx, screeny
 		}
@@ -341,9 +320,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(mouseX > size.getWidth() - 20)
 		{
 			screenx += 6;
-			if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH)
+			if(screenx > levelState.getWidth() * Constant.TILE_WIDTH)
 			{
-				screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
+				screenx = levelState.getWidth()*Constant.TILE_WIDTH;
 			}
 		}
 		if(mouseY < 20)
@@ -354,9 +333,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(mouseY > size.getHeight() - 20)
 		{
 			screeny += 6;
-			if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT)
+			if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT)
 			{
-				screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
+				screeny = levelState.getHeight() * Constant.TILE_HEIGHT;
 			}
 		}
 	}
@@ -378,8 +357,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		FileOutputStream fileOutputStream;
 		try {
 			fileOutputStream = new FileOutputStream(fileName);
-			bottom_layer.writeToFileOutputStream(fileOutputStream);
-			top_layer.writeToFileOutputStream(fileOutputStream);
+			levelState.writeToFileOutputStream(fileOutputStream);
 			tileSelectorFrame.writeTilePatternsToFileOutputStream(fileOutputStream);
 			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
@@ -394,11 +372,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		FileInputStream fileInputStream;
 		try {
 			fileInputStream = new FileInputStream(fileName);
-			bottom_layer.readFromFileInputStream(fileInputStream);
-			top_layer.readFromFileInputStream(fileInputStream);
+			levelState.readFromFileInputStream(fileInputStream);
 			tileSelectorFrame.readTilePatternsFromOutputStream(fileInputStream);
-			levelStack = new LevelStack(bottom_layer, top_layer);
-			dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
+			levelStack = new LevelStack(levelState.bottom_layer, levelState.top_layer);
+			Resources.dialogStyles = new ArrayList<>();
+			Resources.dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -483,7 +461,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			{
 				Int2d topleft = editorState.mapSelection.topleft;
 				Int2d bottomright = editorState.mapSelection.bottomright;
-				Layer layer = mouseDownLeft ? top_layer : bottom_layer;
+				Layer layer = mouseDownLeft ? levelState.top_layer : levelState.bottom_layer;
 				levelStack.pushLayers();
 				for(int x = 0; x <= bottomright.x - topleft.x; x++)
 				{
@@ -498,7 +476,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			if(mouseDownLeft || mouseDownRight)
 			{
-				Layer layer = mouseDownLeft ? top_layer : bottom_layer;
+				Layer layer = mouseDownLeft ? levelState.top_layer : levelState.bottom_layer;
 				if(tileSelectorFrame.selectedTilePattern != null)
 				{
 					levelStack.pushLayers();

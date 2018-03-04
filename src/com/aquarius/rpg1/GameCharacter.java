@@ -3,6 +3,7 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -19,10 +20,9 @@ public class GameCharacter implements CharacterBehavior
 	private Int2d movement;
 	private HashSet<InteractionPossibility> interactionPossibilities;
 	float health;
-	private ArrayList<DialogStyle> dialogStyles;
 	protected Dialogue dialogue = null;
 	
-	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction, ArrayList<DialogStyle> dialogStyles) {
+	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		super();
 		this.position = position;
 		this.characterTileSet = characterTileSet;
@@ -32,7 +32,6 @@ public class GameCharacter implements CharacterBehavior
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
-		this.dialogStyles = dialogStyles;
 	}
 	
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
@@ -112,5 +111,10 @@ public class GameCharacter implements CharacterBehavior
 	public Dialogue startDialog() {
 
 		return dialogue ;
-	}	
+	}
+	private void writeObject(java.io.ObjectOutputStream stream)	throws IOException {
+		stream.writeObject(position);
+		stream.writeObject(direction);
+	}
+	
 }
