@@ -226,72 +226,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		//System.out.println("Size: " + imageWidth + "," + imageHeight);
 		if(mouseInFrame)
 		{
-			if(mouseX < 20)
-			{
-				screenx -= 6;
-				if(screenx<0)screenx=0;
-			}
-			if(mouseX > size.getWidth() - 20)
-			{
-				screenx += 6;
-				if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH)
-				{
-					screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
-				}
-			}
-			if(mouseY < 20)
-			{
-				screeny -= 6;
-				if(screeny<0)screeny=0;
-			}
-			if(mouseY > size.getHeight() - 20)
-			{
-				screeny += 6;
-				if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT)
-				{
-					screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
-				}
-			}
-			
-			boolean playerMoved = false;
-			if(input.buttons[Input.LEFT])
-			{
-				player.position.x -= 2;
-				player.setDirection(Direction.WEST);
-				playerMoved = true;
-			}
-			if(input.buttons[Input.RIGHT])
-			{
-				player.position.x += 2;
-				player.setDirection(Direction.EAST);
-				playerMoved = true;
-			}
-			if(input.buttons[Input.UP])
-			{
-				player.position.y -= 2;
-				player.setDirection(Direction.NORTH);
-				playerMoved = true;
-			}
-			if(input.buttons[Input.DOWN])
-			{
-				player.position.y += 2;
-				player.setDirection(Direction.SOUTH);
-				playerMoved = true;
-			}
-			if(playerMoved){
-				screenx = player.position.x - 100;
-				screeny = player.position.y - 100;
-
-				if(screenx<0)screenx=0;
-				if(screeny<0)screeny=0;
-				if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH) {
-					screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
-				}
-				if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT) {
-					screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
-				}				
-				// TODO: get rid of screenx, screeny
-			}
+			mouseCornerActions(size);
+			inputPlayerMovement();
 		}
 		//Image image=createVolatileImage(imageWidth,imageHeight);
 		BufferedImage image = new BufferedImage(imageWidth, imageHeight,
@@ -308,16 +244,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		henry.draw(imageGraphics, frameCounter, screenx, screeny);
 		player.draw(imageGraphics, frameCounter, screenx, screeny);
 		
-		/*
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 3, charDirection), 130, 100, null);
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 6, charDirection), 160, 100, null);
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 9, charDirection), 190, 100, null);
-
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection + 4), 100, 140, null);
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 3, charDirection + 4), 130, 140, null);
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 6, charDirection + 4), 160, 140, null);
-		imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3 + 9, charDirection + 4), 190, 140, null);
-		*/
 		if(dialogue != null) {
 			//System.out.println("Drawing dialogue");
 			dialogue.draw(imageGraphics, 
@@ -365,6 +291,75 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}
 		}
 	}
+	private void inputPlayerMovement() {
+		boolean playerMoved = false;
+		if(input.buttons[Input.LEFT])
+		{
+			player.position.x -= 2;
+			player.setDirection(Direction.WEST);
+			playerMoved = true;
+		}
+		if(input.buttons[Input.RIGHT])
+		{
+			player.position.x += 2;
+			player.setDirection(Direction.EAST);
+			playerMoved = true;
+		}
+		if(input.buttons[Input.UP])
+		{
+			player.position.y -= 2;
+			player.setDirection(Direction.NORTH);
+			playerMoved = true;
+		}
+		if(input.buttons[Input.DOWN])
+		{
+			player.position.y += 2;
+			player.setDirection(Direction.SOUTH);
+			playerMoved = true;
+		}
+		if(playerMoved){
+			screenx = player.position.x - 100;
+			screeny = player.position.y - 100;
+
+			if(screenx<0)screenx=0;
+			if(screeny<0)screeny=0;
+			if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH) {
+				screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
+			}
+			if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT) {
+				screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
+			}				
+			// TODO: get rid of screenx, screeny
+		}
+	}
+	private void mouseCornerActions(Dimension size) {
+		if(mouseX < 20)
+		{
+			screenx -= 6;
+			if(screenx<0)screenx=0;
+		}
+		if(mouseX > size.getWidth() - 20)
+		{
+			screenx += 6;
+			if(screenx > bottom_layer.getWidth() * Constant.TILE_WIDTH)
+			{
+				screenx = bottom_layer.getWidth()*Constant.TILE_WIDTH;
+			}
+		}
+		if(mouseY < 20)
+		{
+			screeny -= 6;
+			if(screeny<0)screeny=0;
+		}
+		if(mouseY > size.getHeight() - 20)
+		{
+			screeny += 6;
+			if(screeny > bottom_layer.getHeight() * Constant.TILE_HEIGHT)
+			{
+				screeny = bottom_layer.getHeight() * Constant.TILE_HEIGHT;
+			}
+		}
+	}
 	
 
 	public static void main(String[] args)
@@ -379,7 +374,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 	public void saveToFile(String fileName)
 	{
-		System.out.println("Saving layer to " + fileName);
+		System.out.println("Saving game to " + fileName);
 		FileOutputStream fileOutputStream;
 		try {
 			fileOutputStream = new FileOutputStream(fileName);

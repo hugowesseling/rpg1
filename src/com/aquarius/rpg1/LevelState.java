@@ -11,29 +11,27 @@ public class LevelState {
 	public Layer bottom_layer, top_layer;
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
 	public Vector<GameCharacter> allCharacters;	// All characters in this level
-	public Vector<GameObject> allGameObjects; // All objects in this level
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
 		this.bottom_layer = bottom_layer;
 		this.top_layer = top_layer;
 		levelKeyValues = new HashMap<>();
 		allCharacters = new Vector<>();
-		allGameObjects = new Vector<>();
 	}
 
-	public GameObject findRandomInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
-		ArrayList<GameObject> eligibleObjects = new ArrayList<>();
-		for(GameObject gameObject : allGameObjects)
+	public GameCharacter findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
+		ArrayList<GameCharacter> eligibles = new ArrayList<>();
+		for(GameCharacter character : allCharacters)
 		{
-			if(gameObject.distanceTo(position) < distance)
+			if(character.position.tileAsInt2d().nearby(position, distance))
 			{
-				eligibleObjects.add(gameObject);
+				eligibles.add(character);
 			}
 		}
-		if(eligibleObjects.size() == 0)
+		if(eligibles.size() == 0)
 			return null;
-		int rnd = new Random().nextInt(eligibleObjects.size());
-	    return eligibleObjects.get(rnd);
+		int rnd = new Random().nextInt(eligibles.size());
+	    return eligibles.get(rnd);
 	}
 
 	public Int2d findRandomPositionInNeighborhood(int tileIndex, Int2d position, int distance) {
