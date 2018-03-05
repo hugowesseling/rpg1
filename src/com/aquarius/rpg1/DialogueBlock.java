@@ -1,10 +1,12 @@
 package com.aquarius.rpg1;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DialogueBlock
+public class DialogueBlock implements Serializable
 {
+	private static final long serialVersionUID = 6276869414867442109L;
 	String text;
 	DialogueBlock nextNode = null;
 	String jumpTo = null;

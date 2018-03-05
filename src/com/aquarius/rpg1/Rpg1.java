@@ -86,8 +86,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		readFromFile(levelpos);
 		
 		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
-		levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
-		levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
+		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
+		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
 
 		JFrame frame = new JFrame("Rpg");

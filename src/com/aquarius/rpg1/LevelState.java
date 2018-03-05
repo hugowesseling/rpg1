@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,6 +114,17 @@ public class LevelState {
 
 	public void readFromFileInputStream(FileInputStream fileInputStream) {
 		bottom_layer.readFromFileInputStream(fileInputStream);
-		top_layer.readFromFileInputStream(fileInputStream);		
+		top_layer.readFromFileInputStream(fileInputStream);
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(fileInputStream);
+			allCharacters = (Vector<GameCharacter>) ois.readObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -23,6 +23,9 @@ public class CharacterPosition implements Position, Serializable {
 		return y;
 	}
 
+	public String toString() {
+		return x + ", " + y;		
+	}
 	
 	public int getXTile() {
 		return x / Constant.TILE_WIDTH;

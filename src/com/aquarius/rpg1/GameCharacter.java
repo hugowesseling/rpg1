@@ -38,8 +38,12 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
+		System.out.println("Constructor position: "  +position + ", for name " + name);
 	}
-	
+
+	public GameCharacter() {
+		this("noname2", new CharacterPosition(100,100), new CharacterTileSet(new Int2d(3,1)), Direction.EAST);
+	}
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
 		return interactionPossibilities;
 	}
@@ -119,17 +123,21 @@ public class GameCharacter implements CharacterBehavior, Serializable
 
 		return dialogue ;
 	}
-	private void writeObject(java.io.ObjectOutputStream stream)	throws IOException {
-		stream.writeObject(name);
-		stream.writeObject(position);
-		stream.writeObject(direction);
+	private void writeObject(java.io.ObjectOutputStream oos)	throws IOException {
+		System.out.println("Writing position: "  + position + ", for name " + name);
+		oos.defaultWriteObject();
+		//stream.writeObject(name);
+		//stream.writeObject(position);
+		//stream.writeObject(direction);
 	}
 
 	private void readObject(ObjectInputStream ois)
 		    throws ClassNotFoundException, IOException {
-		name = (String)ois.readObject();
-		position = (CharacterPosition) ois.readObject();
-		direction = (Direction) ois.readObject();
+		ois.defaultReadObject();
+		//name = (String)ois.readObject();
+		//position = (CharacterPosition) ois.readObject();
+		//direction = (Direction) ois.readObject();
+		System.out.println("Read position: "  +position + ", for name " + name);
 	}
 	
 }

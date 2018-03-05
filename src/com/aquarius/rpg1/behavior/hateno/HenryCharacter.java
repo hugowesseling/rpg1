@@ -42,7 +42,7 @@ public class HenryCharacter extends GameCharacter
 		if(!(getAction() instanceof WalkToCharacterAction)){
 			if(player.getPosition().subnearby(position, 80)) {
 				setAction(new WalkToCharacterAction(this, player, 20, 100));
-				System.out.println("HenryCharacter.think: WalkToCharacterAction");
+				//System.out.println("HenryCharacter.think: WalkToCharacterAction");
 				return;
 			}
 		}
@@ -50,10 +50,10 @@ public class HenryCharacter extends GameCharacter
 			Int2d treePosition = levelState.findRandomPositionInNeighborhood(TileObjectIndex.TREE1, position.tileAsInt2d(), 10);
 			if(treePosition != null) {
 				setAction(new WalkToTilePositionAction(this, treePosition));
-				System.out.println("HenryCharacter.think: WalkToPositionAction");
+				//System.out.println("HenryCharacter.think: WalkToPositionAction");
 			}else {
 				setAction(new WaitAction(worldState, STANDINGAROUND_DURATION));
-				System.out.println("HenryCharacter.think: WaitAction");
+				//System.out.println("HenryCharacter.think: WaitAction");
 			}
 		}
 	}

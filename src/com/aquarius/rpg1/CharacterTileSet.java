@@ -1,9 +1,11 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CharacterTileSet {
+public class CharacterTileSet implements Serializable {
+	private static final long serialVersionUID = -8543957292787335445L;
 	private Int2d tilesetPosition;
 	private final static int[] FRAME_ORDER = {0,1,2,1};
 	

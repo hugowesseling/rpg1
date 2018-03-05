@@ -1,7 +1,10 @@
 package com.aquarius.rpg1;
 
-public class Int2d implements Position
+import java.io.Serializable;
+
+public class Int2d implements Position, Serializable
 {
+	private static final long serialVersionUID = -5947870930273839690L;
 	public int x,y;
 
 	public Int2d(int x, int y){
