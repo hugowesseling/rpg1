@@ -1,5 +1,7 @@
 package com.aquarius.rpg1;
 
+import java.awt.BorderLayout;
+
 // TODO: stitching levels together
 // DONE: Automatic path routing
 //		 Create boolean map from where there is the path type and where there isn't, create a 8 boolean (8 directions) to one index (0-28) mapping to choose the correct tile
@@ -25,6 +27,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -44,9 +48,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	volatile private boolean mouseDownLeft = false;
 	volatile private boolean mouseDownRight = false;
 	private static final long serialVersionUID = 1L;
-	private static final String DEFAULT_SAVE_FILENAME = "test.rpg1";
 	private static final int MENUBAR_HEIGHT = 45;
 	private boolean running = false;
+	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
 	private int screenx;
 	private int screeny;
@@ -79,7 +83,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 		levelState = new LevelState(bottom_layer, top_layer);
 
-		readFromFile(DEFAULT_SAVE_FILENAME);
+		readFromFile(levelpos);
 		
 		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
 		levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
@@ -94,7 +98,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);
 		frame.setSize(new Dimension(800,600));
-		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter(){			
 		    public void windowClosing(WindowEvent e)
@@ -119,9 +122,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("Save clicked");
-				saveToFile(DEFAULT_SAVE_FILENAME);
-	            } 
-	          });
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				int retVal = fc.showSaveDialog(Rpg1.this);
+				if(retVal == JFileChooser.APPROVE_OPTION) {
+					saveToFile(fc.getSelectedFile().getPath());
+	            }
+			}
+		});
 		fileMenu.add(saveMenuItem);
 		JMenuItem exitMenuItem = new JMenuItem("Exit"); 
 		exitMenuItem.addMouseListener(new MouseAdapter() { 
@@ -133,7 +141,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		fileMenu.add(exitMenuItem);
 		menuBar.add(fileMenu);
 		frame.setJMenuBar(menuBar);
-		
+		frame.setVisible(true);
 	}
 	public void start()
 	{
@@ -215,6 +223,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	@Override
 	public void paint(Graphics g)
 	{
+		//super.paint(g);
 		worldState.setTimeMs(System.currentTimeMillis());
 		Dimension size = this.getSize();
 		int imageWidth = size.width / 2;
@@ -310,6 +319,30 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}				
 			// TODO: get rid of screenx, screeny
 		}
+		if(player.position.x < Constant.TILE_WIDTH * 1)
+		{
+			levelpos.x -= 1;
+			readFromFile(levelpos);
+			player.position.x = (levelState.getWidth()-2) * Constant.TILE_WIDTH;
+		}
+		if(player.position.x > (levelState.getWidth()-1) * Constant.TILE_WIDTH)
+		{
+			levelpos.x += 1;
+			readFromFile(levelpos);
+			player.position.x = Constant.TILE_WIDTH * 2;
+		}
+		if(player.position.y < Constant.TILE_HEIGHT * 1)
+		{
+			levelpos.y -= 1;
+			readFromFile(levelpos);
+			player.position.y = (levelState.getHeight()-2) * Constant.TILE_HEIGHT;
+		}
+		if(player.position.y > (levelState.getHeight()-1) * Constant.TILE_HEIGHT)
+		{
+			levelpos.y += 1;
+			readFromFile(levelpos);
+			player.position.y = Constant.TILE_HEIGHT * 2;
+		}
 	}
 	private void mouseCornerActions(Dimension size) {
 		if(mouseX < 20)
@@ -366,8 +399,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			e.printStackTrace();
 		}
 	}
-	public void readFromFile(String fileName)
+
+	public void readFromFile(Int2d levelpos)
 	{
+		String fileName = levelPos2FileName(levelpos);
 		System.out.println("Reading layer from " + fileName);
 		FileInputStream fileInputStream;
 		try {
@@ -385,6 +420,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 	}
 	
+	private String levelPos2FileName(Int2d levelpos) {
+		return String.format("level_%03d_%03d.rpg1", levelpos.x, levelpos.y);
+	}
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent){
 	}

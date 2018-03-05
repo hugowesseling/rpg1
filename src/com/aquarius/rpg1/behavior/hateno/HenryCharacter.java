@@ -1,13 +1,7 @@
 package com.aquarius.rpg1.behavior.hateno;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import com.aquarius.rpg1.CharacterPosition;
 import com.aquarius.rpg1.CharacterTileSet;
-import com.aquarius.rpg1.DialogStyle;
 import com.aquarius.rpg1.Dialogue;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
@@ -25,6 +19,8 @@ import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
 public class HenryCharacter extends GameCharacter
 {
+	private static final long serialVersionUID = 2895154313614688180L;
+
 	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		super(position, characterTileSet, direction);
 		getInteractionPossibilities().add(InteractionPossibility.TALK);
@@ -60,16 +56,5 @@ public class HenryCharacter extends GameCharacter
 				System.out.println("HenryCharacter.think: WaitAction");
 			}
 		}
-	}
-
-	@Override
-	public void writeSaveState(FileOutputStream fileOutputStream) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void readSaveState(FileInputStream fileInputStream) {
-		// TODO Auto-generated method stub
 	}
 }

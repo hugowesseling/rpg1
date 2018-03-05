@@ -1,17 +1,16 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashSet;
 
 import com.aquarius.rpg1.behavior.CharacterAction;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
-public class GameCharacter implements CharacterBehavior
+public class GameCharacter implements CharacterBehavior, Serializable
 {
+	private static final long serialVersionUID = 4512007766793306312L;
 	protected CharacterPosition position;
 	private CharacterTileSet characterTileSet;
 	private CharacterBehavior behavior;
@@ -59,6 +58,7 @@ public class GameCharacter implements CharacterBehavior
 		return action;
 	}
 
+	/*
 	@Override
 	public void writeSaveState(FileOutputStream fileOutputStream) {
 		// TODO Auto-generated method stub
@@ -67,7 +67,7 @@ public class GameCharacter implements CharacterBehavior
 	@Override
 	public void readSaveState(FileInputStream fileInputStream) {
 		// TODO Auto-generated method stub
-	}
+	}*/
 
 	@Override
 	public void think(Player player, WorldState worldState, LevelState levelState) {
@@ -116,5 +116,4 @@ public class GameCharacter implements CharacterBehavior
 		stream.writeObject(position);
 		stream.writeObject(direction);
 	}
-	
 }

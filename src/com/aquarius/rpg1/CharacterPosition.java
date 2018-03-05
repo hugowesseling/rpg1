@@ -1,6 +1,10 @@
 package com.aquarius.rpg1;
 
-public class CharacterPosition implements Position {
+import java.io.IOException;
+import java.io.Serializable;
+
+public class CharacterPosition implements Position, Serializable {
+	private static final long serialVersionUID = -2456233648907996230L;
 	public int x, y;
 	
 	public CharacterPosition(int x, int y) {
@@ -56,5 +60,9 @@ public class CharacterPosition implements Position {
 		int minx = Math.min(topleft.x, bottomright.x), miny = Math.min(topleft.y, bottomright.y);
 		int maxx = Math.max(topleft.x, bottomright.x), maxy = Math.max(topleft.y, bottomright.y);
 		return (x >= minx) && (y >= miny) && (x <= maxx) && (y <= maxy);
+	}
+	private void writeObject(java.io.ObjectOutputStream stream)	throws IOException {
+		stream.writeObject(x);
+		stream.writeObject(y);
 	}
 }
