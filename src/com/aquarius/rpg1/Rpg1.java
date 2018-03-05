@@ -411,7 +411,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			tileSelectorFrame.readTilePatternsFromOutputStream(fileInputStream);
 			levelStack = new LevelStack(levelState.bottom_layer, levelState.top_layer);
 			Resources.dialogStyles = new ArrayList<>();
-			Resources.dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
+			//Resources.dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

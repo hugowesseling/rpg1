@@ -1,6 +1,7 @@
 package com.aquarius.rpg1;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 public class CharacterPosition implements Position, Serializable {
@@ -62,7 +63,13 @@ public class CharacterPosition implements Position, Serializable {
 		return (x >= minx) && (y >= miny) && (x <= maxx) && (y <= maxy);
 	}
 	private void writeObject(java.io.ObjectOutputStream stream)	throws IOException {
-		stream.writeObject(x);
-		stream.writeObject(y);
+		stream.writeInt(x);
+		stream.writeInt(y);
 	}
+	private void readObject(ObjectInputStream ois)
+	    throws ClassNotFoundException, IOException {
+	  x = (int) ois.readInt();
+	  y = (int) ois.readInt();
+	}
+	
 }

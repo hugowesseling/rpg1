@@ -29,7 +29,7 @@ public class HenryCharacter extends GameCharacter
 		dialogueBlock.add(new DialogueBlock("How are you doing?"))
 					 .add(new DialogueBlock("I'm doing great!"))
 				     .add(new DialogueBlock("See you later!"));
-		dialogue = new Dialogue(dialogueBlock, Resources.dialogStyles.get(0));
+		dialogue = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
 	}
 
 	private final static int STANDINGAROUND_DURATION = 10000;

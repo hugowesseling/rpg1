@@ -2,6 +2,7 @@ package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashSet;
 
@@ -20,9 +21,15 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	private HashSet<InteractionPossibility> interactionPossibilities;
 	float health;
 	protected Dialogue dialogue = null;
-	
+	private String name;
+
 	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
+		this("noname", position, characterTileSet, direction);
+	}
+	
+	public GameCharacter(String name, CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		super();
+		this.name = name;
 		this.position = position;
 		this.characterTileSet = characterTileSet;
 		this.direction = direction;
@@ -113,7 +120,16 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		return dialogue ;
 	}
 	private void writeObject(java.io.ObjectOutputStream stream)	throws IOException {
+		stream.writeObject(name);
 		stream.writeObject(position);
 		stream.writeObject(direction);
 	}
+
+	private void readObject(ObjectInputStream ois)
+		    throws ClassNotFoundException, IOException {
+		name = (String)ois.readObject();
+		position = (CharacterPosition) ois.readObject();
+		direction = (Direction) ois.readObject();
+	}
+	
 }
