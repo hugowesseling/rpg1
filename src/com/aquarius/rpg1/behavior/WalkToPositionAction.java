@@ -1,13 +1,16 @@
 package com.aquarius.rpg1.behavior;
 
+import java.io.Serializable;
+
 import com.aquarius.rpg1.CharacterPosition;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameCharacter;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.WorldState;
 
-public class WalkToPositionAction implements CharacterAction {
+public class WalkToPositionAction implements CharacterAction, Serializable {
 
+	private static final long serialVersionUID = 5956310423103168473L;
 	private CharacterPosition toPosition;
 	private GameCharacter character;
 

@@ -38,7 +38,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	public TileSet tileSet;
 	private boolean mouseDownLeft;
 	private Int2d mouseStart = null;
-    public Vector<TilePattern> tilePatterns;
     private boolean[][] tileCollision;
     private EditMode editMode;
 	public TilePattern selectedTilePattern = null;
@@ -51,7 +50,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		this.editorState = editorState;
 		imageWidth = tileSet.tiles.length * Constant.TILE_WIDTH;
 		imageHeight = tileSet.tiles[0].length * Constant.TILE_HEIGHT;
-		tilePatterns = new Vector<TilePattern>();
 		editMode = EditMode.SELECT_TILES;
 		
 		setSize(imageWidth * 2,imageHeight * 2);
@@ -163,7 +161,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		if(editMode == EditMode.TILE_PATTERN_SELECTION)
 		{
 			imageG.setColor(Color.RED);
-			for(TilePattern tilePattern:tilePatterns)
+			for(TilePattern tilePattern:Resources.tilePatterns)
 			{
 				tilePattern.draw(imageG);
 			}
@@ -226,18 +224,18 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			{
 				System.out.println("Cloning current tilePattern");
 				// Copy selected tilepattern translated from top-left most to mouseStart
-				tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
+				Resources.tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
 			}
 		}else
 		{
 			if(editMode == EditMode.TILE_PATTERN_SELECTION)
 			{
-				TilePattern tilePattern = getTilePatternFromTile(tileX, tileY);
+				TilePattern tilePattern = Resources.getTilePatternFromTile(tileX, tileY);
 				if(tilePattern == null)
 				{
 					tilePattern = new TilePattern();
 					tilePattern.addTile(new TilePatternTile(tileX, tileY));
-					tilePatterns.add(tilePattern);
+					Resources.tilePatterns.add(tilePattern);
 				}
 				selectedTilePattern  = tilePattern; 
 				editMode = EditMode.TILE_PATTERN_EDIT;
@@ -258,18 +256,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			}
 			mouseDragged(mouseEvent);
 		}
-	}
-
-	private TilePattern getTilePatternFromTile(int tileX, int tileY)
-	{
-		for(TilePattern tilePattern:tilePatterns)
-		{
-			if(tilePattern.isTileInTilePattern(tileX,tileY))
-			{
-				return tilePattern;
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -306,31 +292,5 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				System.out.println("Topleft index: " + tileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
 			}
 		}
-	}
-
-	public void writeTilePatternsToFileOutputStream(FileOutputStream fileOutputStream)
-	{
-		ObjectOutputStream objectOutputStream;
-		try {
-			objectOutputStream = new  ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeObject(tilePatterns);
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public void readTilePatternsFromOutputStream(FileInputStream fileInputStream)
-	{
-		try
-		{
-			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-			tilePatterns = (Vector<TilePattern>) objectInputStream.readObject();
-		}catch(IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
 	}
 }

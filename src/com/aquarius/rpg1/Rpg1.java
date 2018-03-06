@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -49,6 +50,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	volatile private boolean mouseDownRight = false;
 	private static final long serialVersionUID = 1L;
 	private static final int MENUBAR_HEIGHT = 45;
+	private static final String CONFIG_FILENAME = "rpg1.config";
 	private boolean running = false;
 	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
@@ -73,6 +75,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		mouseInFrame = true;
 		editorState = new EditorState();
 		levelTileSet = new TileSet("/roguelikeSheet_transparent.png", 16, 16, 1, 1);
+		loadConfig(CONFIG_FILENAME);
 		tileSelectorFrame = new TileSelectorFrame("TileSet", levelTileSet, editorState);
 		Layer bottom_layer, top_layer;
 		bottom_layer = new Layer(levelTileSet);
@@ -118,6 +121,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	            } 
 	          });
 		fileMenu.add(gameModeMenuItem);
+		
 		JMenuItem saveMenuItem = new JMenuItem("Save"); 
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
@@ -131,6 +135,22 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}
 		});
 		fileMenu.add(saveMenuItem);
+
+		JMenuItem saveConfigMenuItem = new JMenuItem("Save config"); 
+		saveConfigMenuItem.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				System.out.println("Save config clicked");
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				int retVal = fc.showSaveDialog(Rpg1.this);
+				if(retVal == JFileChooser.APPROVE_OPTION) {
+					saveConfigToFile(fc.getSelectedFile().getPath());
+	            }
+			}
+
+		});
+		fileMenu.add(saveConfigMenuItem);
+		
 		JMenuItem exitMenuItem = new JMenuItem("Exit"); 
 		exitMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
@@ -391,11 +411,38 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		try {
 			fileOutputStream = new FileOutputStream(fileName);
 			levelState.writeToFileOutputStream(fileOutputStream);
-			tileSelectorFrame.writeTilePatternsToFileOutputStream(fileOutputStream);
 			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void saveConfigToFile(String fileName) {
+		System.out.println("Saving game to " + fileName);
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(Resources.tilePatterns);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void loadConfig(String fileName)
+	{
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(fileName);
+			Resources.readTilePatternsFromOutputStream(fis);
+			Resources.dialogStyles = new ArrayList<>();
+			Resources.dialogStyles.add(new DialogStyle(Resources.tilePatterns.get(4), levelTileSet));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -408,10 +455,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		try {
 			fileInputStream = new FileInputStream(fileName);
 			levelState.readFromFileInputStream(fileInputStream);
-			tileSelectorFrame.readTilePatternsFromOutputStream(fileInputStream);
+			//Resources.readTilePatternsFromOutputStream(fileInputStream);
 			levelStack = new LevelStack(levelState.bottom_layer, levelState.top_layer);
-			Resources.dialogStyles = new ArrayList<>();
-			//Resources.dialogStyles.add(new DialogStyle(tileSelectorFrame.tilePatterns.get(4), levelTileSet));
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
