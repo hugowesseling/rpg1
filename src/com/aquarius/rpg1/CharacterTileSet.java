@@ -14,10 +14,28 @@ public class CharacterTileSet implements Serializable {
 		this.tilesetPosition = tilesetPosition;
 	}
 
-
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame)
 	{
 		int drawFrame = FRAME_ORDER[frame%4];
 		graphics.drawImage(Resources.characterTileSets.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y), x, y, null);		
+	}
+	
+	public void changeTileSetPosition(boolean nextprevious)
+	{
+		if(nextprevious) {
+			tilesetPosition.x += 3;
+		}else {
+			tilesetPosition.x -= 3;
+		}
+		if(tilesetPosition.x > 9)
+		{
+			tilesetPosition.x = 0;
+			tilesetPosition.y = (tilesetPosition.y + 4) % 8;
+		}
+		if(tilesetPosition.x < 0)
+		{
+			tilesetPosition.x = 9;
+			tilesetPosition.y = (tilesetPosition.y - 4 + 8) % 8;
+		}
 	}
 }

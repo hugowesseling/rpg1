@@ -29,7 +29,7 @@ public class HenryCharacter extends GameCharacter implements Serializable
 
 	static {
 		System.out.println("HenryCharacter.static");
-		Resources.addCharacterSubClass(HenryCharacter.class.getCanonicalName());
+		Resources.addCharacterSubClass(HenryCharacter.class.getSimpleName());
 	}
 	
 	public HenryCharacter()

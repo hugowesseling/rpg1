@@ -2,6 +2,7 @@ package com.aquarius.rpg1;
 
 import java.awt.BorderLayout;
 
+// TODO: Add character editing dialog upon adding a character
 // TODO: Optimize graphics (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
 // DONE: stitching levels together
 // DONE: Automatic path routing
@@ -27,6 +28,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -37,12 +40,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -54,14 +61,14 @@ import javax.swing.JToggleButton;
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 
-public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener {
+public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	volatile private boolean mouseDownLeft = false;
 	volatile private boolean mouseDownRight = false;
 	private static final long serialVersionUID = 1L;
 	private static final int MENUBAR_HEIGHT = 45;
 	private boolean running = false;
 	private boolean simulating = false;;
-	private boolean addCharacterMode = false;
+	private CharacterTileSet addCharacterTileSet = null;	//!null means that a character currently is being added
 	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
 	private int screenx;
@@ -78,6 +85,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private WorldState worldState;
 	private Dialogue dialogue;
 	private LevelStack levelStack;
+	
 
 
 	public Rpg1()
@@ -119,6 +127,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		frame.addKeyListener(this);
 		frame.addMouseListener(this);
 		frame.addMouseMotionListener(this);
+		frame.addMouseWheelListener(this);
 		
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
@@ -198,7 +207,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		addCharacterMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("addCharacter clicked");
-					addCharacterMode = !addCharacterMode;
+					if(addCharacterTileSet == null) {
+						addCharacterTileSet = new CharacterTileSet(new Int2d(0,0));
+					} else {
+						addCharacterTileSet = null;
+					}
 			} 
 		});
 		editMenu.add(addCharacterMenuItem);
@@ -327,8 +340,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}
 			}
 		}
-		if(addCharacterMode) {
-			new CharacterTileSet(new Int2d(0,0)).draw(imageGraphics, mouseX/2, mouseY/2, Direction.SOUTH, frameCounter / 10);
+		if(addCharacterTileSet != null) {
+			addCharacterTileSet.draw(imageGraphics, mouseX/2, mouseY/2, Direction.SOUTH, frameCounter / 10);
 		}
 
 		imageGraphics.dispose();
@@ -566,10 +579,30 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		int tileX = mouseLocation.x / Constant.TILE_WIDTH;
 		int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
 
-		if(addCharacterMode) {
+		if(addCharacterTileSet != null) {
 			if(mouseDownLeft) {
-				levelState.allCharacters.add(new HenryCharacter(new CharacterPosition(mouseLocation.x, mouseLocation.y), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH));
-				addCharacterMode = false;
+				String[] characterSubClassesStrings = Resources.characterSubClasses.toArray(new String[Resources.characterSubClasses.size()]);
+				JComboBox<String> characterSubClassComboBox = new JComboBox<String>(characterSubClassesStrings);
+				JComboBox<Direction> directionComboBox = new JComboBox<Direction>(Direction.values());
+				Object characterSettings[] = {"Specify character settings", characterSubClassComboBox, directionComboBox};
+				
+				JOptionPane optionPane = new JOptionPane();
+			    optionPane.setMessage(characterSettings);
+			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+			    JDialog dialog = optionPane.createDialog(null, "Character Settings");
+			    dialog.setVisible(true);
+			    
+			    Direction direction = (Direction) directionComboBox.getSelectedItem();
+			    String className = (String) characterSubClassComboBox.getSelectedItem();
+				System.out.println("Placing character: " + className + ", " + direction);
+				
+				if(className.equals(HenryCharacter.class.getSimpleName())) {
+					levelState.allCharacters.add(new HenryCharacter(new CharacterPosition(mouseLocation.x, mouseLocation.y), addCharacterTileSet, direction));
+				} else {
+					System.err.println("Could not determine character sub class: " + className);
+				}
+				addCharacterTileSet = null;
+				mouseDownLeft = false; //no ongoing clicking
 			}
 		}else
 		if(input.buttons[Input.SHIFT] && mouseDownLeft)
@@ -621,6 +654,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					levelStack.popLayersIfNoChange();
 				}
 			}
+		}
+	}
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent mwe) {
+		System.out.println("Mouse wheel: " + mwe.getWheelRotation());
+		boolean scrollup = mwe.getWheelRotation() <0;
+		if(addCharacterTileSet != null) {
+			addCharacterTileSet.changeTileSetPosition(scrollup);
 		}
 	}
 
