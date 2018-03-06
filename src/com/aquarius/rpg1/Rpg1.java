@@ -61,6 +61,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private static final int MENUBAR_HEIGHT = 45;
 	private boolean running = false;
 	private boolean simulating = false;;
+	private boolean addCharacterMode = false;
 	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
 	private int screenx;
@@ -192,6 +193,17 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		simulateMenu.add(simulateMenuItem);
 		menuBar.add(simulateMenu);
 		
+		JMenu editMenu = new JMenu("Edit");
+		JMenuItem addCharacterMenuItem = new JMenuItem("Add Character"); 
+		addCharacterMenuItem.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				System.out.println("addCharacter clicked");
+					addCharacterMode = !addCharacterMode;
+			} 
+		});
+		editMenu.add(addCharacterMenuItem);
+		menuBar.add(editMenu);
+		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
 	}
@@ -315,6 +327,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}
 			}
 		}
+		if(addCharacterMode) {
+			new CharacterTileSet(new Int2d(0,0)).draw(imageGraphics, mouseX/2, mouseY/2, Direction.SOUTH, frameCounter / 10);
+		}
+
 		imageGraphics.dispose();
 
 		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
@@ -550,6 +566,12 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		int tileX = mouseLocation.x / Constant.TILE_WIDTH;
 		int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
 
+		if(addCharacterMode) {
+			if(mouseDownLeft) {
+				levelState.allCharacters.add(new HenryCharacter(new CharacterPosition(mouseLocation.x, mouseLocation.y), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH));
+				addCharacterMode = false;
+			}
+		}else
 		if(input.buttons[Input.SHIFT] && mouseDownLeft)
 		{
 			int tileXStart = mouseStart.x / Constant.TILE_WIDTH;
