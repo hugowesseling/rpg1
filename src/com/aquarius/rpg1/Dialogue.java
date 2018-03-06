@@ -3,8 +3,7 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 
-public class Dialogue implements Serializable {
-	private static final long serialVersionUID = -7417730327592995980L;
+public class Dialogue {
 	DialogueBlock startDialogueBlock, currentDialogueBlock;
 	DialogStyle dialogStyle;
 	
