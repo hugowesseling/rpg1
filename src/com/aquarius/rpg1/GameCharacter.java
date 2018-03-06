@@ -18,10 +18,10 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	private CharacterAction action;
 	private Direction direction;
 	private Int2d movement;
-	private HashSet<InteractionPossibility> interactionPossibilities;
+	protected HashSet<InteractionPossibility> interactionPossibilities;
 	float health;
 	protected Dialogue dialogue = null;
-	private String name;
+	protected String name;
 
 	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		this("noname", position, characterTileSet, direction);
@@ -38,7 +38,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
-		System.out.println("Constructor position: "  +position + ", for name " + name);
+		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 	}
 
 	public GameCharacter() {

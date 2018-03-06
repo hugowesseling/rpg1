@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
@@ -50,7 +51,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	volatile private boolean mouseDownRight = false;
 	private static final long serialVersionUID = 1L;
 	private static final int MENUBAR_HEIGHT = 45;
-	private static final String CONFIG_FILENAME = "rpg1.config";
 	private boolean running = false;
 	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
@@ -58,7 +58,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private int screeny;
 	private EditorState editorState;
 	private TileSelectorFrame tileSelectorFrame;
-	private LevelStack levelStack;
+	//private LevelStack levelStack;
 	Int2d mouseStart = new Int2d(0,0);
 	int mouseX=0, mouseY=0;
 	int frameCounter;
@@ -67,25 +67,21 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private LevelState levelState;
 	private WorldState worldState;
 	private Dialogue dialogue;
-	private TileSet levelTileSet;
+	private LevelStack levelStack;
+
 
 	public Rpg1()
 	{
 		frameCounter = 0;
 		mouseInFrame = true;
 		editorState = new EditorState();
-		levelTileSet = new TileSet("/roguelikeSheet_transparent.png", 16, 16, 1, 1);
-		loadConfig(CONFIG_FILENAME);
-		tileSelectorFrame = new TileSelectorFrame("TileSet", levelTileSet, editorState);
-		Layer bottom_layer, top_layer;
-		bottom_layer = new Layer(levelTileSet);
-		top_layer = new Layer(levelTileSet);
-		levelStack = new LevelStack(bottom_layer, top_layer);
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
+		levelStack = new LevelStack(new Layer(Resources.levelTileSet), new Layer(Resources.levelTileSet));
+		levelState = new LevelState(new Layer(Resources.levelTileSet), new Layer(Resources.levelTileSet));
+		tileSelectorFrame = new TileSelectorFrame("TileSet", Resources.levelTileSet, editorState);
 
-		levelState = new LevelState(bottom_layer, top_layer);
-
+		// Load level at beginning location
 		readFromFile(levelpos);
 		
 		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
@@ -126,6 +122,19 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("Save clicked");
+				String fileName = levelPos2FileName(levelpos);
+			    int retVal = JOptionPane.showConfirmDialog (null, "Would you like to overwrite " + fileName,"Warning", JOptionPane.YES_NO_OPTION);
+			    if (retVal == JOptionPane.YES_OPTION) {
+					saveToFile(fileName);
+	            }
+			}
+		});
+		fileMenu.add(saveMenuItem);
+
+		JMenuItem saveAsMenuItem = new JMenuItem("Save As"); 
+		saveAsMenuItem.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				System.out.println("Save As clicked");
 				JFileChooser fc = new JFileChooser();
 				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int retVal = fc.showSaveDialog(Rpg1.this);
@@ -134,7 +143,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	            }
 			}
 		});
-		fileMenu.add(saveMenuItem);
+		fileMenu.add(saveAsMenuItem);
 
 		JMenuItem saveConfigMenuItem = new JMenuItem("Save config"); 
 		saveConfigMenuItem.addMouseListener(new MouseAdapter() { 
@@ -433,19 +442,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		
 	}
-	public void loadConfig(String fileName)
-	{
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(fileName);
-			Resources.readTilePatternsFromOutputStream(fis);
-			Resources.dialogStyles = new ArrayList<>();
-			Resources.dialogStyles.add(new DialogStyle(Resources.tilePatterns.get(4), levelTileSet));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public void readFromFile(Int2d levelpos)
 	{
@@ -455,7 +451,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		try {
 			fileInputStream = new FileInputStream(fileName);
 			levelState.readFromFileInputStream(fileInputStream);
-			//Resources.readTilePatternsFromOutputStream(fileInputStream);
 			levelStack = new LevelStack(levelState.bottom_layer, levelState.top_layer);
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {

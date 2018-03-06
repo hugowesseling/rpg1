@@ -119,6 +119,9 @@ public class LevelState {
 		try {
 			ois = new ObjectInputStream(fileInputStream);
 			allCharacters = (Vector<GameCharacter>) ois.readObject();
+			for(GameCharacter character:allCharacters) {
+				System.out.println("Read GameCharacter: " + character);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -12,6 +12,11 @@ public class Dialogue implements Serializable {
 		super();
 		this.startDialogueBlock = startDialogueBlock;
 		this.currentDialogueBlock = startDialogueBlock;
+		if(dialogStyle == null) {
+			dialogStyle = Resources.dialogStyles.get(0);
+			System.out.println("Setting dialogstyle to:" + dialogStyle);
+		}
+		
 		this.dialogStyle = dialogStyle;
 	}
 

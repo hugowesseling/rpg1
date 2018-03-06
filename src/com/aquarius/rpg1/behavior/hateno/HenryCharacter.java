@@ -1,5 +1,11 @@
 package com.aquarius.rpg1.behavior.hateno;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+
 import com.aquarius.rpg1.CharacterPosition;
 import com.aquarius.rpg1.CharacterTileSet;
 import com.aquarius.rpg1.Dialogue;
@@ -17,19 +23,30 @@ import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
 import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
-public class HenryCharacter extends GameCharacter
+public class HenryCharacter extends GameCharacter implements Serializable
 {
 	private static final long serialVersionUID = 2895154313614688180L;
 
+	public HenryCharacter()
+	{
+		super();
+		System.out.println("HenryCharacter: Empty Constructor position: "  +position + ", for name " + name);
+	}
+	
 	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		super(position, characterTileSet, direction);
-		getInteractionPossibilities().add(InteractionPossibility.TALK);
-		
+		init();
+		System.out.println("HenryCharacter: Constructor position: "  +position + ", for name " + name);
+	}
+
+	private void init() {
+		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TALK));
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello");
 		dialogueBlock.add(new DialogueBlock("How are you doing?"))
 					 .add(new DialogueBlock("I'm doing great!"))
 				     .add(new DialogueBlock("See you later!"));
 		dialogue = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
+		System.out.println("HenryCharacter: init()");
 	}
 
 	private final static int STANDINGAROUND_DURATION = 10000;
@@ -57,4 +74,14 @@ public class HenryCharacter extends GameCharacter
 			}
 		}
 	}
+
+	private void readObject(ObjectInputStream ois)
+		    throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		init();
+		//name = (String)ois.readObject();
+		//position = (CharacterPosition) ois.readObject();
+		//direction = (Direction) ois.readObject();
+		System.out.println("HenryCharacter:Read position: "  +position + ", for name " + name);
+	}	
 }
