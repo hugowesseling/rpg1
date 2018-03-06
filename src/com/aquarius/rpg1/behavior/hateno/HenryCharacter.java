@@ -27,6 +27,11 @@ public class HenryCharacter extends GameCharacter implements Serializable
 {
 	private static final long serialVersionUID = 2895154313614688180L;
 
+	static {
+		System.out.println("HenryCharacter.static");
+		Resources.addCharacterSubClass(HenryCharacter.class.getCanonicalName());
+	}
+	
 	public HenryCharacter()
 	{
 		super();

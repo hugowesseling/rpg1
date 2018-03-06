@@ -15,7 +15,6 @@ public class Dialogue {
 			dialogStyle = Resources.dialogStyles.get(0);
 			System.out.println("Setting dialogstyle to:" + dialogStyle);
 		}
-		
 		this.dialogStyle = dialogStyle;
 	}
 

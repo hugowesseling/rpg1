@@ -17,6 +17,7 @@ public class TileSet
 
 	public TileSet(String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight)
 	{
+		System.out.println("Loading tileSet " + fileName);
 		this.fileName = fileName; 
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
 	}

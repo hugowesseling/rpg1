@@ -12,8 +12,10 @@ public class Resources {
 	public static TileSet characterTileSets = new TileSet("/characters1.png", 26, 36, 0, 0);
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static Vector<TilePattern> tilePatterns = new Vector<>();
+    public static ArrayList<String> characterSubClasses = new ArrayList<String>(); 
 
     static {
+    	System.out.println("Resources.static");
     	loadConfig("rpg1.config");
     }
 	public static TilePattern getTilePatternFromTile(int tileX, int tileY)
@@ -53,5 +55,10 @@ public class Resources {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static void addCharacterSubClass(String string) {
+		System.out.println("addCharacterSubClass: Adding " + string);
+		characterSubClasses.add(string);
 	}
 }

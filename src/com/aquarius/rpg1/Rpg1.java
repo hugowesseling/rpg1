@@ -2,7 +2,8 @@ package com.aquarius.rpg1;
 
 import java.awt.BorderLayout;
 
-// TODO: stitching levels together
+// TODO: Optimize graphics (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
+// DONE: stitching levels together
 // DONE: Automatic path routing
 //		 Create boolean map from where there is the path type and where there isn't, create a 8 boolean (8 directions) to one index (0-28) mapping to choose the correct tile
 // DONE: View screen resizing
@@ -18,6 +19,8 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -35,6 +38,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -42,6 +49,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JToggleButton;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
@@ -52,6 +60,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private static final long serialVersionUID = 1L;
 	private static final int MENUBAR_HEIGHT = 45;
 	private boolean running = false;
+	private boolean simulating = false;;
 	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
 	private int screenx;
@@ -83,6 +92,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 		// Load level at beginning location
 		readFromFile(levelpos);
+
+		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
 		
 		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
@@ -169,6 +180,18 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	          });
 		fileMenu.add(exitMenuItem);
 		menuBar.add(fileMenu);
+		
+		JMenu simulateMenu = new JMenu("Simulate");
+		JCheckBoxMenuItem simulateMenuItem = new JCheckBoxMenuItem("Simulate");
+		simulateMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				simulating = ((AbstractButton)event.getSource()).getModel().isSelected();
+			}
+		});
+		simulateMenu.add(simulateMenuItem);
+		menuBar.add(simulateMenu);
+		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
 	}
@@ -186,7 +209,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	@Override
 	public void keyTyped(KeyEvent keyEvent)
 	{
-		//System.out.println("Key typed: " + keyEvent);
+		System.out.println("Key typed: " + keyEvent);
 		if(keyEvent.getKeyChar() == '')
 		{
 			System.out.println("Ctrl-Z typed");
@@ -196,6 +219,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	@Override
 	public void keyPressed(KeyEvent ke) 
 	{
+		System.out.println("Key pressed");
 		int keyCode = ke.getKeyCode();
 		input.set(keyCode, true);
 		if(keyCode == KeyEvent.VK_A)
@@ -273,22 +297,24 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter);
 
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
-		player.draw(imageGraphics, frameCounter, screenx, screeny);
-
-		if(dialogue != null) {
-			//System.out.println("Drawing dialogue");
-			dialogue.draw(imageGraphics, 
-					50, imageHeight-100, 
-					imageWidth-100, 2 * Constant.TILE_HEIGHT);
-		}else {		
-			if(player.getTalkActionCharacter() != null) {
-				imageGraphics.setColor(Color.BLUE);
-				imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
-				imageGraphics.setColor(Color.WHITE);
-				imageGraphics.drawString("Talk", imageWidth - 60, 40);
+		
+		if(simulating) {
+			player.draw(imageGraphics, frameCounter, screenx, screeny);
+	
+			if(dialogue != null) {
+				//System.out.println("Drawing dialogue");
+				dialogue.draw(imageGraphics, 
+						50, imageHeight-100, 
+						imageWidth-100, 2 * Constant.TILE_HEIGHT);
+			}else {		
+				if(player.getTalkActionCharacter() != null) {
+					imageGraphics.setColor(Color.BLUE);
+					imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
+					imageGraphics.setColor(Color.WHITE);
+					imageGraphics.drawString("Talk", imageWidth - 60, 40);
+				}
 			}
 		}
-		
 		imageGraphics.dispose();
 
 		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
@@ -299,14 +325,16 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			e.printStackTrace();
 		}
-		frameCounter++;
-
-		levelState.doActions(worldState);
-		if(frameCounter %10 == 0) {
-			levelState.think(player, worldState, levelState);
+		if(simulating) {
+			frameCounter++;
+	
+			levelState.doActions(worldState);
+			if(frameCounter %10 == 0) {
+				levelState.think(player, worldState, levelState);
+			}
+	
+			player.determineTalkActionCharacter(levelState.allCharacters);
 		}
-
-		player.determineTalkActionCharacter(levelState.allCharacters);
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
@@ -403,11 +431,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	
 
-	public static void main(String[] args)
-	{
-		Rpg1 rpg1=new Rpg1();
-		rpg1.start();
-	}
 	protected void closing()
 	{
 		System.out.println("Closing");
@@ -577,5 +600,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}
 			}
 		}
+	}
+
+	public static void main(String[] args)
+	{
+		Rpg1 rpg1=new Rpg1();
+		rpg1.start();
 	}
 }
