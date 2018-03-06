@@ -14,13 +14,12 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	private static final long serialVersionUID = 4512007766793306312L;
 	protected CharacterPosition position;
 	private CharacterTileSet characterTileSet;
-	private CharacterBehavior behavior;
 	private CharacterAction action;
 	private Direction direction;
 	private Int2d movement;
-	protected HashSet<InteractionPossibility> interactionPossibilities;
 	float health;
-	protected Dialogue dialogue = null;
+	protected transient HashSet<InteractionPossibility> interactionPossibilities;
+	protected transient Dialogue dialogue = null;
 	protected String name;
 
 	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
@@ -34,7 +33,6 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		this.characterTileSet = characterTileSet;
 		this.direction = direction;
 		this.action = null;
-		this.behavior = new NothingBehavior();
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
@@ -55,10 +53,6 @@ public class GameCharacter implements CharacterBehavior, Serializable
 
 	public CharacterPosition getPosition() {
 		return position;
-	}
-
-	public CharacterBehavior getBehavior() {
-		return behavior;
 	}
 
 	protected void setAction(CharacterAction action){
@@ -123,7 +117,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 
 		return dialogue ;
 	}
-	private void writeObject(java.io.ObjectOutputStream oos)	throws IOException {
+	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
 		System.out.println("Writing position: "  + position + ", for name " + name);
 		oos.defaultWriteObject();
 		//stream.writeObject(name);
@@ -131,8 +125,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		//stream.writeObject(direction);
 	}
 
-	private void readObject(ObjectInputStream ois)
-		    throws ClassNotFoundException, IOException {
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
 		//name = (String)ois.readObject();
 		//position = (CharacterPosition) ois.readObject();

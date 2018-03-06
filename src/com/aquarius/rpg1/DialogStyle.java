@@ -3,8 +3,7 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
-public class DialogStyle {
-
+public class DialogStyle  {
 	private TilePattern tilePattern;
 	private TileSet tileSet;
 	
@@ -34,7 +33,5 @@ public class DialogStyle {
 		graphics.translate(x, y);
 		layer.drawLayer(graphics, (w/Constant.TILE_WIDTH -1)*Constant.TILE_WIDTH, (h/ Constant.TILE_HEIGHT-1)* Constant.TILE_HEIGHT, 0, 0, false);
 		graphics.setTransform(transform);
-		
 	}
-
 }
