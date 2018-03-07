@@ -26,6 +26,16 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+/*
+TileSelectorFrame:
+Things that belong together:
+- imageWidth, imageHeight (can be set upon switching)
+- tileSet
+- tileCollision (should be a part of a tile set)
+- selectedTilePattern (reset upon switching)
+
+ */
+
 public class TileSelectorFrame extends Component implements MouseListener, MouseMotionListener
 {
 	private enum EditMode {
@@ -38,7 +48,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	public TileSet tileSet;
 	private boolean mouseDownLeft;
 	private Int2d mouseStart = null;
-    private boolean[][] tileCollision;
     private EditMode editMode;
 	public TilePattern selectedTilePattern = null;
 	private static int drawCounter = 0;
@@ -46,7 +55,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
     public TileSelectorFrame(String name, TileSet tileSet, EditorState editorState)
 	{
 		this.tileSet = tileSet;
-		tileCollision = new boolean[tileSet.tiles.length][tileSet.tiles[0].length];
 		this.editorState = editorState;
 		imageWidth = tileSet.tiles.length * Constant.TILE_WIDTH;
 		imageHeight = tileSet.tiles[0].length * Constant.TILE_HEIGHT;
@@ -151,7 +159,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 						}else
 						if(editMode == EditMode.TILE_COLLISION_EDIT)
 						{
-							imageG.setColor(tileCollision[x][y] ? Color.RED : Color.GREEN);
+							imageG.setColor(tileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
 							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
 						}
 					}
@@ -280,8 +288,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
 			if(editMode == EditMode.TILE_COLLISION_EDIT)
 			{
-				if(tileX >= 0 && tileX < tileCollision.length && tileY >= 0 && tileY < tileCollision[0].length)
-					tileCollision[tileX][tileY] = !tileCollision[tileX][tileY]; 
+				if(tileX >= 0 && tileX < tileSet.tileCollision.length && tileY >= 0 && tileY < tileSet.tileCollision[0].length)
+					tileSet.tileCollision[tileX][tileY] = !tileSet.tileCollision[tileX][tileY]; 
 			}else		
 			if(editMode == EditMode.SELECT_TILES)
 			{

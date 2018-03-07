@@ -106,11 +106,21 @@ public class Layer {
 		{
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			tiles = (int[][]) objectInputStream.readObject();
+			//convert2newIndex();
 		}catch(IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void convert2newIndex() {
+		for(int x=0;x<tiles.length;x++)
+			for(int y=0;y<tiles[0].length;y++) {
+				int tileX = tiles[x][y] % tileSet.tiles.length;
+				int tileY = tiles[x][y] / tileSet.tiles.length;
+				tiles[x][y] = TileSet.getTileIndexFromXY(tileX, tileY);
+			}
 	}
 
 	public int getHeight() 

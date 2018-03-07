@@ -12,7 +12,9 @@ import com.aquarius.common2dgraphics.Art;
 
 public class TileSet
 {
-	public BufferedImage[][] tiles ;
+	public BufferedImage[][] tiles;
+    boolean[][] tileCollision;
+
 	private String fileName;
 
 	public TileSet(String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight)
@@ -20,22 +22,23 @@ public class TileSet
 		System.out.println("Loading tileSet " + fileName);
 		this.fileName = fileName; 
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
+		tileCollision = new boolean[tiles.length][tiles[0].length];
 	}
 
-	public int getTileIndexFromXY(int x, int y)
+	public static int getTileIndexFromXY(int x, int y)
 	{
-		return y * tiles.length + x;
+		return y * 256 + x;
 	}
 	
-	public Int2d getTileXYFromIndex(int index)
+	public static Int2d getTileXYFromIndex(int index)
 	{
-		return new Int2d(index % tiles.length, index / tiles.length);
+		return new Int2d(index % 256, index / 256);
 	}
 
 	public Image getTileImageFromIndex(int i)
 	{
-		int y = i / tiles.length;
-		int x = i - y * tiles.length;
+		int y = i / 256;
+		int x = i % 256;
 		return getTileImageFromXY(x,y);
 	}
 
