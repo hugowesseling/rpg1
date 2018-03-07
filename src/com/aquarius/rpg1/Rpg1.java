@@ -95,9 +95,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState = new EditorState();
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
-		levelStack = new LevelStack(new Layer(Resources.levelTileSet), new Layer(Resources.levelTileSet));
-		levelState = new LevelState(new Layer(Resources.levelTileSet), new Layer(Resources.levelTileSet));
-		tileSelectorFrame = new TileSelectorFrame("TileSet", Resources.levelTileSet, editorState);
+		levelStack = new LevelStack(new Layer(), new Layer());
+		levelState = new LevelState(new Layer(), new Layer());
+		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
 
 		// Load level at beginning location
 		readFromFile(levelpos);
@@ -636,7 +636,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				if(tileSelectorFrame.selectedTilePattern != null)
 				{
 					levelStack.pushLayers();
-					tileSelectorFrame.selectedTilePattern.place(layer, tileX, tileY, true);
+					tileSelectorFrame.selectedTilePattern.place(layer, tileSelectorFrame.currentTileSet, tileX, tileY, true);
 					levelStack.popLayersIfNoChange();
 				}else
 				if(editorState.tileSelection != null)
@@ -648,7 +648,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					{
 						for(int y = 0; y <= bottomright.y - topleft.y; y++)
 						{
-							layer.setTile(x + tileX, y + tileY, tileSelectorFrame.tileSet.getTileIndexFromXY(x + topleft.x, y + topleft.y));
+							layer.setTile(x + tileX, y + tileY, tileSelectorFrame.currentTileSet.getTileIndexFromXY(x + topleft.x, y + topleft.y));
 						}
 					}
 					levelStack.popLayersIfNoChange();

@@ -15,29 +15,33 @@ public class TileSet
 	public BufferedImage[][] tiles;
     boolean[][] tileCollision;
 
-	private String fileName;
+	public String fileName;
+	private int index;
 
-	public TileSet(String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight)
+	public TileSet(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight)
 	{
 		System.out.println("Loading tileSet " + fileName);
-		this.fileName = fileName; 
+		this.index = index;
+		this.fileName = fileName;
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
 		tileCollision = new boolean[tiles.length][tiles[0].length];
 	}
 
-	public static int getTileIndexFromXY(int x, int y)
+	public int getTileIndexFromXY(int x, int y)
 	{
-		return y * 256 + x;
+		int retval = index * 65536 + y * 256 + x;
+		System.out.println("getTileIndexFromXY: " + retval);
+		return retval;
 	}
 	
 	public static Int2d getTileXYFromIndex(int index)
 	{
-		return new Int2d(index % 256, index / 256);
+		return new Int2d(index % 256, (index / 256) % 256);
 	}
 
 	public Image getTileImageFromIndex(int i)
 	{
-		int y = i / 256;
+		int y = (i / 256) % 256;
 		int x = i % 256;
 		return getTileImageFromXY(x,y);
 	}
@@ -47,32 +51,5 @@ public class TileSet
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return tiles[x][y];
 		return tiles[0][0];
-	}
-
-	public void writeToFileOutputStream(FileOutputStream fileOutputStream)
-	{
-		ObjectOutputStream objectOutputStream;
-		try {
-			objectOutputStream = new  ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeObject(fileName);
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public void readFromFileInputStream(FileInputStream fileInputStream)
-	{
-		ObjectInputStream objectInputStream;
-		try {
-			objectInputStream = new  ObjectInputStream(fileInputStream);
-			fileName = (String) objectInputStream.readObject();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		} catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
 	}
 }

@@ -106,7 +106,7 @@ public class TilePattern implements Serializable
 	}
 
 
-	public void place(Layer layer, int tileX, int tileY, boolean placeNeighborhood)
+	public void place(Layer layer, TileSet tileSet, int tileX, int tileY, boolean placeNeighborhood)
 	{
 		// Determine correct tile to place and set it on layer
 		if(tilePatternTiles.size() == 0)
@@ -127,7 +127,7 @@ public class TilePattern implements Serializable
 				maxMatchRate = matchRate;
 			}
 		}
-		layer.setTile(tileX, tileY, layer.tileSet.getTileIndexFromXY(maxRateTilePatternTile.tileX, maxRateTilePatternTile.tileY));
+		layer.setTile(tileX, tileY, tileSet.getTileIndexFromXY(maxRateTilePatternTile.tileX, maxRateTilePatternTile.tileY));
 		if(placeNeighborhood)
 		{
 			// Check all neighborhood tiles that are also in this tilePattern and update them
@@ -142,10 +142,10 @@ public class TilePattern implements Serializable
 					{
 						// Check if in this tilePattern
 						int tileIndex = layer.getTile(nTileX, nTileY);
-						Int2d tileXY = layer.tileSet.getTileXYFromIndex(tileIndex);
+						Int2d tileXY = tileSet.getTileXYFromIndex(tileIndex);
 						if(isTileInTilePattern(tileXY.x,tileXY.y))
 						{
-							place(layer, nTileX, nTileY, false);
+							place(layer, tileSet, nTileX, nTileY, false);
 						}
 					}
 				}
@@ -167,7 +167,7 @@ public class TilePattern implements Serializable
 					result[x+1][y+1] = false;
 				}else
 				{
-					Int2d tileXY = layer.tileSet.getTileXYFromIndex(tileIndex);
+					Int2d tileXY = TileSet.getTileXYFromIndex(tileIndex);
 					result[x+1][y+1] = isTileInTilePattern(tileXY.x,tileXY.y);
 				}
 			}

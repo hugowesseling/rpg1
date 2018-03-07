@@ -11,12 +11,10 @@ import java.io.ObjectOutputStream;
 public class Layer {
 
 	public int[][] tiles = new int[20][20];
-	public TileSet tileSet;
 	private int drawCounter = 0;
 	
-	public Layer(TileSet tileSet)
+	public Layer()
 	{
-		this.tileSet = tileSet;
 	}
 
 	public void drawLayer(Graphics2D graphics, int imageWidth, int imageHeight, int screenx, int screeny, boolean animate)
@@ -39,7 +37,7 @@ public class Layer {
 				{
 					if(x >= 0 && x < tiles.length)
 					{
-						graphics.drawImage(tileSet.getTileImageFromIndex(tiles[x][y]), x*16-screenx, y*16-screeny, null);
+						graphics.drawImage(Resources.getTileImageFromIndex(tiles[x][y]), x*16-screenx, y*16-screeny, null);
 					}
 				}
 			}
@@ -71,7 +69,6 @@ public class Layer {
 
 	public void writeToFileOutputStream(FileOutputStream fileOutputStream)
 	{
-		tileSet.writeToFileOutputStream(fileOutputStream);
 		ObjectOutputStream objectOutputStream;
 		try {
 			objectOutputStream = new  ObjectOutputStream(fileOutputStream);
@@ -101,7 +98,16 @@ public class Layer {
 	
 	public void readFromFileInputStream(FileInputStream fileInputStream)
 	{
-		tileSet.readFromFileInputStream(fileInputStream);
+		/* temporary string reader
+		try {
+			new ObjectInputStream(fileInputStream).readObject();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		try
 		{
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -114,14 +120,14 @@ public class Layer {
 		}
 	}
 
-	private void convert2newIndex() {
+	/*private void convert2newIndex() {
 		for(int x=0;x<tiles.length;x++)
 			for(int y=0;y<tiles[0].length;y++) {
 				int tileX = tiles[x][y] % tileSet.tiles.length;
 				int tileY = tiles[x][y] / tileSet.tiles.length;
 				tiles[x][y] = TileSet.getTileIndexFromXY(tileX, tileY);
 			}
-	}
+	}*/
 
 	public int getHeight() 
 	{

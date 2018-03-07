@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,6 +22,7 @@ import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -45,26 +47,35 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private int imageWidth;
 	private int imageHeight;
 	private EditorState editorState;
-	public TileSet tileSet;
 	private boolean mouseDownLeft;
 	private Int2d mouseStart = null;
     private EditMode editMode;
 	public TilePattern selectedTilePattern = null;
+	TileSet currentTileSet;
+	private JFrame jFrame;
 	private static int drawCounter = 0;
 
-    public TileSelectorFrame(String name, TileSet tileSet, EditorState editorState)
+    public TileSelectorFrame(String name, EditorState editorState)
 	{
-		this.tileSet = tileSet;
 		this.editorState = editorState;
-		imageWidth = tileSet.tiles.length * Constant.TILE_WIDTH;
-		imageHeight = tileSet.tiles[0].length * Constant.TILE_HEIGHT;
 		editMode = EditMode.SELECT_TILES;
 		
-		setSize(imageWidth * 2,imageHeight * 2);
-		setPreferredSize(new Dimension(imageWidth * 2,imageHeight * 2));
-		JFrame jFrame=new JFrame(name);
+		jFrame=new JFrame(name);
 		
 		JMenuBar menuBar = new JMenuBar();
+		String[] tileSetStrings = Resources.getTileSetNames();
+		JComboBox<String> tileSetCombobox = new JComboBox<String>(tileSetStrings);
+		tileSetCombobox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				JComboBox<String> comboBox = (JComboBox<String>) ae.getSource();
+				int index = comboBox.getSelectedIndex();
+				System.out.println("Selected tileset index: " + index);
+				setCurrentTileSet(index);
+			}
+		});
+		menuBar.add(tileSetCombobox);
+		
 		JMenu optionsMenu = new JMenu("Options");
 		JMenuItem editTilePatterngMenuItem = new JMenuItem("Edit Tile Patterns");
 		optionsMenu.add(editTilePatterngMenuItem);
@@ -126,10 +137,19 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		
 		
 		jFrame.add(this);
-		jFrame.pack();
+		setCurrentTileSet(0);
 		jFrame.setVisible(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+
+	private void setCurrentTileSet(int index) {
+		currentTileSet = Resources.levelTileSets[index];
+		imageWidth = currentTileSet.tiles.length * Constant.TILE_WIDTH;
+		imageHeight = currentTileSet.tiles[0].length * Constant.TILE_HEIGHT;
+		setSize(imageWidth * 2,imageHeight * 2);
+		setPreferredSize(new Dimension(imageWidth * 2,imageHeight * 2));
+		jFrame.pack();
 	}
 
 	@Override
@@ -145,13 +165,13 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		int tilesheight = imageHeight/16+1;
 		for(int y=0;y<tilesheight;y++)
 		{
-			if(y >= 0 && y < tileSet.tiles[0].length)
+			if(y >= 0 && y < currentTileSet.tiles[0].length)
 			{
 				for(int x=0;x<tileswidth;x++)
 				{
-					if(x >= 0 && x< tileSet.tiles.length)
+					if(x >= 0 && x< currentTileSet.tiles.length)
 					{
-						imageG.drawImage(tileSet.tiles[x][y], x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, null);
+						imageG.drawImage(currentTileSet.tiles[x][y], x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, null);
 						if(editMode == EditMode.TILE_PATTERN_SELECTION)
 						{
 							imageG.setColor(Color.GRAY);
@@ -159,7 +179,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 						}else
 						if(editMode == EditMode.TILE_COLLISION_EDIT)
 						{
-							imageG.setColor(tileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
+							imageG.setColor(currentTileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
 							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
 						}
 					}
@@ -288,8 +308,11 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
 			if(editMode == EditMode.TILE_COLLISION_EDIT)
 			{
-				if(tileX >= 0 && tileX < tileSet.tileCollision.length && tileY >= 0 && tileY < tileSet.tileCollision[0].length)
-					tileSet.tileCollision[tileX][tileY] = !tileSet.tileCollision[tileX][tileY]; 
+				if(tileX >= 0 &&
+				   tileX < currentTileSet.tileCollision.length &&
+				   tileY >= 0 &&
+				   tileY < currentTileSet.tileCollision[0].length)
+					currentTileSet.tileCollision[tileX][tileY] = !currentTileSet.tileCollision[tileX][tileY]; 
 			}else		
 			if(editMode == EditMode.SELECT_TILES)
 			{
@@ -297,7 +320,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				int tileY1 = mouseStart.y / Constant.TILE_HEIGHT;
 				
 				editorState.setTileSelection(tileX, tileY, tileX1, tileY1);
-				System.out.println("Topleft index: " + tileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
+				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
 			}
 		}
 	}
