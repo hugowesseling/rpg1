@@ -13,6 +13,7 @@ public class Resources {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1),
 			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0)
 	};
+	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1);
 	public static TileSet characterTileSets = new TileSet(-1, "/characters1.png", 26, 36, 0, 0);
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static Vector<TilePattern> tilePatterns = new Vector<>();

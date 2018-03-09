@@ -20,6 +20,7 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -325,6 +326,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		
 		if(simulating) {
 			player.draw(imageGraphics, frameCounter, screenx, screeny);
+			int[] SWORD_DIRECTION_ORDER = {0,1,3,2};
+			int frame = frameCounter/3 % 6;
+			if(frame<3) {
+				Image swordimage = Resources.swordAttack.getTileImageFromXY(
+						frame, 
+						SWORD_DIRECTION_ORDER[player.getDirection().tileOffset % SWORD_DIRECTION_ORDER.length]);
+				imageGraphics.drawImage(swordimage, player.position.x - screenx - 19, player.position.y - screeny - 15, null);
+			}
 	
 			if(dialogue != null) {
 				//System.out.println("Drawing dialogue");
