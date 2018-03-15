@@ -21,6 +21,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
 	protected transient Dialogue dialogue = null;
 	protected String name;
+	protected Weapon weapon = null;
 
 	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
 		this("noname", position, characterTileSet, direction);
@@ -49,6 +50,9 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
 	{
 		characterTileSet.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / 10);
+		if(weapon != null) {
+			weapon.draw(graphics,frameCounter, screenx, screeny);
+		}
 	}
 
 	public CharacterPosition getPosition() {
@@ -74,10 +78,6 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		// TODO Auto-generated method stub
 	}*/
 
-	@Override
-	public void think(Player player, WorldState worldState, LevelState levelState) {
-	}
-
 	public Direction getDirection() {
 		return direction;
 	}
@@ -94,11 +94,14 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		position.add(movement);
 	}
 	
-	public void doAction(WorldState worldState) {
+	public void doActionAndWeapon(WorldState worldState, LevelState levelState) {
 		if(action != null) {
 			if(action.doAction(worldState)) {
 				action = null;
 			}
+		}
+		if(weapon != null) {
+			weapon.think(worldState, levelState);
 		}
 	}
 
@@ -132,5 +135,16 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		//direction = (Direction) ois.readObject();
 		System.out.println("Read position: "  +position + ", for name " + name);
 	}
-	
+
+	public void useWeapon() {
+		if(weapon != null) {
+			weapon.startUse();
+		}
+	}
+
+	@Override
+	public void think(Player player, WorldState worldState, LevelState levelState) {
+		
+	}	
+
 }

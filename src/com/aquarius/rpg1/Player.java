@@ -2,13 +2,13 @@ package com.aquarius.rpg1;
 
 import java.util.Vector;
 
-import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
-
 public class Player extends GameCharacter {
+	private static final long serialVersionUID = 1752542798493227606L;
 	Vector<CarryableItem> itemsCarried;
 	private GameCharacter talkActionCharacter = null;
 	public Player(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
-		super(position, characterTileSet, direction);
+		super("player", position, characterTileSet, direction);
+		weapon = new Sword(this);
 	}
 	public GameCharacter getTalkActionCharacter() {
 		return talkActionCharacter;
@@ -31,5 +31,4 @@ public class Player extends GameCharacter {
 			}
 		}
 	}
-	
 }

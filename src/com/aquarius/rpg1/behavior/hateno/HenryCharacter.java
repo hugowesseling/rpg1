@@ -56,6 +56,7 @@ public class HenryCharacter extends GameCharacter implements Serializable
 
 	private final static int STANDINGAROUND_DURATION = 10000;
 	
+	@Override
 	public void think(Player player, WorldState worldState, LevelState levelState)
 	{
 		// Henry's behavior: walk from tree to tree, if player gets near, walk up to him and wait

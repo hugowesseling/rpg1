@@ -262,6 +262,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}				
 			}
 		}
+		if(keyCode == KeyEvent.VK_S) {
+			player.useWeapon();
+		}
 		if(keyCode == KeyEvent.VK_UP)
 		{
 			if(dialogue != null)
@@ -326,14 +329,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		
 		if(simulating) {
 			player.draw(imageGraphics, frameCounter, screenx, screeny);
-			int[] SWORD_DIRECTION_ORDER = {0,1,3,2};
-			int frame = frameCounter/3 % 6;
-			if(frame<3) {
-				Image swordimage = Resources.swordAttack.getTileImageFromXY(
-						frame, 
-						SWORD_DIRECTION_ORDER[player.getDirection().tileOffset % SWORD_DIRECTION_ORDER.length]);
-				imageGraphics.drawImage(swordimage, player.position.x - screenx - 19, player.position.y - screeny - 15, null);
-			}
 	
 			if(dialogue != null) {
 				//System.out.println("Drawing dialogue");
@@ -365,12 +360,13 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		if(simulating) {
 			frameCounter++;
-	
-			levelState.doActions(worldState);
-			if(frameCounter %10 == 0) {
-				levelState.think(player, worldState, levelState);
+			if(frameCounter % 10 == 0) {
+				levelState.think(player, worldState);
 			}
 	
+			levelState.doActionsWeaponAndMovement(worldState);
+			
+			player.doActionAndWeapon(worldState, levelState);
 			player.determineTalkActionCharacter(levelState.allCharacters);
 		}
 	}

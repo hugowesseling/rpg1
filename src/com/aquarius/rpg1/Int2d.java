@@ -29,4 +29,8 @@ public class Int2d implements Position, Serializable
 	public String toString() {
 		return x + ", " + y;
 	}
+
+	public Int2d rotate90() {
+		return new Int2d(y, -x);
+	}
 }

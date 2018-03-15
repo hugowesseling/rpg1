@@ -85,17 +85,17 @@ public class LevelState {
 		}
 			}
 
-	public void doActions(WorldState worldState) {
-		// Do actions and thinking
+	public void doActionsWeaponAndMovement(WorldState worldState) {
+		// Do actions and movement
 		for(GameCharacter gameCharacter: allCharacters) {
-			gameCharacter.doAction(worldState);
+			gameCharacter.doActionAndWeapon(worldState, this);
 			gameCharacter.doMovement();
 		}
 	}
-
-	public void think(Player player, WorldState worldState, LevelState levelState) {
-		for(GameCharacter gameCharacter: levelState.allCharacters) {
-			gameCharacter.think(player, worldState, levelState);
+	public void think(Player player, WorldState worldState) {
+		// Do actions and movement
+		for(GameCharacter gameCharacter: allCharacters) {
+			gameCharacter.think(player, worldState, this);
 		}
 	}
 

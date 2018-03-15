@@ -1,5 +1,6 @@
 package com.aquarius.rpg1.behavior;
 
+import com.aquarius.rpg1.GameCharacter;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
