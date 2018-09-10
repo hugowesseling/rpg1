@@ -2,8 +2,41 @@ package com.aquarius.rpg1;
 
 import java.awt.BorderLayout;
 
-// TODO: Add character editing dialog upon adding a character
+/*
+Need a simple story:
+- Go find a person in another town and talk to some people that then tell different things.
+	- Retrieve object after searching
+
+Minimal additions:
+- Collision with objects and other characters
+	- Check if colliding
+		- for each object, check world for colliding objects
+			- define what are colliding objects:
+				xMmark with tile editor special mode
+					- houses except roofs
+					- bottom of trees
+				- Save all TileSet.tileCollision's into config
+					Add to Rpg.saveConfigToFile()
+				
+	- push both objects back until not colliding, position on pixel basis
+- Random walking around midpoint behavior
+- world state dependent dialogs
+
+Then:
+- World changing events:
+	- Doors opening
+	- Rocks moving
+	- Characters/objects appearing
+ */
+
+// TODO: Add collision with objects
 // TODO: Optimize graphics (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
+// TODO: Add shield and enemy behavior
+// TODO: Add clipboard window (to copy paste level parts on and off) 
+
+
+// DONE: Add sword fighting
+// DONE: Add character editing dialog upon adding a character
 // DONE: stitching levels together
 // DONE: Automatic path routing
 //		 Create boolean map from where there is the path type and where there isn't, create a 8 boolean (8 directions) to one index (0-28) mapping to choose the correct tile
