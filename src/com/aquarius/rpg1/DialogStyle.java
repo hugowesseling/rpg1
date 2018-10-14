@@ -10,8 +10,8 @@ public class DialogStyle  {
 	private Layer layer = null;
 	private int prev_w=0, prev_h=0;
 
-	public DialogStyle(TilePattern tilePattern, TileSet tileSet) {
-		this.tilePattern = tilePattern;
+	public DialogStyle(int tilePatternIndex, TileSet tileSet) {
+		this.tilePattern = tileSet.tilePatterns.get(tilePatternIndex);
 		this.tileSet = tileSet;
 	}
 

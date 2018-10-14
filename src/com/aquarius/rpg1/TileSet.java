@@ -3,10 +3,14 @@ package com.aquarius.rpg1;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import com.aquarius.common2dgraphics.Art;
 
@@ -17,14 +21,97 @@ public class TileSet
 
 	public String fileName;
 	private int index;
+    public Vector<TilePattern> tilePatterns = new Vector<>();
+	private boolean hasTilePattern;
+	
 
-	public TileSet(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight)
+	public TileSet(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight, boolean hasTilePattern)
 	{
 		System.out.println("Loading tileSet " + fileName);
 		this.index = index;
 		this.fileName = fileName;
+		this.hasTilePattern = hasTilePattern;
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
 		tileCollision = new boolean[tiles.length][tiles[0].length];
+		if(this.hasTilePattern) {
+			loadTilePattern();
+		}
+	}
+	
+	public void saveTileSetData()
+	{
+		if(!hasTilePattern)
+		{
+			System.err.println("No tile pattern data to save for " + fileName);
+		}
+		String tilePatternFileName = getTilePatternFileName();
+		System.out.println("Saving game to " + tilePatternFileName);
+		try {
+			FileOutputStream fos = new FileOutputStream(tilePatternFileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(tilePatterns);
+			//oos.writeObject(tileCollision);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+
+	private String getTilePatternFileName() {
+		return replaceExtension(this.fileName, "config");
+	}
+
+	private static String replaceExtension(String fileName, String newExtension)
+	{
+		  int i = fileName.lastIndexOf('.');
+		  String newName = fileName.substring(0,i+1);
+		  return newName + newExtension;
+	}
+
+	public TilePattern getTilePatternFromTile(int tileX, int tileY)
+	{
+		for(TilePattern tilePattern:tilePatterns)
+		{
+			if(tilePattern.isTileInTilePattern(tileX,tileY))
+			{
+				return tilePattern;
+			}
+		}
+		return null;
+	}
+
+	public void readTilePatternsFromInputStream(FileInputStream fileInputStream)
+	{
+		try
+		{
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			tilePatterns = (Vector<TilePattern>) objectInputStream.readObject();
+		}catch(IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loadTilePattern()
+	{
+		URL tilePatternURL = TileSet.class.getResource(getTilePatternFileName());
+		if(tilePatternURL == null)
+		{
+			System.err.println("Resource " + getTilePatternFileName() + " not found");
+			System.exit(1);
+		}
+		String tilePatternFileName = tilePatternURL.getFile();
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(tilePatternFileName);
+			readTilePatternsFromInputStream(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getTileIndexFromXY(int x, int y)

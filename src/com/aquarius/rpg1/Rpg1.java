@@ -17,6 +17,7 @@ Minimal additions:
 					- bottom of trees
 				- Save all TileSet.tileCollision's into config
 					Add to Rpg.saveConfigToFile()
+					- First split up the tilePatterns to different tilesets
 				
 	- push both objects back until not colliding, position on pixel basis
 - Random walking around midpoint behavior
@@ -203,13 +204,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		JMenuItem saveConfigMenuItem = new JMenuItem("Save config"); 
 		saveConfigMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
-				System.out.println("Save config clicked");
-				JFileChooser fc = new JFileChooser();
-				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-				int retVal = fc.showSaveDialog(Rpg1.this);
-				if(retVal == JFileChooser.APPROVE_OPTION) {
-					saveConfigToFile(fc.getSelectedFile().getPath());
-	            }
+				saveConfig();
 			}
 
 		});
@@ -518,19 +513,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 	}
 
-	private void saveConfigToFile(String fileName) {
-		System.out.println("Saving game to " + fileName);
-		try {
-			FileOutputStream fos = new FileOutputStream(fileName);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(Resources.tilePatterns);
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	private void saveConfig() {
+		Resources.saveTileSetData();
 	}
 
 	public void readFromFile(Int2d levelpos)

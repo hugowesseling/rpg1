@@ -189,7 +189,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		if(editMode == EditMode.TILE_PATTERN_SELECTION)
 		{
 			imageG.setColor(Color.RED);
-			for(TilePattern tilePattern:Resources.tilePatterns)
+			for(TilePattern tilePattern:currentTileSet.tilePatterns)
 			{
 				tilePattern.draw(imageG);
 			}
@@ -252,18 +252,18 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			{
 				System.out.println("Cloning current tilePattern");
 				// Copy selected tilepattern translated from top-left most to mouseStart
-				Resources.tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
+				currentTileSet.tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
 			}
 		}else
 		{
 			if(editMode == EditMode.TILE_PATTERN_SELECTION)
 			{
-				TilePattern tilePattern = Resources.getTilePatternFromTile(tileX, tileY);
+				TilePattern tilePattern = currentTileSet.getTilePatternFromTile(tileX, tileY);
 				if(tilePattern == null)
 				{
 					tilePattern = new TilePattern();
 					tilePattern.addTile(new TilePatternTile(tileX, tileY));
-					Resources.tilePatterns.add(tilePattern);
+					currentTileSet.tilePatterns.add(tilePattern);
 				}
 				selectedTilePattern  = tilePattern; 
 				editMode = EditMode.TILE_PATTERN_EDIT;
