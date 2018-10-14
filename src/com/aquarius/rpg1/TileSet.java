@@ -50,6 +50,7 @@ public class TileSet
 			FileOutputStream fos = new FileOutputStream(tilePatternFileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(tilePatterns);
+			oos.writeObject(tileCollision);
 			//oos.writeObject(tileCollision);
 			fos.close();
 		} catch (FileNotFoundException e) {
@@ -60,7 +61,7 @@ public class TileSet
 	}
 
 	private String getTilePatternFileName() {
-		return replaceExtension(this.fileName, "config");
+		return getFileNamePart(replaceExtension(this.fileName, "config"));
 	}
 
 	private static String replaceExtension(String fileName, String newExtension)
@@ -70,6 +71,10 @@ public class TileSet
 		  return newName + newExtension;
 	}
 
+	private static String getFileNamePart(String fileName) {
+		int idx = fileName.replaceAll("\\\\", "/").lastIndexOf("/");
+		return idx >= 0 ? fileName.substring(idx + 1) : fileName;
+	}
 	public TilePattern getTilePatternFromTile(int tileX, int tileY)
 	{
 		for(TilePattern tilePattern:tilePatterns)
@@ -82,12 +87,13 @@ public class TileSet
 		return null;
 	}
 
-	public void readTilePatternsFromInputStream(FileInputStream fileInputStream)
+	public void readTileSetDataFromInputStream(FileInputStream fileInputStream)
 	{
 		try
 		{
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			tilePatterns = (Vector<TilePattern>) objectInputStream.readObject();
+			tileCollision = (boolean[][]) objectInputStream.readObject();
 		}catch(IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -97,17 +103,11 @@ public class TileSet
 
 	public void loadTilePattern()
 	{
-		URL tilePatternURL = TileSet.class.getResource(getTilePatternFileName());
-		if(tilePatternURL == null)
-		{
-			System.err.println("Resource " + getTilePatternFileName() + " not found");
-			System.exit(1);
-		}
-		String tilePatternFileName = tilePatternURL.getFile();
+		String tilePatternFileName = getTilePatternFileName();
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(tilePatternFileName);
-			readTilePatternsFromInputStream(fis);
+			readTileSetDataFromInputStream(fis);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
