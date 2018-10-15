@@ -132,6 +132,19 @@ public class TileSet
 		int x = i % 256;
 		return getTileImageFromXY(x,y);
 	}
+	
+	public boolean getTileCollisionFromIndex(int i)
+	{
+		int y = (i / 256) % 256;
+		int x = i % 256;
+		return getTileCollisionFromXY(x, y);
+	}
+	
+	public boolean getTileCollisionFromXY(int x, int y) {
+		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
+			return tileCollision[x][y];
+		return false;
+	}
 
 	public Image getTileImageFromXY(int x, int y)
 	{

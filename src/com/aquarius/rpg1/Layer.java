@@ -138,4 +138,16 @@ public class Layer {
 		return tiles.length;
 	}
 
+	public boolean collides(int xTile, int yTile, int radius) {
+		int tileIndex = getTile(xTile, yTile);
+		if(tileIndex != -1) {
+			boolean result = Resources.getTileCollisionFromIndex(tileIndex);
+			System.out.println("Checking " + xTile + ", " + yTile +": " + result);
+			return result;
+		} else {
+			System.out.println("No tileSet found for index " + tileIndex);
+			return false;
+		}
+	}
+
 }

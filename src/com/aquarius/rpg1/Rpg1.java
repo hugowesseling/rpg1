@@ -400,6 +400,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
+		CharacterPosition oldPlayerPosition = CharacterPosition(player.position);
 		if(input.buttons[Input.LEFT])
 		{
 			player.position.x -= 2;
@@ -423,6 +424,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			player.position.y += 2;
 			player.setDirection(Direction.SOUTH);
 			playerMoved = true;
+		}
+		if(player.collided(levelState))
+		{
+			playerMoved = false;
+			player.position = oldPlayerPosition;
 		}
 		if(playerMoved){
 			screenx = player.position.x - 100;
@@ -462,6 +468,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			readFromFile(levelpos);
 			player.position.y = Constant.TILE_HEIGHT * 2;
 		}
+	}
+	private CharacterPosition CharacterPosition(CharacterPosition original) {
+		return new CharacterPosition(original.x, original.y);
 	}
 	private void mouseCornerActions(Dimension size) {
 		if(mouseX < 20)

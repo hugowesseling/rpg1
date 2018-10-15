@@ -130,4 +130,8 @@ public class LevelState {
 			e.printStackTrace();
 		}
 	}
+
+	public boolean collides(CharacterPosition position, int radius) {
+		return this.top_layer.collides(position.getXTile(), position.getYTile(), radius);
+	}
 }

@@ -31,4 +31,7 @@ public class Player extends GameCharacter {
 			}
 		}
 	}
+	public boolean collided(LevelState levelState) {
+		return levelState.collides(this.position, 16);
+	}
 }
