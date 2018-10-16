@@ -146,5 +146,18 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	public void think(Player player, WorldState worldState, LevelState levelState) {
 		
 	}	
-
+	
+	public Int2d getCollisionBounce(GameCharacter other_char) {
+		// Never collide with yourself
+		if(other_char != this) {
+			int rx = other_char.position.x - position.x, ry = other_char.position.y - position.y;
+			int radius = 10;
+			if(rx *rx + ry *ry < radius*radius) {
+				System.out.println("Character " + other_char.name + " in range");
+				double dist = Math.hypot(rx, ry);
+				return new Int2d((int)(-rx * radius / dist), (int)(-ry * radius / dist));
+			}
+		}
+		return null;
+	}
 }
