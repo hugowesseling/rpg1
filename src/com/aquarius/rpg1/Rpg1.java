@@ -400,35 +400,52 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
-		CharacterPosition oldPlayerPosition = CharacterPosition(player.position);
+		int dx = 0, dy = 0;
 		if(input.buttons[Input.LEFT])
 		{
-			player.position.x -= 2;
+			dx = -2;
 			player.setDirection(Direction.WEST);
 			playerMoved = true;
 		}
 		if(input.buttons[Input.RIGHT])
 		{
-			player.position.x += 2;
+			dx = 2;
 			player.setDirection(Direction.EAST);
 			playerMoved = true;
 		}
 		if(input.buttons[Input.UP])
 		{
-			player.position.y -= 2;
+			dy = -2;
 			player.setDirection(Direction.NORTH);
 			playerMoved = true;
 		}
 		if(input.buttons[Input.DOWN])
 		{
-			player.position.y += 2;
+			dy = 2;
 			player.setDirection(Direction.SOUTH);
 			playerMoved = true;
 		}
-		if(player.collided(levelState))
+		player.position.x+=dx;
+		player.position.y+=dy;
+		if(playerMoved)
 		{
-			playerMoved = false;
-			player.position = oldPlayerPosition;
+			if(player.collided(levelState))
+			{
+				//try only x movement
+				player.position.y-=dy;
+				if(player.collided(levelState))
+				{
+					//try only y movement
+					player.position.x-=dx;
+					player.position.y+=dy;
+					if(player.collided(levelState))
+					{
+						//reset movements and call it a day
+						player.position.y-=dy;
+						playerMoved = false;
+					}
+				}
+			}
 		}
 		if(playerMoved){
 			screenx = player.position.x - 100;

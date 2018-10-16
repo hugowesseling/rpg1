@@ -132,6 +132,9 @@ public class LevelState {
 	}
 
 	public boolean collides(CharacterPosition position, int radius) {
-		return this.top_layer.collides(position.getXTile(), position.getYTile(), radius);
+		// Return true if one of the layers collides
+		if(this.top_layer.collides(position.getXTile(), position.getYTile(), radius))
+			return true;
+		return this.bottom_layer.collides(position.getXTile(), position.getYTile(), radius); 
 	}
 }
