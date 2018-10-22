@@ -54,6 +54,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	TileSet currentTileSet;
 	private JFrame jFrame;
 	private static int drawCounter = 0;
+	private boolean redrawNeeded = true;
 
     public TileSelectorFrame(String name, EditorState editorState)
 	{
@@ -72,6 +73,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				int index = comboBox.getSelectedIndex();
 				System.out.println("Selected tileset index: " + index);
 				setCurrentTileSet(index);
+				redrawNeeded = true;
 			}
 		});
 		menuBar.add(tileSetCombobox);
@@ -94,6 +96,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					  selectedTilePattern = null;
 				  }
 	        	  System.out.println("tileSelectionModeActive: " + editMode);
+	        	  redrawNeeded = true;
 	            } 
 	          });
 		menuBar.add(tilePatternSwitchMenu);
@@ -111,6 +114,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					  editMode = EditMode.TILE_PATTERN_EDIT;
 				  }
 	        	  System.out.println("tileSelectionModeActive: " + editMode);
+	        	  redrawNeeded = true;
 	            } 
 	          });
 		menuBar.add(tilePatternColoringSwitchMenu);
@@ -128,6 +132,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					  editMode = EditMode.SELECT_TILES;
 				  }
 	        	  System.out.println("tileSelectionModeActive: " + editMode);
+	        	  redrawNeeded = true;
 	            } 
 	          });
 		menuBar.add(collisionSwitchMenu);
@@ -202,7 +207,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		if(editMode == EditMode.TILE_PATTERN_COLORING)
 		{
 			Composite backupComposite = imageG.getComposite();
-			imageG.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+			imageG.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); //alpha));
 			selectedTilePattern.drawColorHash(imageG);
 			imageG.setComposite(backupComposite);
 		}
@@ -213,7 +218,11 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 
 	public void updateFrame()
 	{
-		repaint();
+		if(redrawNeeded)
+		{
+			redrawNeeded = false;
+			repaint();
+		}
 	}
 	
 	@Override
@@ -284,6 +293,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			}
 			mouseDragged(mouseEvent);
 		}
+  	  	redrawNeeded = true;
 	}
 
 	@Override
@@ -323,5 +333,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
 			}
 		}
+  	  	redrawNeeded = true;
 	}
 }
