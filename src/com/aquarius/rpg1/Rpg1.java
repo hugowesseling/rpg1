@@ -426,13 +426,20 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			playerMoved = true;
 		}
 		//Add dx,dy from colliding with other characters
+		int bouncedx = 0, bouncedy = 0, bouncecount =0;
 		for(GameCharacter other_char: levelState.allCharacters) {
 			Int2d bounce = player.getCollisionBounce(other_char);
 			if(bounce != null)
 			{
-				dx += bounce.x;
-				dy += bounce.y;
+				bouncedx += bounce.x;
+				bouncedy += bounce.y;
+				bouncecount ++;
 			}
+		}
+		if(bouncecount != 0)
+		{
+			dx += bouncedx / bouncecount;
+			dy += bouncedy / bouncecount;
 		}
 			
 		player.position.x+=dx;

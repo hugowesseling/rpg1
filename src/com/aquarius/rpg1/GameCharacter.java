@@ -154,8 +154,8 @@ public class GameCharacter implements CharacterBehavior, Serializable
 			int radius = 10;
 			if(rx *rx + ry *ry < radius*radius) {
 				System.out.println("Character " + other_char.name + " in range");
-				double dist = Math.hypot(rx, ry);
-				return new Int2d((int)(-rx * radius / dist), (int)(-ry * radius / dist));
+				double dist = Math.hypot(rx, ry); // dist < radius
+				return new Int2d((int)(-rx * (radius-dist) / dist), (int)(-ry * (radius-dist) / dist));
 			}
 		}
 		return null;
