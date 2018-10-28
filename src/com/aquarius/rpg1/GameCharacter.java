@@ -19,7 +19,6 @@ public class GameCharacter implements CharacterBehavior, Serializable
 	private Int2d movement;
 	float health;
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
-	protected transient Dialogue dialogue = null;
 	protected String name;
 	protected Weapon weapon = null;
 
@@ -116,9 +115,9 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		return pos2.inRect(topleft, bottomright);
 	}
 
-	public Dialogue startDialog() {
+	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
 
-		return dialogue ;
+		return null;
 	}
 	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
 		System.out.println("Writing position: "  + position + ", for name " + name);

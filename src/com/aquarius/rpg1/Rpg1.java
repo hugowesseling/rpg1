@@ -310,7 +310,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	private void startDialog() {
 		System.out.println("Starting dialogue");
-		dialogue = player.getTalkActionCharacter().startDialog();
+		dialogue = player.getTalkActionCharacter().startDialog(player, worldState, levelState);
 		
 	}
 	@Override

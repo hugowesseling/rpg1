@@ -26,6 +26,7 @@ import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 public class HenryCharacter extends GameCharacter implements Serializable
 {
 	private static final long serialVersionUID = 2895154313614688180L;
+	protected transient Dialogue dialogue1 = null, dialogue2 = null;
 
 	static {
 		System.out.println("HenryCharacter.static");
@@ -46,11 +47,14 @@ public class HenryCharacter extends GameCharacter implements Serializable
 
 	private void init() {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TALK));
-		DialogueBlock dialogueBlock = new DialogueBlock("Hello");
+		DialogueBlock dialogueBlock = new DialogueBlock("Hello, we're now higher");
 		dialogueBlock.add(new DialogueBlock("How are you doing?"))
 					 .add(new DialogueBlock("I'm doing great!"))
 				     .add(new DialogueBlock("See you later!"));
-		dialogue = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
+		dialogue1 = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
+		dialogueBlock = new DialogueBlock("Hello, we're now lower");
+		dialogueBlock.add(new DialogueBlock("Goodbye"));
+		dialogue2 = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
 		System.out.println("HenryCharacter: init()");
 	}
 
@@ -90,4 +94,12 @@ public class HenryCharacter extends GameCharacter implements Serializable
 		//direction = (Direction) ois.readObject();
 		System.out.println("HenryCharacter:Read position: "  +position + ", for name " + name);
 	}	
+	
+	@Override
+	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
+		if(position.y<100)
+			return dialogue1;
+		else
+			return dialogue2;
+	}
 }
