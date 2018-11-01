@@ -14,7 +14,7 @@ public class Resources {
 			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true)
 	};
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
-	public static TileSet characterTileSets = new TileSet(-1, "/characters1.png", 26, 36, 0, 0, false);
+	public static TileSet characterTileSet = new TileSet(-1, "/characters1.png", 26, 36, 0, 0, false);
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static ArrayList<String> characterSubClasses = new ArrayList<String>(); 
 

@@ -18,7 +18,7 @@ public class CharacterTileSet implements Serializable {
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame)
 	{
 		int drawFrame = FRAME_ORDER[frame%4];
-		Image image = Resources.characterTileSets.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
+		Image image = Resources.characterTileSet.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
 		graphics.drawImage(image, x - image.getWidth(null)/2, y - image.getHeight(null)*3/4, null);		
 	}
 	
