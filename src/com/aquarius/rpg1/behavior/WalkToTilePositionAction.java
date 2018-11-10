@@ -3,17 +3,17 @@ package com.aquarius.rpg1.behavior;
 import java.io.Serializable;
 
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameCharacter;
+import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.WorldState;
 
-public class WalkToTilePositionAction implements CharacterAction, Serializable{
+public class WalkToTilePositionAction implements ObjectAction, Serializable{
 
 	private static final long serialVersionUID = -2497869400457681585L;
 	private Int2d toPosition;
-	GameCharacter character;
+	GameObject character;
 
-	public WalkToTilePositionAction(GameCharacter character, Int2d position) {
+	public WalkToTilePositionAction(GameObject character, Int2d position) {
 		toPosition = position;
 		this.character = character;
 	}

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-public class CharacterPosition implements Position, Serializable {
+public class ObjectPosition implements Position, Serializable {
 	private static final long serialVersionUID = -2456233648907996230L;
 	public int x, y;
 	
-	public CharacterPosition(int x, int y) {
+	public ObjectPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -39,16 +39,16 @@ public class CharacterPosition implements Position, Serializable {
 		return new Int2d(getXTile(), getYTile());
 	}
 
-	public int distanceTo(CharacterPosition pos) {
+	public int distanceTo(ObjectPosition pos) {
 		return (int) Math.hypot(x - pos.x, y - pos.y);
 	}
 	
-	public boolean subnearby(CharacterPosition pos, int distance) {
+	public boolean subnearby(ObjectPosition pos, int distance) {
 		return distanceTo(pos) <= distance;
 	}
 
-	public static CharacterPosition createFromTilePosition(Int2d tilePosition) {
-		return new CharacterPosition(tilePosition.x * Constant.TILE_WIDTH, tilePosition.y * Constant.TILE_HEIGHT);
+	public static ObjectPosition createFromTilePosition(Int2d tilePosition) {
+		return new ObjectPosition(tilePosition.x * Constant.TILE_WIDTH, tilePosition.y * Constant.TILE_HEIGHT);
 	}
 
 	public void focusScreen(Int2d screen){

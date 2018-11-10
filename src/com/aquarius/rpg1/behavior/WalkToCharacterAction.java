@@ -3,19 +3,19 @@ package com.aquarius.rpg1.behavior;
 import java.io.Serializable;
 
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameCharacter;
+import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.WorldState;
 
-public class WalkToCharacterAction implements CharacterAction, Serializable{
+public class WalkToCharacterAction implements ObjectAction, Serializable{
 
 	private static final long serialVersionUID = -4328959808077331996L;
-	private GameCharacter character;
-	private GameCharacter toCharacter;
+	private GameObject character;
+	private GameObject toCharacter;
 	private int mindistance;
 	private int maxdistance;
 
-	public WalkToCharacterAction(GameCharacter character, GameCharacter toCharacter, int mindistance, int maxdistance) {
+	public WalkToCharacterAction(GameObject character, GameObject toCharacter, int mindistance, int maxdistance) {
 		this.character = character;
 		this.toCharacter = toCharacter;
 		this.mindistance = mindistance;

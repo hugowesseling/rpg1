@@ -6,15 +6,16 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.aquarius.rpg1.CharacterPosition;
+import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.CharacterTileSet;
 import com.aquarius.rpg1.Dialogue;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameCharacter;
+import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.Resources;
 import com.aquarius.rpg1.TileObjectIndex;
@@ -23,7 +24,7 @@ import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
 import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
-public class HenryCharacter extends GameCharacter implements Serializable
+public class HenryCharacter extends GameObject implements Serializable
 {
 	private static final long serialVersionUID = 2895154313614688180L;
 	protected transient Dialogue dialogue1 = null, dialogue2 = null;
@@ -39,8 +40,8 @@ public class HenryCharacter extends GameCharacter implements Serializable
 		System.out.println("HenryCharacter: Empty Constructor position: "  +position + ", for name " + name);
 	}
 	
-	public HenryCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
-		super(position, characterTileSet, direction);
+	public HenryCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
+		super(objectDrawer, position, direction);
 		init();
 		System.out.println("HenryCharacter: Constructor position: "  +position + ", for name " + name);
 	}

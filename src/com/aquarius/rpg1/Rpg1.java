@@ -22,6 +22,8 @@ Minimal additions:
 	- push both objects back until not colliding, position on pixel basis
 - Random walking around midpoint behavior
 - world state dependent dialogs
+- Objects in the world:
+	- Needs new drawing routine: Make the Actions responsible for deciding which image to draw and which collision model to use
 
 Then:
 - World changing events:
@@ -139,7 +141,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
 		
-		player = new Player(CharacterPosition.createFromTilePosition(new Int2d(5, 5)), new CharacterTileSet(new Int2d(0,0)), Direction.SOUTH);
+		player = new Player(new CharacterDrawer(new CharacterTileSet(new Int2d(0,0))), ObjectPosition.createFromTilePosition(new Int2d(5, 5)), Direction.SOUTH);
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
@@ -427,7 +429,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		//Add dx,dy from colliding with other characters
 		int bouncedx = 0, bouncedy = 0, bouncecount =0;
-		for(GameCharacter other_char: levelState.allCharacters) {
+		for(GameObject other_char: levelState.allCharacters) {
 			Int2d bounce = player.getCollisionBounce(other_char);
 			if(bounce != null)
 			{
@@ -503,8 +505,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			player.position.y = Constant.TILE_HEIGHT * 2;
 		}
 	}
-	private CharacterPosition CharacterPosition(CharacterPosition original) {
-		return new CharacterPosition(original.x, original.y);
+	private ObjectPosition CharacterPosition(ObjectPosition original) {
+		return new ObjectPosition(original.x, original.y);
 	}
 	private void mouseCornerActions(Dimension size) {
 		if(mouseX < 20)
@@ -662,7 +664,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				System.out.println("Placing character: " + className + ", " + direction);
 				
 				if(className.equals(HenryCharacter.class.getSimpleName())) {
-					levelState.allCharacters.add(new HenryCharacter(new CharacterPosition(mouseLocation.x, mouseLocation.y), addCharacterTileSet, direction));
+					levelState.allCharacters.add(new HenryCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}

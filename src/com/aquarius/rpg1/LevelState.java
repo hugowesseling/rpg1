@@ -17,7 +17,7 @@ import com.aquarius.rpg1.behavior.GameObjectType;
 public class LevelState {
 	public Layer bottom_layer, top_layer;
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
-	public Vector<GameCharacter> allCharacters;	// All characters in this level
+	public Vector<GameObject> allCharacters;	// All characters in this level
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
 		this.bottom_layer = bottom_layer;
@@ -26,9 +26,9 @@ public class LevelState {
 		allCharacters = new Vector<>();
 	}
 
-	public GameCharacter findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
-		ArrayList<GameCharacter> eligibles = new ArrayList<>();
-		for(GameCharacter character : allCharacters)
+	public GameObject findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
+		ArrayList<GameObject> eligibles = new ArrayList<>();
+		for(GameObject character : allCharacters)
 		{
 			if(character.position.tileAsInt2d().nearby(position, distance))
 			{
@@ -80,21 +80,21 @@ public class LevelState {
 		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false);
 		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true);
 		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
-		for(GameCharacter gameCharacter: allCharacters){
+		for(GameObject gameCharacter: allCharacters){
 			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny);
 		}
 			}
 
 	public void doActionsWeaponAndMovement(WorldState worldState) {
 		// Do actions and movement
-		for(GameCharacter gameCharacter: allCharacters) {
+		for(GameObject gameCharacter: allCharacters) {
 			gameCharacter.doActionAndWeapon(worldState, this);
 			gameCharacter.doMovement();
 		}
 	}
 	public void think(Player player, WorldState worldState) {
 		// Do actions and movement
-		for(GameCharacter gameCharacter: allCharacters) {
+		for(GameObject gameCharacter: allCharacters) {
 			gameCharacter.think(player, worldState, this);
 		}
 	}
@@ -118,8 +118,9 @@ public class LevelState {
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(fileInputStream);
-			allCharacters = (Vector<GameCharacter>) ois.readObject();
-			for(GameCharacter character:allCharacters) {
+			//allCharacters = new Vector<>();
+			allCharacters = (Vector<GameObject>) ois.readObject();
+			for(GameObject character:allCharacters) {
 				System.out.println("Read GameCharacter: " + character);
 			}
 		} catch (IOException e) {
@@ -131,7 +132,7 @@ public class LevelState {
 		}
 	}
 
-	public boolean collides(CharacterPosition position, int radius) {
+	public boolean collides(ObjectPosition position, int radius) {
 		// Return true if one of the layers collides
 		if(this.top_layer.collides(position.getXTile(), position.getYTile(), radius))
 			return true;

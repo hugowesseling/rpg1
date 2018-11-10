@@ -6,31 +6,31 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashSet;
 
-import com.aquarius.rpg1.behavior.CharacterAction;
+import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
-public class GameCharacter implements CharacterBehavior, Serializable
+public class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
-	protected CharacterPosition position;
-	private CharacterTileSet characterTileSet;
-	private CharacterAction action;
+	protected ObjectPosition position;
+	private ObjectAction action;
 	private Direction direction;
 	private Int2d movement;
 	float health;
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
 	protected String name;
 	protected Weapon weapon = null;
+	protected ObjectDrawer objectDrawer;
 
-	public GameCharacter(CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
-		this("noname", position, characterTileSet, direction);
+	public GameObject(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
+		this("noname", objectDrawer, position, direction);
 	}
 	
-	public GameCharacter(String name, CharacterPosition position, CharacterTileSet characterTileSet, Direction direction) {
+	public GameObject(String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super();
 		this.name = name;
+		this.objectDrawer = objectDrawer;
 		this.position = position;
-		this.characterTileSet = characterTileSet;
 		this.direction = direction;
 		this.action = null;
 		this.movement = new Int2d(0,0);
@@ -39,8 +39,8 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 	}
 
-	public GameCharacter() {
-		this("noname2", new CharacterPosition(100,100), new CharacterTileSet(new Int2d(3,1)), Direction.EAST);
+	public GameObject() {
+		this("noname2", new CharacterDrawer(new CharacterTileSet(new Int2d(3,1))), new ObjectPosition(100,100), Direction.EAST);
 	}
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
 		return interactionPossibilities;
@@ -48,21 +48,21 @@ public class GameCharacter implements CharacterBehavior, Serializable
 
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
 	{
-		characterTileSet.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / 10);
+		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / 10);
 		if(weapon != null) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}
 	}
 
-	public CharacterPosition getPosition() {
+	public ObjectPosition getPosition() {
 		return position;
 	}
 
-	protected void setAction(CharacterAction action){
+	protected void setAction(ObjectAction action){
 		this.action = action;
 	}
 	
-	protected CharacterAction getAction() {
+	protected ObjectAction getAction() {
 		return action;
 	}
 
@@ -104,7 +104,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		}
 	}
 
-	public boolean hasInSight(CharacterPosition pos2, int maxdistance) {
+	public boolean hasInSight(ObjectPosition pos2, int maxdistance) {
 		// returns true if this character can see something at position position at maximum distance maxdistance
 		int maxdistance2 = maxdistance/2;
 		Int2d view = getDirection().movement;
@@ -146,7 +146,7 @@ public class GameCharacter implements CharacterBehavior, Serializable
 		
 	}	
 	
-	public Int2d getCollisionBounce(GameCharacter other_char) {
+	public Int2d getCollisionBounce(GameObject other_char) {
 		// Never collide with yourself
 		if(other_char != this) {
 			int rx = other_char.position.x - position.x, ry = other_char.position.y - position.y;
