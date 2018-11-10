@@ -11,7 +11,9 @@ public class Resources {
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public static TileSet characterTileSet = new TileSet(-1, "/characters1.png", 26, 36, 0, 0, false);
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
-    public static ArrayList<String> characterSubClasses = new ArrayList<String>(); 
+    public static ArrayList<String> characterSubClasses = new ArrayList<String>();
+    public static ArrayList<String> objectSubClasses = new ArrayList<String>();
+    
 
     static {
     	System.out.println("Resources.static");
@@ -19,6 +21,8 @@ public class Resources {
 		dialogStyles.add(new DialogStyle(4, levelTileSets[0]));
 		
 		addCharacterSubClass("HenryCharacter");
+		
+		addObjectSubClass("TreasureObject");
     }
 
 	public static void addCharacterSubClass(String string) {
@@ -26,6 +30,12 @@ public class Resources {
 		characterSubClasses.add(string);
 	}
 
+	public static void addObjectSubClass(String string) {
+		System.out.println("addObjectSubClass: Adding " + string);
+		objectSubClasses.add(string);
+
+	}
+	
 	public static Image getTileImageFromIndex(int i) {
 		return levelTileSets[i / 65536].getTileImageFromIndex(i % 65536);
 	}

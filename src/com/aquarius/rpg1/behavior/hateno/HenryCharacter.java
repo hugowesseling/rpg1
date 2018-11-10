@@ -42,6 +42,7 @@ public class HenryCharacter extends GameObject implements Serializable
 	}
 
 	private void init() {
+		System.out.println("HenryCharacter: init()");
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TALK));
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello, we're now higher");
 		dialogueBlock.add(new DialogueBlock("How are you doing?"))
@@ -51,7 +52,6 @@ public class HenryCharacter extends GameObject implements Serializable
 		dialogueBlock = new DialogueBlock("Hello, we're now lower");
 		dialogueBlock.add(new DialogueBlock("Goodbye"));
 		dialogue2 = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
-		System.out.println("HenryCharacter: init()");
 	}
 
 	private final static int STANDINGAROUND_DURATION = 10000;
