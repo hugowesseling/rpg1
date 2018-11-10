@@ -1,12 +1,7 @@
 package com.aquarius.rpg1;
 
 import java.awt.Image;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class Resources {
 	public static TileSet[] levelTileSets = {
@@ -22,6 +17,8 @@ public class Resources {
     	System.out.println("Resources.static");
 		dialogStyles = new ArrayList<>();
 		dialogStyles.add(new DialogStyle(4, levelTileSets[0]));
+		
+		addCharacterSubClass("HenryCharacter");
     }
 
 	public static void addCharacterSubClass(String string) {

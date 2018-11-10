@@ -29,11 +29,6 @@ public class HenryCharacter extends GameObject implements Serializable
 	private static final long serialVersionUID = 2895154313614688180L;
 	protected transient Dialogue dialogue1 = null, dialogue2 = null;
 
-	static {
-		System.out.println("HenryCharacter.static");
-		Resources.addCharacterSubClass(HenryCharacter.class.getSimpleName());
-	}
-	
 	public HenryCharacter()
 	{
 		super();
