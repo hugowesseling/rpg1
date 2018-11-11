@@ -25,19 +25,65 @@ Minimal additions:
 - Objects in the world:
 	- Needs new drawing routine: Make the Actions responsible for deciding which image to draw and which collision model to use
 
+- Wandering person in village lost a special ring (with engraving of dead mother), only knows location where lost
+	- At that location, find a person running around, catch him, but he will only give ring back if you help him
+		-> He needs something to give to his girlfriend
+		-> Find a nice flower and tell him that if she does not accept this, then it was not meant to be
+	- Find girlfriend, she keeps hiding behind trees, does not want to meet him. Ask him to stay behind and tell her that he's sorry, he can then approach and make things up to her
+	- you get the ring and bring it back to person in village,that gives you soup in his house (his mother's recipe)
+
+	*Needed additions:
+	- Running, hiding, following behavior
+	- Entering house  <- Does this one!!!
+
 Then:
 - World changing events:
 	- Doors opening
+		-> Needs storage of layer animations:
+			-> Go in animation edit mode, control frame.
+				-> Change some tiles
+				-> Go to next frame, change some tiles
+				-> Store entire sequence as animation
+				-> Only store forward, reverse editing (to t-1) by reloading full map for only affected tiles and playing animation until point t-1
+				-> Storage: anim:[{top:[x,y, tileIndex],bottom:[x,y, tileIndex]}]  (anim[0] has first frame 
 	- Rocks moving
 	- Characters/objects appearing
+ 
+
+Possible game objects:
+- Level push-on-stack and teleport (to go into house for instance)
+- treasure chest
+- box of treasure
+- Switch that opens door
+- Block that can be pushed
+- Switch with two states (red/green) 
+
+
+Behavior:
+The object should also do something with its contents
+
+Should it be possible to have different images for the same type object? Almost no game does this!
+-> hardcoding images used is no problem!
+
+Each object type has a function:
+Object[] getObjectSettings():
+	{"Specify object settings", comboBox, comboBox}
+
+When starting to add an object: Show the object type selection, then specify parameters, then create with those parameters and keep moving the object around with mouse
+A left-click them simply does not control the object anymore, keeping it in its last place.
+
+
+
  */
 
-// TODO: Add collision with objects
-// TODO: Optimize graphics (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
+// TODO: Add house interiors: Walking into another level and out into previous level again (level-stack).
+// TODO: Optimize graphics2 (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
 // TODO: Add shield and enemy behavior
 // TODO: Add clipboard window (to copy paste level parts on and off) 
 
 
+// DONE: Add collision with objects
+// DONE: Optimize graphics1: only draw when needed
 // DONE: Add sword fighting
 // DONE: Add character editing dialog upon adding a character
 // DONE: stitching levels together
@@ -694,10 +740,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			if(mouseDownLeft) {
 				String[] objectSubClassesStrings = Resources.objectSubClasses.toArray(new String[Resources.objectSubClasses.size()]);
 				JComboBox<String> objectSubClassComboBox = new JComboBox<String>(objectSubClassesStrings);
-				Object characterSettings[] = {"Specify object settings", objectSubClassComboBox};
+				Object objectSettings[] = {"Specify object settings", objectSubClassComboBox};
 				
 				JOptionPane optionPane = new JOptionPane();
-			    optionPane.setMessage(characterSettings);
+			    optionPane.setMessage(objectSettings);
 			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
 			    JDialog dialog = optionPane.createDialog(null, "Object Settings");
 			    dialog.setVisible(true);
