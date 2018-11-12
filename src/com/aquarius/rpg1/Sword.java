@@ -45,7 +45,7 @@ public class Sword extends Weapon {
 			//hypot(rp)^2<radius^2 && 
 			//frontal 45 degrees: inprod(vf + vs,rp)>0 && inprod(vf - vs, rp)>0
 			//just front: inprod(vf, rp) > 0
-			for(GameObject character: levelState.allCharacters) {
+			for(GameObject character: levelState.allGameObjects) {
 				if(character != user) {
 					int rx = character.position.x - user.position.x, ry = character.position.y - user.position.y;
 					Int2d vf = user.getDirection().movement;

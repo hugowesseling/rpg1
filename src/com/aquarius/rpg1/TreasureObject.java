@@ -7,12 +7,11 @@ public class TreasureObject extends GameObject {
 	private static final long serialVersionUID = 4226718004114866622L;
 
 	public TreasureObject(TileDrawer tileDrawer, ObjectPosition position){
-		super(tileDrawer, position, Direction.NORTH);
+		super("treasureObject", tileDrawer, position, Direction.NORTH);
 		init();
 	}
 	
 	private void init() {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.OPEN));
 	}
-
 }

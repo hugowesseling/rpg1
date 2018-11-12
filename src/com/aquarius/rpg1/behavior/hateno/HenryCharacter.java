@@ -36,7 +36,7 @@ public class HenryCharacter extends GameObject implements Serializable
 	}
 	
 	public HenryCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
-		super(objectDrawer, position, direction);
+		super("henryCharacter", objectDrawer, position, direction);
 		init();
 		System.out.println("HenryCharacter: Constructor position: "  +position + ", for name " + name);
 	}

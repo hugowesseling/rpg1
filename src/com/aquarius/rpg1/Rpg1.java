@@ -465,7 +465,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			levelState.doActionsWeaponAndMovement(worldState);
 			
 			player.doActionAndWeapon(worldState, levelState);
-			player.determineTalkActionCharacter(levelState.allCharacters);
+			player.determineTalkActionCharacter(levelState.allGameObjects);
+			player.checkIfTouching(levelState.allGameObjects);
 		}
 	}
 	private void inputPlayerMovement() {
@@ -497,8 +498,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		//Add dx,dy from colliding with other characters
 		int bouncedx = 0, bouncedy = 0, bouncecount =0;
-		for(GameObject other_char: levelState.allCharacters) {
-			Int2d bounce = player.getCollisionBounce(other_char);
+		for(GameObject gameObject: levelState.allGameObjects) {
+			Int2d bounce = player.getCollisionBounce(gameObject);
 			if(bounce != null)
 			{
 				bouncedx += bounce.x;
@@ -717,7 +718,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				System.out.println("Placing character: " + className + ", " + direction);
 				
 				if(className.equals(HenryCharacter.class.getSimpleName())) {
-					levelState.allCharacters.add(new HenryCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
+					levelState.allGameObjects.add(new HenryCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}
@@ -741,9 +742,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				System.out.println("Placing object: " + className);
 				
 				if(className.equals(TreasureObject.class.getSimpleName())) {
-					levelState.allCharacters.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
+					levelState.allGameObjects.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
 				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
-					levelState.allCharacters.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelpos));
+					levelState.allGameObjects.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelpos));
 				} else{
 					System.err.println("Could not determine object sub class: " + className);
 				}

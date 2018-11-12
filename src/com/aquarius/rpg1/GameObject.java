@@ -12,6 +12,7 @@ import com.aquarius.rpg1.behavior.CharacterBehavior;
 public class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
+	private static final int DEFAULT_RADIUS = 10;
 	protected ObjectPosition position;
 	private ObjectAction action;
 	private Direction direction;
@@ -146,17 +147,31 @@ public class GameObject implements CharacterBehavior, Serializable
 		
 	}	
 	
-	public Int2d getCollisionBounce(GameObject other_char) {
+	public Int2d getCollisionBounce(GameObject gameObject) {
 		// Never collide with yourself
-		if(other_char != this) {
-			int rx = other_char.position.x - position.x, ry = other_char.position.y - position.y;
-			int radius = 10;
+		if(gameObject != this) {
+			int rx = gameObject.position.x - position.x, ry = gameObject.position.y - position.y;
+			int radius = DEFAULT_RADIUS;
 			if(rx *rx + ry *ry < radius*radius) {
-				System.out.println("Character " + other_char.name + " in range");
+				System.out.println("Character " + gameObject.name + " in range");
 				double dist = Math.hypot(rx, ry); // dist < radius
 				return new Int2d((int)(-rx * (radius-dist) / dist), (int)(-ry * (radius-dist) / dist));
 			}
 		}
 		return null;
 	}
+	public boolean colliding(GameObject gameObject) {
+		if(gameObject != this) {
+			int rx = gameObject.position.x - position.x, ry = gameObject.position.y - position.y;
+			int radius = DEFAULT_RADIUS;
+			if(rx *rx + ry *ry < radius*radius)
+				return true;
+		}
+		return false;
+	}
+
+	public void doTouchAction() {
+		System.out.println("No touch action defined for: "+name);
+	}
+
 }
