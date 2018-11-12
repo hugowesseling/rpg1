@@ -10,11 +10,12 @@ import java.io.ObjectOutputStream;
 
 public class Layer {
 
-	public int[][] tiles = new int[20][20];
+	public int[][] tiles;
 	private int drawCounter = 0;
 	
-	public Layer()
+	public Layer(int width, int height)
 	{
+		tiles = new int[width][width];
 	}
 
 	public void drawLayer(Graphics2D graphics, int imageWidth, int imageHeight, int screenx, int screeny, boolean animate)

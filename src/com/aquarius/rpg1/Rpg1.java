@@ -52,6 +52,10 @@ Then:
 
 Possible game objects:
 - Level push-on-stack and teleport (to go into house for instance)
+	Should show possible levels to choose from, or create a new one (text field with name)
+	Levels to jump to are in context of the current map coordinates
+		-> What about jumping towards another point (actual warp?)
+			- Maybe use separate teleport object
 - treasure chest
 - box of treasure
 - Switch that opens door
@@ -179,8 +183,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState = new EditorState();
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
-		levelStack = new LevelStack(new Layer(), new Layer());
-		levelState = new LevelState(new Layer(), new Layer());
+		levelStack = new LevelStack(new Layer(1,1), new Layer(1,1));
+		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
 		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
 
 		// Load level at beginning location
@@ -230,7 +234,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				String fileName = levelPos2FileName(levelpos);
 			    int retVal = JOptionPane.showConfirmDialog (null, "Would you like to overwrite " + fileName,"Warning", JOptionPane.YES_NO_OPTION);
 			    if (retVal == JOptionPane.YES_OPTION) {
-					saveToFile(fileName);
+			    	Resources.saveToFile(fileName, levelState);
 	            }
 			}
 		});
@@ -244,7 +248,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int retVal = fc.showSaveDialog(Rpg1.this);
 				if(retVal == JFileChooser.APPROVE_OPTION) {
-					saveToFile(fc.getSelectedFile().getPath());
+					Resources.saveToFile(fc.getSelectedFile().getPath(), levelState);
 	            }
 			}
 		});
@@ -347,7 +351,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					dialogue = null;
 				}
 			}else {
-				if(player.getTalkActionCharacter() != null)
+				if(player.getTalkActionGameObject() != null)
 				{
 					startDialog();
 				}				
@@ -373,7 +377,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	private void startDialog() {
 		System.out.println("Starting dialogue");
-		dialogue = player.getTalkActionCharacter().startDialog(player, worldState, levelState);
+		dialogue = player.getTalkActionGameObject().startDialog(player, worldState, levelState);
 		
 	}
 	@Override
@@ -427,7 +431,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 						50, imageHeight-100, 
 						imageWidth-100, 2 * Constant.TILE_HEIGHT);
 			}else {		
-				if(player.getTalkActionCharacter() != null) {
+				if(player.getTalkActionGameObject() != null) {
 					imageGraphics.setColor(Color.BLUE);
 					imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
 					imageGraphics.setColor(Color.WHITE);
@@ -607,21 +611,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		System.out.println("Closing");
 	}
 
-	public void saveToFile(String fileName)
-	{
-		System.out.println("Saving game to " + fileName);
-		FileOutputStream fileOutputStream;
-		try {
-			fileOutputStream = new FileOutputStream(fileName);
-			levelState.writeToFileOutputStream(fileOutputStream);
-			fileOutputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void saveConfig() {
 		Resources.saveTileSetData();
 	}
@@ -753,7 +742,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				
 				if(className.equals(TreasureObject.class.getSimpleName())) {
 					levelState.allCharacters.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
-				} else {
+				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
+					levelState.allCharacters.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelpos));
+				} else{
 					System.err.println("Could not determine object sub class: " + className);
 				}
 				addObjectIndex = -1;

@@ -1,5 +1,5 @@
 package com.aquarius.rpg1;
 
 public enum InteractionPossibility {
-	TALK, FIGHT, OPEN
+	TALK, FIGHT, OPEN, TOUCH
 }

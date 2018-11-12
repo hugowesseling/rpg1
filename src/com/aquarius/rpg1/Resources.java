@@ -1,6 +1,9 @@
 package com.aquarius.rpg1;
 
 import java.awt.Image;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Resources {
@@ -23,6 +26,8 @@ public class Resources {
 		addCharacterSubClass("HenryCharacter");
 		
 		addObjectSubClass("TreasureObject");
+		addObjectSubClass("DoorwayObject");
+		
     }
 
 	public static void addCharacterSubClass(String string) {
@@ -57,4 +62,24 @@ public class Resources {
 			tileSet.saveTileSetData();
 		}
 	}
+
+	public static void createLevel(String fileName, int width, int height) {
+		// Create level in current folder 
+		saveToFile(fileName, new LevelState(new Layer(width, height), new Layer(width, height)));
+	}
+
+	public static void saveToFile(String fileName, LevelState levelState)
+	{
+		System.out.println("Saving game to " + fileName);
+		FileOutputStream fileOutputStream;
+		try {
+			fileOutputStream = new FileOutputStream(fileName);
+			levelState.writeToFileOutputStream(fileOutputStream);
+			fileOutputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
 }

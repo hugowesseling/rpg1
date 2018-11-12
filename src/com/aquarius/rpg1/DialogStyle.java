@@ -22,7 +22,7 @@ public class DialogStyle  {
 			prev_h = h;
 			// create new layer
 			System.out.println("DialogStyle dimensions changed, recreating");
-			layer = new Layer();
+			layer = new Layer(20, 20);
 			for(int yt=0; yt <= h/Constant.TILE_HEIGHT ; yt++) {
 				for(int xt=0; xt <= w/Constant.TILE_WIDTH ; xt++) {
 					tilePattern.place(layer, tileSet, xt, yt, true);					

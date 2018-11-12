@@ -5,27 +5,27 @@ import java.util.Vector;
 public class Player extends GameObject {
 	private static final long serialVersionUID = 1752542798493227606L;
 	Vector<CarryableItem> itemsCarried;
-	private GameObject talkActionCharacter = null;
+	private GameObject talkActionGameObject = null;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
 		weapon = new Sword(this);
 	}
-	public GameObject getTalkActionCharacter() {
-		return talkActionCharacter;
+	public GameObject getTalkActionGameObject() {
+		return talkActionGameObject;
 	}
-	public void setTalkActionCharacter(GameObject talkActionCharacter) {
-		this.talkActionCharacter = talkActionCharacter;
+	public void setTalkActionGameObject(GameObject talkActionGameObject) {
+		this.talkActionGameObject = talkActionGameObject;
 	}
 	
-	public void determineTalkActionCharacter(Vector<GameObject> allCharacters) {
-		setTalkActionCharacter(null);
-		for(GameObject character: allCharacters)
+	public void determineTalkActionCharacter(Vector<GameObject> allGameObjects) {
+		setTalkActionGameObject(null);
+		for(GameObject gameObject: allGameObjects)
 		{
-			if(hasInSight(character.getPosition(), 64))
+			if(hasInSight(gameObject.getPosition(), 64))
 			{
-				if(character.getInteractionPossibilities().contains(InteractionPossibility.TALK))
+				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TALK))
 				{
-					setTalkActionCharacter(character);
+					setTalkActionGameObject(gameObject);
 					//System.out.println("Player has in sight!");
 				}
 			}
