@@ -23,6 +23,7 @@ public class Player extends GameObject {
 		{
 			if(hasInSight(gameObject.getPosition(), 64))
 			{
+				System.out.println("hasInSight: " + gameObject.name);
 				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TALK))
 				{
 					setTalkActionGameObject(gameObject);
@@ -48,5 +49,8 @@ public class Player extends GameObject {
 	@Override
 	public void doTouchAction(LevelState levelState, Player player) {
 		System.out.println("Don't touch yourself!");
+	}
+	@Override
+	protected void init() {
 	}
 }

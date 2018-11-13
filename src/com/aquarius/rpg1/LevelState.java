@@ -202,6 +202,8 @@ public class LevelState {
 		if(inSubLevel) {
 			inSubLevel = false;
 			player.position = playerPositionInSuperLevel;
+			player.position.x += dx*2;
+			player.position.y += dy*2;
 			playerPositionInSuperLevel = null;
 		}else {
 			levelPos.x += dx;

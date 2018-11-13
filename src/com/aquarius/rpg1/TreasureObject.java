@@ -1,9 +1,12 @@
 package com.aquarius.rpg1;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class TreasureObject extends GameObject {
+public class TreasureObject extends GameObject{
 	private static final long serialVersionUID = 4226718004114866622L;
 
 	public TreasureObject(TileDrawer tileDrawer, ObjectPosition position){
@@ -11,7 +14,8 @@ public class TreasureObject extends GameObject {
 		init();
 	}
 	
-	private void init() {
+	protected void init() {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.OPEN));
 	}
+
 }

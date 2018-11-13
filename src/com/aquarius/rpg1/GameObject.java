@@ -9,10 +9,10 @@ import java.util.HashSet;
 import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
-public class GameObject implements CharacterBehavior, Serializable
+public abstract class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
-	private static final int DEFAULT_RADIUS = 10;
+	private static final int DEFAULT_RADIUS = 18;
 	protected ObjectPosition position;
 	private ObjectAction action;
 	private Direction direction;
@@ -127,9 +127,11 @@ public class GameObject implements CharacterBehavior, Serializable
 		//stream.writeObject(position);
 		//stream.writeObject(direction);
 	}
+	protected abstract void init();
 
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
+		init();
 		//name = (String)ois.readObject();
 		//position = (CharacterPosition) ois.readObject();
 		//direction = (Direction) ois.readObject();

@@ -24,7 +24,7 @@ import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
 import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
-public class HenryCharacter extends GameObject implements Serializable
+public class HenryCharacter extends GameObject
 {
 	private static final long serialVersionUID = 2895154313614688180L;
 	protected transient Dialogue dialogue1 = null, dialogue2 = null;
@@ -41,7 +41,7 @@ public class HenryCharacter extends GameObject implements Serializable
 		System.out.println("HenryCharacter: Constructor position: "  +position + ", for name " + name);
 	}
 
-	private void init() {
+	protected void init() {
 		System.out.println("HenryCharacter: init()");
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TALK));
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello, we're now higher");
@@ -80,16 +80,6 @@ public class HenryCharacter extends GameObject implements Serializable
 			}
 		}
 	}
-
-	private void readObject(ObjectInputStream ois)
-		    throws ClassNotFoundException, IOException {
-		ois.defaultReadObject();
-		init();
-		//name = (String)ois.readObject();
-		//position = (CharacterPosition) ois.readObject();
-		//direction = (Direction) ois.readObject();
-		System.out.println("HenryCharacter:Read position: "  +position + ", for name " + name);
-	}	
 	
 	@Override
 	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {

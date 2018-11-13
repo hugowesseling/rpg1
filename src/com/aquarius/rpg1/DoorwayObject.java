@@ -68,7 +68,7 @@ public class DoorwayObject extends GameObject {
 	    Resources.createLevel(levelToLoad, Integer.parseInt(widthTextField.getText()), Integer.parseInt(heightTextField.getText()));
 	}
 
-	private void init() {
+	protected void init() {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TOUCH));
 	}
 
