@@ -2,6 +2,7 @@ package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -141,4 +142,43 @@ public class LevelState {
 			return true;
 		return this.bottom_layer.collides(position.getXTile(), position.getYTile(), radius); 
 	}
+	public void loadLevelByPosition(Int2d levelpos)
+	{
+		String fileName = levelPos2FileName(levelpos);
+		System.out.println("Reading layer from " + fileName);
+		loadLevel(fileName);
+	}
+	
+	public void loadLevel(String fileName) {
+		FileInputStream fileInputStream;
+		try {
+			fileInputStream = new FileInputStream(fileName);
+			readFromFileInputStream(fileInputStream);
+			fileInputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveToFile(String fileName)
+	{
+		System.out.println("Saving game to " + fileName);
+		FileOutputStream fileOutputStream;
+		try {
+			fileOutputStream = new FileOutputStream(fileName);
+			writeToFileOutputStream(fileOutputStream);
+			fileOutputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
+	
+	public static String levelPos2FileName(Int2d levelpos) {
+		return String.format("level_%03d_%03d.rpg1", levelpos.x, levelpos.y);
+	}
+
 }

@@ -80,16 +80,6 @@ public class Layer {
 		}
 	}
 	
-	private void growLayer()
-	{
-		int newwidth=100,newheight=100;
-		int[][] newTiles = new int[newwidth][newheight];
-		for(int x=0;x<tiles.length;x++)
-			for(int y=0;y<tiles[0].length;y++)
-				newTiles[x][y]=tiles[x][y];
-		tiles = newTiles;
-	}
-	
 	public void setAllLayer(int tileIndex)
 	{
 		for(int x=0;x<tiles.length;x++)

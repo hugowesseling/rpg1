@@ -80,6 +80,7 @@ public class LevelStack
 		return true;
 	}
 
+	@SuppressWarnings("unused")
 	private void printLayer(int[][] tiles1)
 	{
 		for(int y=0;y<tiles1[0].length;y++)

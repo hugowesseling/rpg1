@@ -34,19 +34,19 @@ public class Player extends GameObject {
 	public boolean collided(LevelState levelState) {
 		return levelState.collides(this.position, 16);
 	}
-	public void checkIfTouching(Vector<GameObject> allGameObjects) {
-		for(GameObject gameObject: allGameObjects) {
+	public void checkIfTouching(LevelState levelState) {
+		for(GameObject gameObject: levelState.allGameObjects) {
 			if(colliding(gameObject)) {
 				System.out.println(gameObject.name + " is colliding");
 				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TOUCH)) {
 					System.out.println("Touching " + gameObject.name);
-					gameObject.doTouchAction();
+					gameObject.doTouchAction(levelState, this);
 				}
 			}
 		}
 	}
 	@Override
-	public void doTouchAction() {
+	public void doTouchAction(LevelState levelState, Player player) {
 		System.out.println("Don't touch yourself!");
 	}
 }

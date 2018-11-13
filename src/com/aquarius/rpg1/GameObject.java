@@ -170,7 +170,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		return false;
 	}
 
-	public void doTouchAction() {
+	public void doTouchAction(LevelState levelState, Player player) {
 		System.out.println("No touch action defined for: "+name);
 	}
 

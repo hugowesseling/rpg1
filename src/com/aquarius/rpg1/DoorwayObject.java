@@ -73,8 +73,10 @@ public class DoorwayObject extends GameObject {
 	}
 
 	@Override
-	public void doTouchAction() {
-		System.out.println("Should now load level:" + levelToLoad + ", at entry point: " + entryPoint);
-		
+	public void doTouchAction(LevelState levelState, Player player) {
+		System.out.println("Loading level:" + levelToLoad + ", at entry point: " + entryPoint);
+		levelState.loadLevel(levelToLoad);
+		player.position.x = entryPoint.x * Constant.TILE_WIDTH;
+		player.position.y = entryPoint.y * Constant.TILE_HEIGHT;
 	}
 }

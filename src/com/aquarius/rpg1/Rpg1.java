@@ -183,7 +183,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
 
 		// Load level at beginning location
-		loadLevelByPosition(levelpos);
+		levelState.loadLevelByPosition(levelpos);
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
 		
@@ -226,10 +226,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("Save clicked");
-				String fileName = levelPos2FileName(levelpos);
+				String fileName = LevelState.levelPos2FileName(levelpos);
 			    int retVal = JOptionPane.showConfirmDialog (null, "Would you like to overwrite " + fileName,"Warning", JOptionPane.YES_NO_OPTION);
 			    if (retVal == JOptionPane.YES_OPTION) {
-			    	Resources.saveToFile(fileName, levelState);
+			    	levelState.saveToFile(fileName);
 	            }
 			}
 		});
@@ -243,7 +243,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int retVal = fc.showSaveDialog(Rpg1.this);
 				if(retVal == JFileChooser.APPROVE_OPTION) {
-					Resources.saveToFile(fc.getSelectedFile().getPath(), levelState);
+					levelState.saveToFile(fc.getSelectedFile().getPath());
 	            }
 			}
 		});
@@ -461,7 +461,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			
 			player.doActionAndWeapon(worldState, levelState);
 			player.determineTalkActionCharacter(levelState.allGameObjects);
-			player.checkIfTouching(levelState.allGameObjects);
+			player.checkIfTouching(levelState);
 		}
 	}
 	private void inputPlayerMovement() {
@@ -547,25 +547,25 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(player.position.x < Constant.TILE_WIDTH * 1)
 		{
 			levelpos.x -= 1;
-			loadLevelByPosition(levelpos);
+			levelState.loadLevelByPosition(levelpos);
 			player.position.x = (levelState.getWidth()-2) * Constant.TILE_WIDTH;
 		}
 		if(player.position.x > (levelState.getWidth()-1) * Constant.TILE_WIDTH)
 		{
 			levelpos.x += 1;
-			loadLevelByPosition(levelpos);
+			levelState.loadLevelByPosition(levelpos);
 			player.position.x = Constant.TILE_WIDTH * 2;
 		}
 		if(player.position.y < Constant.TILE_HEIGHT * 1)
 		{
 			levelpos.y -= 1;
-			loadLevelByPosition(levelpos);
+			levelState.loadLevelByPosition(levelpos);
 			player.position.y = (levelState.getHeight()-2) * Constant.TILE_HEIGHT;
 		}
 		if(player.position.y > (levelState.getHeight()-1) * Constant.TILE_HEIGHT)
 		{
 			levelpos.y += 1;
-			loadLevelByPosition(levelpos);
+			levelState.loadLevelByPosition(levelpos);
 			player.position.y = Constant.TILE_HEIGHT * 2;
 		}
 	}
@@ -611,29 +611,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		Resources.saveTileSetData();
 	}
 
-	public void loadLevelByPosition(Int2d levelpos)
-	{
-		String fileName = levelPos2FileName(levelpos);
-		System.out.println("Reading layer from " + fileName);
-		loadLevel(fileName);
-	}
-	
-	private void loadLevel(String fileName) {
-		FileInputStream fileInputStream;
-		try {
-			fileInputStream = new FileInputStream(fileName);
-			levelState.readFromFileInputStream(fileInputStream);
-			fileInputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private String levelPos2FileName(Int2d levelpos) {
-		return String.format("level_%03d_%03d.rpg1", levelpos.x, levelpos.y);
-	}
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent){
 	}

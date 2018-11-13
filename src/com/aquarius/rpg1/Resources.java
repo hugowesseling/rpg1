@@ -64,22 +64,10 @@ public class Resources {
 	}
 
 	public static void createLevel(String fileName, int width, int height) {
-		// Create level in current folder 
-		saveToFile(fileName, new LevelState(new Layer(width, height), new Layer(width, height)));
+		// Create level in current folder
+		LevelState levelState = new LevelState(new Layer(width, height), new Layer(width, height));
+		levelState.saveToFile(fileName);
 	}
 
-	public static void saveToFile(String fileName, LevelState levelState)
-	{
-		System.out.println("Saving game to " + fileName);
-		FileOutputStream fileOutputStream;
-		try {
-			fileOutputStream = new FileOutputStream(fileName);
-			levelState.writeToFileOutputStream(fileOutputStream);
-			fileOutputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}	
+
 }
