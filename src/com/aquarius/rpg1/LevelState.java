@@ -18,12 +18,14 @@ public class LevelState {
 	public Layer bottom_layer, top_layer;
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
 	public Vector<GameObject> allGameObjects;	// All characters in this level
+	public LevelStack levelStack;
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
 		this.bottom_layer = bottom_layer;
 		this.top_layer = top_layer;
 		levelKeyValues = new HashMap<>();
 		allGameObjects = new Vector<>();
+		levelStack = new LevelStack(bottom_layer, top_layer);
 	}
 
 	public GameObject findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
@@ -115,6 +117,7 @@ public class LevelState {
 	public void readFromFileInputStream(FileInputStream fileInputStream) {
 		bottom_layer.readFromFileInputStream(fileInputStream);
 		top_layer.readFromFileInputStream(fileInputStream);
+		levelStack.clearStack();
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(fileInputStream);

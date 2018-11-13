@@ -14,7 +14,6 @@ public class LevelStack
 		}
 	}
 	Layer layer1, layer2;
-	LevelState levelState;
 	Stack<StackLayer> stack = new Stack<StackLayer>();
 	
 	public LevelStack(Layer layer1, Layer layer2) 
@@ -24,6 +23,11 @@ public class LevelStack
 		this.layer2 = layer2;
 	}
 
+	public void clearStack()
+	{
+		stack = new Stack<StackLayer>();
+	}
+	
 	public void pushLayers()
 	{
 		StackLayer stackLayer = new StackLayer(clone2dArray(layer1.tiles), clone2dArray(layer2.tiles));
