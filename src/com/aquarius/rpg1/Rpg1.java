@@ -157,7 +157,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private boolean simulating = false;;
 	private CharacterTileSet addCharacterTileSet = null;	//!null means that a character currently is being added
 	private int addObjectIndex = -1;
-	private Int2d levelpos= new Int2d(500,500);
 	private Input input;
 	private int screenx;
 	private int screeny;
@@ -180,10 +179,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
 		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
+		levelState.setLevelPos(new Int2d(500,500));
 		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
 
 		// Load level at beginning location
-		levelState.loadLevelByPosition(levelpos);
+		levelState.loadLevelByPosition();
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
 		
@@ -226,7 +226,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("Save clicked");
-				String fileName = LevelState.levelPos2FileName(levelpos);
+				String fileName = levelState.getLevelFileName();
 			    int retVal = JOptionPane.showConfirmDialog (null, "Would you like to overwrite " + fileName,"Warning", JOptionPane.YES_NO_OPTION);
 			    if (retVal == JOptionPane.YES_OPTION) {
 			    	levelState.saveToFile(fileName);
@@ -546,27 +546,19 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 		if(player.position.x < Constant.TILE_WIDTH * 1)
 		{
-			levelpos.x -= 1;
-			levelState.loadLevelByPosition(levelpos);
-			player.position.x = (levelState.getWidth()-2) * Constant.TILE_WIDTH;
+			levelState.loadLevelByExit(-1, 0, player);
 		}
 		if(player.position.x > (levelState.getWidth()-1) * Constant.TILE_WIDTH)
 		{
-			levelpos.x += 1;
-			levelState.loadLevelByPosition(levelpos);
-			player.position.x = Constant.TILE_WIDTH * 2;
+			levelState.loadLevelByExit(1, 0, player);
 		}
 		if(player.position.y < Constant.TILE_HEIGHT * 1)
 		{
-			levelpos.y -= 1;
-			levelState.loadLevelByPosition(levelpos);
-			player.position.y = (levelState.getHeight()-2) * Constant.TILE_HEIGHT;
+			levelState.loadLevelByExit(0, -1, player);
 		}
 		if(player.position.y > (levelState.getHeight()-1) * Constant.TILE_HEIGHT)
 		{
-			levelpos.y += 1;
-			levelState.loadLevelByPosition(levelpos);
-			player.position.y = Constant.TILE_HEIGHT * 2;
+			levelState.loadLevelByExit(0, 1, player);
 		}
 	}
 	private ObjectPosition CharacterPosition(ObjectPosition original) {
@@ -719,7 +711,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				if(className.equals(TreasureObject.class.getSimpleName())) {
 					levelState.allGameObjects.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
 				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
-					levelState.allGameObjects.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelpos));
+					levelState.allGameObjects.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState.getLevelPos()));
 				} else{
 					System.err.println("Could not determine object sub class: " + className);
 				}

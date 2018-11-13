@@ -20,6 +20,11 @@ public class LevelState {
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
 	public Vector<GameObject> allGameObjects;	// All characters in this level
 	public LevelStack levelStack;
+	private Int2d levelPos= new Int2d(0,0);
+	private String latestLoadedFileName = "";
+	private boolean inSubLevel;
+	private ObjectPosition playerPositionInSuperLevel;
+
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
 		this.bottom_layer = bottom_layer;
@@ -27,6 +32,8 @@ public class LevelState {
 		levelKeyValues = new HashMap<>();
 		allGameObjects = new Vector<>();
 		levelStack = new LevelStack(bottom_layer, top_layer);
+		inSubLevel = false;
+		playerPositionInSuperLevel = null;
 	}
 
 	public GameObject findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
@@ -142,14 +149,15 @@ public class LevelState {
 			return true;
 		return this.bottom_layer.collides(position.getXTile(), position.getYTile(), radius); 
 	}
-	public void loadLevelByPosition(Int2d levelpos)
+	public void loadLevelByPosition()
 	{
-		String fileName = levelPos2FileName(levelpos);
+		String fileName = levelPos2FileName(levelPos);
 		System.out.println("Reading layer from " + fileName);
 		loadLevel(fileName);
 	}
 	
 	public void loadLevel(String fileName) {
+		latestLoadedFileName = fileName;
 		FileInputStream fileInputStream;
 		try {
 			fileInputStream = new FileInputStream(fileName);
@@ -177,8 +185,47 @@ public class LevelState {
 		}
 	}	
 	
-	public static String levelPos2FileName(Int2d levelpos) {
+	private static String levelPos2FileName(Int2d levelpos) {
 		return String.format("level_%03d_%03d.rpg1", levelpos.x, levelpos.y);
+	}
+
+	public void setLevelPos(Int2d levelPos) {
+		this.levelPos = levelPos;
+		
+	}
+
+	public String getLevelFileName() {
+		return latestLoadedFileName;
+	}
+
+	public void loadLevelByExit(int dx, int dy, Player player) {
+		if(inSubLevel) {
+			inSubLevel = false;
+			player.position = playerPositionInSuperLevel;
+			playerPositionInSuperLevel = null;
+		}else {
+			levelPos.x += dx;
+			levelPos.y += dy;
+			if(dx<0)
+				player.position.x = (getWidth()-2) * Constant.TILE_WIDTH;
+			if(dx>0)
+				player.position.x = Constant.TILE_WIDTH * 2;
+			if(dy<0)
+				player.position.y = (getHeight()-2) * Constant.TILE_HEIGHT;
+			if(dy>0)
+				player.position.y = Constant.TILE_HEIGHT * 2;
+		}
+		loadLevelByPosition();
+	}
+
+	public Int2d getLevelPos() {
+		return levelPos;
+	}
+
+	public void loadSubLevel(String levelToLoad, Player player) {
+		loadLevel(levelToLoad);
+		inSubLevel = true;
+		playerPositionInSuperLevel = player.position.clone();
 	}
 
 }

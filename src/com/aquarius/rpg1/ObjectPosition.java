@@ -14,6 +14,11 @@ public class ObjectPosition implements Position, Serializable {
 	}
 
 	@Override
+	public ObjectPosition clone(){
+		return new ObjectPosition(x,y);
+	}
+
+	@Override
 	public int getX() {
 		return x;
 	}
