@@ -717,6 +717,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					levelState.allGameObjects.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
 				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
 					levelState.allGameObjects.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState.getLevelPos()));
+				} else if(className.equals(StorableObject.class.getSimpleName())) {
+					levelState.allGameObjects.add(StorableObject.createStorableObject(addObjectIndex, new ObjectPosition(mouseLocation.x, mouseLocation.y)));
 				} else{
 					System.err.println("Could not determine object sub class: " + className);
 				}

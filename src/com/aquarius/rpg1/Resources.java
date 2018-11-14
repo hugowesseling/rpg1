@@ -28,6 +28,7 @@ public class Resources {
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");
+		addObjectSubClass("StorableObject");
 		
     }
 

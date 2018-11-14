@@ -1,5 +1,6 @@
 package com.aquarius.rpg1;
 import java.io.Serializable;
+import java.util.HashMap;
 
 public abstract class StorableObjectType implements Serializable{
 
@@ -9,7 +10,16 @@ public abstract class StorableObjectType implements Serializable{
 			new FoodObjectType("strawberries", 131076, 100),
 			new FoodObjectType("soup", 133385, 50)
 			};
-
+	static transient HashMap<String, StorableObjectType> allHashMap;
+	
+	static
+	{
+		allHashMap = new HashMap<>();
+		for(StorableObjectType sot: all){
+			allHashMap.put(sot.name, sot);
+		}
+	}
+	
 	public String name;
 	public int tileIndex;
 
