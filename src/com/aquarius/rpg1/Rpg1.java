@@ -24,7 +24,10 @@ Minimal additions:
 - world state dependent dialogs
 - Objects in the world:
 	- Needs new drawing routine: Make the Actions responsible for deciding which image to draw and which collision model to use
-
+- Stored objects:
+	- Are only object types. Stored in a hashmap of {String:Object Behavior Class instance} for behavior definition.
+	- Multiple object types can share behavior, maybe differ on parameters (appearance, strength, duration,...)
+	- Objects stored can also appear in the world, then the objecttype is part of a StorageObject, which uses the objecttype for drawing
 - Wandering person in village lost a special ring (with engraving of dead mother), only knows location where lost
 	- At that location, find a person running around, catch him, but he will only give ring back if you help him
 		-> He needs something to give to his girlfriend
@@ -33,8 +36,11 @@ Minimal additions:
 	- you get the ring and bring it back to person in village,that gives you soup in his house (his mother's recipe)
 
 	*Needed additions:
-	- Running, hiding, following behavior
-	- Entering house  <- Does this one!!!
+	TODO: Running, hiding, following behavior
+	DONE: Entering house
+	TODO: Object storage, behavior and pickup
+	TODO: Dialogue based on stored object
+	TODO: Worldstate containing everything including player?
 
 Then:
 - World changing events:
@@ -61,7 +67,6 @@ Possible game objects:
 - Switch that opens door
 - Block that can be pushed
 - Switch with two states (red/green) 
-
 
 Behavior:
 The object should also do something with its contents
