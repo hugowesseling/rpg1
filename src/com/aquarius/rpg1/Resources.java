@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class Resources {
 	public static TileSet[] levelTileSets = {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1, true),
-			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true)
+			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true),
+			new TileSet(2, "/tileB_inside.png", 16, 16, 0, 0, true)
 	};
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public static TileSet characterTileSet = new TileSet(-1, "/characters1.png", 26, 36, 0, 0, false);
