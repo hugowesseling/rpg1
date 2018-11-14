@@ -8,7 +8,7 @@ public abstract class StorableObjectType implements Serializable{
 
 	static transient StorableObjectType all[] = {
 			new FoodObjectType("strawberries", 131076, 100),
-			new FoodObjectType("soup", 133385, 50)
+			new FoodObjectType("soup", 133385, 60)
 			};
 	static transient HashMap<String, StorableObjectType> allHashMap;
 	
