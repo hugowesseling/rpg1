@@ -23,7 +23,7 @@ public class Player extends GameObject {
 		{
 			if(hasInSight(gameObject.getPosition(), 64))
 			{
-				System.out.println("hasInSight: " + gameObject.name);
+				//System.out.println("hasInSight: " + gameObject.name);
 				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TALK))
 				{
 					setTalkActionGameObject(gameObject);

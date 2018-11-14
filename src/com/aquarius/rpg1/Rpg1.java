@@ -27,7 +27,7 @@ Minimal additions:
 - Stored objects:
 	- Are only object types. Stored in a hashmap of {String:Object Behavior Class instance} for behavior definition.
 	- Multiple object types can share behavior, maybe differ on parameters (appearance, strength, duration,...)
-	- Objects stored can also appear in the world, then the objecttype is part of a StorageObject, which uses the objecttype for drawing
+	- Objects stored can also appear in the world, then the objecttype is part of a StorableObject, which uses the objecttype for drawing
 - Wandering person in village lost a special ring (with engraving of dead mother), only knows location where lost
 	- At that location, find a person running around, catch him, but he will only give ring back if you help him
 		-> He needs something to give to his girlfriend
@@ -340,7 +340,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	@Override
 	public void keyPressed(KeyEvent ke) 
 	{
-		System.out.println("Key pressed");
+		//System.out.println("Key pressed");
 		int keyCode = ke.getKeyCode();
 		input.set(keyCode, true);
 		if(keyCode == KeyEvent.VK_A)
@@ -536,8 +536,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}
 		}
 		if(playerMoved){
-			screenx = player.position.x - 100;
-			screeny = player.position.y - 100;
+			screenx = player.position.x - 150;
+			screeny = player.position.y - 150;
 
 			if(screenx<0)screenx=0;
 			if(screeny<0)screeny=0;
