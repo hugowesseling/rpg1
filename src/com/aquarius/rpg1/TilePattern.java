@@ -114,7 +114,7 @@ public class TilePattern implements Serializable
 			return;
 		}
 		
-		boolean neighborhoodTilePattern[][] = getNeighborhoodTilePattern(layer, tileX,tileY);
+		boolean neighborhoodTilePattern[][] = getNeighborhoodTilePattern(layer, tileSet.index, tileX,tileY);
 		int matchRate, maxMatchRate = -9*4 - 1;
 		TilePatternTile maxRateTilePatternTile = tilePatternTiles.get(0);
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
@@ -127,6 +127,7 @@ public class TilePattern implements Serializable
 				maxMatchRate = matchRate;
 			}
 		}
+		System.out.println("setTile: " + tileX + "," + tileY + ",neighbor:" + placeNeighborhood);
 		layer.setTile(tileX, tileY, tileSet.getTileIndexFromXY(maxRateTilePatternTile.tileX, maxRateTilePatternTile.tileY));
 		if(placeNeighborhood)
 		{
@@ -142,10 +143,13 @@ public class TilePattern implements Serializable
 					{
 						// Check if in this tilePattern
 						int tileIndex = layer.getTile(nTileX, nTileY);
-						Int2d tileXY = tileSet.getTileXYFromIndex(tileIndex);
-						if(isTileInTilePattern(tileXY.x,tileXY.y))
+						if(tileIndex/65536 == tileSet.index)
 						{
-							place(layer, tileSet, nTileX, nTileY, false);
+							Int2d tileXY = TileSet.getTileXYFromIndex(tileIndex);
+							if(isTileInTilePattern(tileXY.x,tileXY.y))
+							{
+								place(layer, tileSet, nTileX, nTileY, false);
+							}
 						}
 					}
 				}
@@ -154,7 +158,7 @@ public class TilePattern implements Serializable
 	}
 
 
-	private boolean[][] getNeighborhoodTilePattern(Layer layer, int tileX, int tileY)
+	private boolean[][] getNeighborhoodTilePattern(Layer layer, int tileSetIndex, int tileX, int tileY)
 	{
 		boolean result[][] = new boolean[3][3];
 		for(int y=-1;y<2;y++)
@@ -162,7 +166,7 @@ public class TilePattern implements Serializable
 			for(int x=-1;x<2;x++)
 			{
 				int tileIndex = layer.getTile(tileX + x, tileY + y);
-				if(tileIndex == -1)
+				if(tileIndex == -1 || tileIndex/65536 != tileSetIndex)
 				{
 					result[x+1][y+1] = false;
 				}else
@@ -172,7 +176,8 @@ public class TilePattern implements Serializable
 				}
 			}
 		}
-		//print2darray(result);
+		System.out.println(tileX + "," + tileY);
+		print2darray(result);
 		return result;
 	}
 

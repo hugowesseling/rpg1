@@ -274,7 +274,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					tilePattern.addTile(new TilePatternTile(tileX, tileY));
 					currentTileSet.tilePatterns.add(tilePattern);
 				}
-				selectedTilePattern  = tilePattern; 
+				selectedTilePattern  = tilePattern;
+				for(int i=0;i<currentTileSet.tilePatterns.size();i++)
+					if(currentTileSet.tilePatterns.get(i)==tilePattern)
+						System.out.println("Selected tile pattern: "+i);
 				editMode = EditMode.TILE_PATTERN_EDIT;
 			}else
 			if(editMode == EditMode.TILE_PATTERN_EDIT)

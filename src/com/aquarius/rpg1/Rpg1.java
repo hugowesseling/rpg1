@@ -547,7 +547,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT) {
 				screeny = levelState.getHeight() * Constant.TILE_HEIGHT;
 			}				
-			// TODO: get rid of screenx, screeny
 		}
 		if(player.position.x < Constant.TILE_WIDTH * 1)
 		{

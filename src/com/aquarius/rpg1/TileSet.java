@@ -20,7 +20,7 @@ public class TileSet
     boolean[][] tileCollision;
 
 	public String fileName;
-	private int index;
+	public int index;
     public Vector<TilePattern> tilePatterns = new Vector<>();
 	private boolean hasTilePattern;
 	
