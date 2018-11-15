@@ -6,9 +6,11 @@ public class Player extends GameObject {
 	private static final long serialVersionUID = 1752542798493227606L;
 	Vector<CarryableItem> itemsCarried;
 	private GameObject talkActionGameObject = null;
+	public Bag<StorableObjectType> inventory;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
 		weapon = new Sword(this);
+		inventory = new Bag<>();
 	}
 	public GameObject getTalkActionGameObject() {
 		return talkActionGameObject;

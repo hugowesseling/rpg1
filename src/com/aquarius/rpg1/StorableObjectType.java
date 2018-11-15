@@ -27,4 +27,7 @@ public abstract class StorableObjectType implements Serializable{
 		this.name = name;
 		this.tileIndex = tileIndex;
 	}
+	public String toString(){
+		return name;
+	}
 }
