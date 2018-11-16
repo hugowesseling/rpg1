@@ -9,6 +9,7 @@ public class DialogueBlock implements Serializable
 	private static final long serialVersionUID = 6276869414867442109L;
 	String text;
 	DialogueBlock nextNode = null;
+	DialogueAction action = null;
 	String jumpTo = null;
 	private HashMap<String, DialogueBlock> answers = new HashMap<String, DialogueBlock>();
 	private HashMap<String, DialogueBlock> jumpPoints = new HashMap<String, DialogueBlock>();
@@ -16,6 +17,12 @@ public class DialogueBlock implements Serializable
 	public DialogueBlock(String text)
 	{
 		this.text = text;
+	}
+
+	public DialogueBlock(String text, DialogueAction action)
+	{
+		this(text);
+		this.action = action;
 	}
 
 	public DialogueBlock add(DialogueBlock dialogueBlock)
@@ -83,5 +90,11 @@ public class DialogueBlock implements Serializable
 			System.out.println("Done");
 		}
 		
+	}
+
+	public void doAction(LevelState levelState, Player player) {
+		if(action != null){
+			action.doAction(levelState, player);
+		}
 	}
 }

@@ -53,6 +53,19 @@ public class Bag<E> {
     else map.put(e, v+count);
     return true;
   }
+  public int remove(E e, int count) {
+	  //Tries to remove count of e, returns the number of successfully removed
+	  Integer v = map.get(e);
+	  if (v == null)
+		  return 0;
+	  if(v > count) {
+		  map.put(e, v-count);
+		  return count;
+	  }
+	  map.remove(e);
+	  return v;
+  }
+
   public Set<E> keySet() {
     return map.keySet();
   }
@@ -74,5 +87,4 @@ public class Bag<E> {
 	      System.out.println(entry.getKey() + ":" + entry.getValue());
 	  }
   }
-
 }

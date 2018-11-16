@@ -351,7 +351,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			System.out.println("Do action");
 			if(dialogue != null) {
-				if(!dialogue.confirm()) {
+				if(!dialogue.confirm(levelState, player)) {
 					dialogue = null;
 				}
 			}else {

@@ -17,13 +17,14 @@ public class Dialogue {
 		this.dialogStyle = dialogStyle;
 	}
 
-	public boolean confirm() {
+	public boolean confirm(LevelState levelState, Player player) {
 		System.out.println("Dialog.confirm");
 		currentDialogueBlock = currentDialogueBlock.nextNode;
 		if(currentDialogueBlock == null) {
 			currentDialogueBlock = startDialogueBlock;
 			return false;
 		}else {
+			currentDialogueBlock.doAction(levelState, player);
 			return true;
 		}
 		

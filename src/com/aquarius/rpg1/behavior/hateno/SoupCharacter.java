@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import com.aquarius.rpg1.CharacterDrawer;
 import com.aquarius.rpg1.Dialogue;
+import com.aquarius.rpg1.DialogueAction;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
@@ -20,11 +21,6 @@ public class SoupCharacter extends GameObject {
 	private static final long serialVersionUID = -1794298120753559536L;
 	private transient Dialogue nosoupDialogue;
 	private transient Dialogue soupDialogue;
-
-	
-	public SoupCharacter() {
-		init();
-	}
 
 	public SoupCharacter(CharacterDrawer characterDrawer, ObjectPosition objectPosition, Direction direction) {
 		super(characterDrawer, objectPosition, direction);
@@ -44,15 +40,17 @@ public class SoupCharacter extends GameObject {
 		
 		dialogueBlock = new DialogueBlock("Hi again!");
 		dialogueBlock.add(new DialogueBlock("It's so nice of you to finally bring me some soup"))
+					 .add(new DialogueBlock("Thank you!", (l,p) -> p.inventory.remove("soup", 1)) )			 
 					 .add(new DialogueBlock("Okay, I won't hold you up any longer"));
 		soupDialogue = new Dialogue(dialogueBlock, null); // Resources.dialogStyles.get(0));
 	}
 
 	@Override
 	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
-		if(player.inventory.getCount("soup") > 0)
+		if(player.inventory.getCount("soup") > 0) {
+			
 			return soupDialogue;
-		else
+		}else
 			return nosoupDialogue;
 	}
 }
