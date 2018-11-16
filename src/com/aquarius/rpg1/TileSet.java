@@ -117,7 +117,7 @@ public class TileSet
 	public int getTileIndexFromXY(int x, int y)
 	{
 		int retval = index * 65536 + y * 256 + x;
-		System.out.println("getTileIndexFromXY: " + retval);
+		//System.out.println("getTileIndexFromXY: " + retval);
 		return retval;
 	}
 	

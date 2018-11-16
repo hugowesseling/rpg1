@@ -23,10 +23,11 @@ public class Resources {
     static {
     	System.out.println("Resources.static");
 		dialogStyles = new ArrayList<>();
-		dialogStyles.add(new DialogStyle(0, levelTileSets[3], true));
 		dialogStyles.add(new DialogStyle(4, levelTileSets[0], true));
+		dialogStyles.add(new DialogStyle(0, levelTileSets[3], true));
 		
 		addCharacterSubClass("HenryCharacter");
+		addCharacterSubClass("SoupCharacter");
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");

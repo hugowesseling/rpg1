@@ -152,6 +152,7 @@ import javax.swing.JToggleButton;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
+import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 
 public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	volatile private boolean mouseDownLeft = false;
@@ -176,6 +177,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private LevelState levelState;
 	private WorldState worldState;
 	private Dialogue dialogue;
+	private boolean showInventory = false;
+	private InventoryMenu inventoryMenu;
 	public Rpg1()
 	{
 		frameCounter = 0;
@@ -183,6 +186,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState = new EditorState();
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
+		inventoryMenu = new InventoryMenu(Resources.dialogStyles.get(1));
 		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
 		levelState.setLevelPos(new Int2d(500,500));
 		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
@@ -357,8 +361,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}				
 			}
 		}
-		if(keyCode == KeyEvent.VK_S) {
+		if(keyCode == KeyEvent.VK_X) {
 			player.useWeapon();
+		}
+		if(keyCode == KeyEvent.VK_S) {
+			simulating = !simulating;
 		}
 		if(keyCode == KeyEvent.VK_UP)
 		{
@@ -373,6 +380,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			{
 				dialogue.down();
 			}
+		}
+		if(keyCode == KeyEvent.VK_I) {
+			showInventory = !showInventory;
 		}
 	}
 	private void startDialog() {
@@ -408,7 +418,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		//System.out.println("Size: " + imageWidth + "," + imageHeight);
 		if(mouseInFrame)
 		{
-			mouseCornerActions(size);
+			if(!simulating)
+				mouseCornerActions(size);
 			inputPlayerMovement();
 		}
 		//Image image=createVolatileImage(imageWidth,imageHeight);
@@ -435,8 +446,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					imageGraphics.setColor(Color.BLUE);
 					imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
 					imageGraphics.setColor(Color.WHITE);
-					imageGraphics.drawString("Talk", imageWidth - 60, 40);
+					imageGraphics.drawString("Talk", imageWidth - 60, 35);
 				}
+			}
+			if(showInventory)
+			{
+				inventoryMenu.draw(imageGraphics,
+						imageWidth/2 - 100, imageHeight/2 - 100,
+						200, 200, player.inventory);
 			}
 		}
 		if(addCharacterTileSet != null) {
@@ -690,6 +707,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				
 				if(className.equals(HenryCharacter.class.getSimpleName())) {
 					levelState.allGameObjects.add(new HenryCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
+				} else 	if(className.equals(SoupCharacter.class.getSimpleName())) {
+					levelState.allGameObjects.add(new SoupCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}

@@ -63,7 +63,7 @@ public class HenryCharacter extends GameObject
 		// Player can then initiate dialog
 	 
 		if(!(getAction() instanceof WalkToCharacterAction)){
-			if(player.getPosition().subnearby(position, 80)) {
+			if(player.getPosition().subnearby(position, 40)) {
 				setAction(new WalkToCharacterAction(this, player, 20, 100));
 				System.out.println("HenryCharacter.think: WalkToCharacterAction");
 				return;

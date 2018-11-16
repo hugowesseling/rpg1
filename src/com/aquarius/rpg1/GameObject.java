@@ -123,19 +123,13 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
 		System.out.println("Writing position: "  + position + ", for name " + name);
 		oos.defaultWriteObject();
-		//stream.writeObject(name);
-		//stream.writeObject(position);
-		//stream.writeObject(direction);
 	}
 	protected abstract void init();
 
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
-		init();
-		//name = (String)ois.readObject();
-		//position = (CharacterPosition) ois.readObject();
-		//direction = (Direction) ois.readObject();
 		System.out.println("Read position: "  +position + ", for name " + name);
+		init();
 	}
 
 	public void useWeapon() {

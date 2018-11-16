@@ -10,9 +10,7 @@ import javax.swing.JOptionPane;
 
 public class StorableObject extends GameObject {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -103755530791188265L;
 	private StorableObjectType storableObjectType;
 
@@ -53,7 +51,7 @@ public class StorableObject extends GameObject {
 				newAllGameObjects.add(go);
 		levelState.allGameObjects = newAllGameObjects;
 		
-		player.inventory.add(storableObjectType);
+		player.inventory.add(storableObjectType.name);
 		System.out.println("New player inventory:");
 		player.inventory.println();
 	}

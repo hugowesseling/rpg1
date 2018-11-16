@@ -8,7 +8,6 @@ public class Dialogue {
 	DialogStyle dialogStyle;
 	
 	public Dialogue(DialogueBlock startDialogueBlock, DialogStyle dialogStyle) {
-		super();
 		this.startDialogueBlock = startDialogueBlock;
 		this.currentDialogueBlock = startDialogueBlock;
 		if(dialogStyle == null) {
@@ -42,7 +41,7 @@ public class Dialogue {
 
 	public void draw(Graphics2D graphics, int x, int y, int w, int h) {
 		dialogStyle.draw(graphics, x, y, w, h);
-		int estimatedTextWidth = 10 * currentDialogueBlock.text.length();
+		int estimatedTextWidth = 5 * currentDialogueBlock.text.length();
 		//System.out.println("Showing dialogue: " + currentDialogueBlock.text);
 		graphics.drawString(currentDialogueBlock.text, x + w/2 - estimatedTextWidth/2, y + h/2 + 10);
 

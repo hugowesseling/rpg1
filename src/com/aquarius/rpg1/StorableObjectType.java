@@ -10,7 +10,7 @@ public abstract class StorableObjectType implements Serializable{
 			new FoodObjectType("strawberries", 131076, 100),
 			new FoodObjectType("soup", 133385, 60)
 			};
-	static transient HashMap<String, StorableObjectType> allHashMap;
+	public static transient HashMap<String, StorableObjectType> allHashMap;
 	
 	static
 	{

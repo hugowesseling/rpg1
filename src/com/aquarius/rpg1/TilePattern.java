@@ -127,7 +127,7 @@ public class TilePattern implements Serializable
 				maxMatchRate = matchRate;
 			}
 		}
-		System.out.println("setTile: " + tileX + "," + tileY + ",neighbor:" + placeNeighborhood);
+		//System.out.println("setTile: " + tileX + "," + tileY + ",neighbor:" + placeNeighborhood);
 		layer.setTile(tileX, tileY, tileSet.getTileIndexFromXY(maxRateTilePatternTile.tileX, maxRateTilePatternTile.tileY));
 		if(placeNeighborhood)
 		{
@@ -176,8 +176,8 @@ public class TilePattern implements Serializable
 				}
 			}
 		}
-		System.out.println(tileX + "," + tileY);
-		print2darray(result);
+		//System.out.println(tileX + "," + tileY);
+		//print2darray(result);
 		return result;
 	}
 
