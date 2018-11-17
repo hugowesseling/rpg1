@@ -19,8 +19,7 @@ import com.aquarius.rpg1.WorldState;
 public class SoupCharacter extends GameObject {
 
 	private static final long serialVersionUID = -1794298120753559536L;
-	private transient Dialogue nosoupDialogue;
-	private transient Dialogue soupDialogue;
+	private transient Dialogue nosoupDialogue, soupDialogue;
 
 	public SoupCharacter(CharacterDrawer characterDrawer, ObjectPosition objectPosition, Direction direction) {
 		super(characterDrawer, objectPosition, direction);
@@ -48,7 +47,6 @@ public class SoupCharacter extends GameObject {
 	@Override
 	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
 		if(player.inventory.getCount("soup") > 0) {
-			
 			return soupDialogue;
 		}else
 			return nosoupDialogue;
