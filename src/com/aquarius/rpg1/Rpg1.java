@@ -93,7 +93,7 @@ features:
  */
 
 // DONE: Add house interiors: Walking into another level and out into previous level again
-// TODO: Multi tileset tile patterns
+// DONE: Multi tileset tile patterns
 // TODO: Dual material tile patterns
 // TODO: Level generator using fancy tile patterns
 // TODO: Level stack
@@ -121,6 +121,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -137,12 +138,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -177,6 +180,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private Dialogue dialogue;
 	private boolean showInventory = false;
 	private InventoryMenu inventoryMenu;
+	private JFrame frame;
 	public Rpg1()
 	{
 		frameCounter = 0;
@@ -199,7 +203,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
 
-		JFrame frame = new JFrame("Rpg");
+		frame = new JFrame("Rpg");
 		//frame.setLayout(new BorderLayout());
 		frame.add(this);
 		//setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
@@ -696,7 +700,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				JOptionPane optionPane = new JOptionPane();
 			    optionPane.setMessage(characterSettings);
 			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-			    JDialog dialog = optionPane.createDialog(null, "Character Settings");
+				JDialog dialog = optionPane.createDialog(null, "Character Settings");
 			    dialog.setVisible(true);
 			    
 			    Direction direction = (Direction) directionComboBox.getSelectedItem();

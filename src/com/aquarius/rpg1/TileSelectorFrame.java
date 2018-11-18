@@ -24,6 +24,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -78,11 +79,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		});
 		menuBar.add(tileSetCombobox);
 		
-		JMenu optionsMenu = new JMenu("Options");
-		JMenuItem editTilePatterngMenuItem = new JMenuItem("Edit Tile Patterns");
-		optionsMenu.add(editTilePatterngMenuItem);
-		menuBar.add(optionsMenu);
-
 		JMenu tilePatternSwitchMenu = new JMenu("");
 		tilePatternSwitchMenu.setIcon(new ImageIcon("star_icon.png"));
 		tilePatternSwitchMenu.addMouseListener(new MouseAdapter() { 
@@ -136,11 +132,14 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	            } 
 	          });
 		menuBar.add(collisionSwitchMenu);
-
-		
+		JLabel tilePatternsLabel = new JLabel("TilePattern:");
+		menuBar.add(tilePatternsLabel);
+		ImageChoosingLabel insideTile = new ImageChoosingLabel("inside", jFrame, (ae)->{ System.out.println("inside tileIndex: "+ ae.getID()); }); 
+		menuBar.add(insideTile);
+		ImageChoosingLabel outsideTile = new ImageChoosingLabel("outside", jFrame, (ae)->{ System.out.println("outside tileIndex: "+ ae.getID()); });
+		menuBar.add(outsideTile);
 		jFrame.setJMenuBar(menuBar);
-		
-		
+
 		jFrame.add(this);
 		setCurrentTileSet(0);
 		jFrame.setVisible(true);
@@ -162,9 +161,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	{
 		Image image=createVolatileImage(imageWidth, imageHeight);
 		Graphics2D imageG=(Graphics2D) image.getGraphics();
-		float alpha = 1f;
 		drawCounter = (drawCounter+1) % 100;
-		alpha = (float)(Math.sin(Math.PI*drawCounter/50)) * 0.25f + 0.75f;
 
 		int tileswidth = imageWidth/16+1;
 		int tilesheight = imageHeight/16+1;
