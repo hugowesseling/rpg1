@@ -75,11 +75,11 @@ public class TileSet
 		int idx = fileName.replaceAll("\\\\", "/").lastIndexOf("/");
 		return idx >= 0 ? fileName.substring(idx + 1) : fileName;
 	}
-	public TilePattern getTilePatternFromTile(int tileX, int tileY)
+	public TilePattern getTilePatternFromTile(int tileIndex)
 	{
 		for(TilePattern tilePattern:tilePatterns)
 		{
-			if(tilePattern.isTileInTilePattern(tileX,tileY))
+			if(tilePattern.isTileInTilePattern(tileIndex))
 			{
 				return tilePattern;
 			}

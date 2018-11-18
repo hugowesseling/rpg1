@@ -28,8 +28,8 @@ public class Resources {
     static {
     	System.out.println("Resources.static");
 		dialogStyles = new ArrayList<>();
-		dialogStyles.add(new DialogStyle(4, levelTileSets[0], true));
-		dialogStyles.add(new DialogStyle(0, levelTileSets[3], true));
+		dialogStyles.add(new DialogStyle(levelTileSets[0].tilePatterns.get(0), true));
+		dialogStyles.add(new DialogStyle(levelTileSets[3].tilePatterns.get(0), true));
 		
 		addCharacterSubClass("HenryCharacter");
 		addCharacterSubClass("SoupCharacter");

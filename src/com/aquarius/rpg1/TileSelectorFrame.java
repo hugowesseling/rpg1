@@ -196,13 +196,13 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			imageG.setColor(Color.RED);
 			for(TilePattern tilePattern:currentTileSet.tilePatterns)
 			{
-				tilePattern.draw(imageG);
+				tilePattern.draw(imageG, currentTileSet.index);
 			}
 		}
 		if(editMode == EditMode.TILE_PATTERN_EDIT)
 		{
 			imageG.setColor(Color.RED);
-			selectedTilePattern.draw(imageG);
+			selectedTilePattern.draw(imageG, currentTileSet.index);
 		}
 		if(editMode == EditMode.TILE_PATTERN_COLORING)
 		{
@@ -253,6 +253,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		mouseStart  = getMousePixelLocation(mouseEvent);
 		int tileX = mouseStart.x / Constant.TILE_WIDTH;
 		int tileY = mouseStart.y / Constant.TILE_HEIGHT;
+		int tileIndex = currentTileSet.index*65536 + tileY*256 + tileX;
 
 
 		if((mouseEvent.getModifiers() & ActionEvent.CTRL_MASK) != 0)
@@ -267,11 +268,11 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		{
 			if(editMode == EditMode.TILE_PATTERN_SELECTION)
 			{
-				TilePattern tilePattern = currentTileSet.getTilePatternFromTile(tileX, tileY);
+				TilePattern tilePattern = currentTileSet.getTilePatternFromTile(tileIndex);
 				if(tilePattern == null)
 				{
 					tilePattern = new TilePattern();
-					tilePattern.addTile(new TilePatternTile(tileX, tileY));
+					tilePattern.addTile(new TilePatternTile(tileIndex));
 					currentTileSet.tilePatterns.add(tilePattern);
 				}
 				selectedTilePattern  = tilePattern;
@@ -282,17 +283,17 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			}else
 			if(editMode == EditMode.TILE_PATTERN_EDIT)
 			{
-				if(selectedTilePattern.isTileInTilePattern(tileX, tileY))
-					selectedTilePattern.removeTileFromPattern(tileX,tileY);
+				if(selectedTilePattern.isTileInTilePattern(tileIndex))
+					selectedTilePattern.removeTileFromPattern(tileIndex);
 				else
-					selectedTilePattern.addTile(new TilePatternTile(tileX, tileY));
+					selectedTilePattern.addTile(new TilePatternTile(tileIndex));
 			}else
 			if(editMode == EditMode.TILE_PATTERN_COLORING)
 			{
 				int tileThirdX = (mouseStart.x % Constant.TILE_WIDTH) * 3 / Constant.TILE_WIDTH;
 				int tileThirdY = (mouseStart.y % Constant.TILE_HEIGHT) * 3 / Constant.TILE_HEIGHT;
 				System.out.println("Third position: " + tileThirdX + "," + tileThirdY);
-				selectedTilePattern.changeColor(tileX, tileY, tileThirdX, tileThirdY);
+				selectedTilePattern.changeColor(tileIndex, tileThirdX, tileThirdY);
 			}
 			mouseDragged(mouseEvent);
 		}

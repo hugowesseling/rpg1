@@ -10,13 +10,13 @@ public class TilePatternTile implements Serializable
 	final static int EMPTY = 0;
 	final static int OCCUPIED = 1;
 	final static int EITHER = 2;
-	int tileX, tileY;
+	//int tileX, tileY;
+	int tileIndex;
 	int[][] tileConnections;	// [0-2][0-2] array of connections to other tiles
 	
-	public TilePatternTile(int tileX, int tileY)
+	public TilePatternTile(int tileIndex)
 	{
-		this.tileX = tileX;
-		this.tileY = tileY;
+		this.tileIndex = tileIndex;
 		tileConnections = new int[3][3];
 		for(int yi=0; yi<3; yi++)
 		{
@@ -29,19 +29,22 @@ public class TilePatternTile implements Serializable
 	}
 
 	public void draw(Graphics imageG) {
-		imageG.drawRect(tileX * Constant.TILE_WIDTH, tileY * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+		Int2d xy = TileSet.getTileXYFromIndex(tileIndex);
+		imageG.drawRect(xy.x * Constant.TILE_WIDTH, xy.y * Constant.TILE_HEIGHT, 
+						Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
 	}
 
 	public void drawColorHash(Graphics imageG)
 	{
+		Int2d xy = TileSet.getTileXYFromIndex(tileIndex);
 		int x[] = new int[4];
 		int y[] = new int[4];
 		imageG.setColor(Color.GRAY);
-		x[0] = tileX * Constant.TILE_WIDTH;
+		x[0] = xy.x * Constant.TILE_WIDTH;
 		x[1] = x[0] + Constant.TILE_WIDTH / 3;
 		x[2] = x[0] + Constant.TILE_WIDTH * 2 / 3;
 		x[3] = x[0] + Constant.TILE_WIDTH - 1;
-		y[0] = tileY * Constant.TILE_HEIGHT;
+		y[0] = xy.y * Constant.TILE_HEIGHT;
 		y[1] = y[0] + Constant.TILE_HEIGHT / 3;
 		y[2] = y[0] + Constant.TILE_HEIGHT * 2 / 3;
 		y[3] = y[0] + Constant.TILE_HEIGHT - 1;
@@ -119,7 +122,10 @@ public class TilePatternTile implements Serializable
 
 	public TilePatternTile cloneTranslated(int xtrans, int ytrans)
 	{
-		TilePatternTile result = new TilePatternTile(tileX + xtrans, tileY + ytrans);
+		int tileSetIndex = tileIndex / 65536;
+		Int2d xy = TileSet.getTileXYFromIndex(tileIndex);
+		int newTileIndex= tileSetIndex * 65536 + xy.y * 256 + xy.x;		
+		TilePatternTile result = new TilePatternTile(newTileIndex);
 		for(int yi=0; yi<3; yi++)
 		{
 			for(int xi=0; xi<3; xi++)

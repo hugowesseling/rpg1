@@ -1,7 +1,5 @@
 package com.aquarius.rpg1;
 
-import java.awt.BorderLayout;
-
 /*
 Need a simple story:
 - Go find a person in another town and talk to some people that then tell different things.
@@ -81,11 +79,24 @@ Object[] getObjectSettings():
 When starting to add an object: Show the object type selection, then specify parameters, then create with those parameters and keep moving the object around with mouse
 A left-click them simply does not control the object anymore, keeping it in its last place.
 
+*Create level generator:
+features:
+- Tilepattern for any two materials
+	-> Only thing needed is to assign two materials to a tilepattern, one for red, one for green
+		-> Assign using other tiles
+- Needs tile patterns over multiple tilesets...
+	-> Major refactor..
+
+*First create small forest scene for crystal quest
 
 
  */
 
-// TODO: Add house interiors: Walking into another level and out into previous level again (level-stack).
+// DONE: Add house interiors: Walking into another level and out into previous level again
+// TODO: Multi tileset tile patterns
+// TODO: Dual material tile patterns
+// TODO: Level generator using fancy tile patterns
+// TODO: Level stack
 // TODO: Optimize graphics2 (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
 // TODO: Add shield and enemy behavior
 // TODO: Add clipboard window (to copy paste level parts on and off) 
@@ -107,11 +118,9 @@ A left-click them simply does not control the object anymore, keeping it in its 
 // DONE: Scroll when being close to the border
 
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -126,18 +135,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -148,7 +147,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
@@ -775,7 +773,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				if(tileSelectorFrame.selectedTilePattern != null)
 				{
 					levelState.levelStack.pushLayers();
-					tileSelectorFrame.selectedTilePattern.place(layer, tileSelectorFrame.currentTileSet, tileX, tileY, true);
+					tileSelectorFrame.selectedTilePattern.place(layer, tileX, tileY, true);
 					levelState.levelStack.popLayersIfNoChange();
 				}else
 				if(editorState.tileSelection != null)

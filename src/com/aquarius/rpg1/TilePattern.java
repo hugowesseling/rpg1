@@ -38,10 +38,11 @@ public class TilePattern implements Serializable
 		tilePatternTiles.add(tilePatternTile);
 	}
 	
-	public void draw(Graphics imageG) {
+	public void draw(Graphics imageG, int tileSetIndex) {
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
 		{
-			tilePatternTile.draw(imageG);
+			if(tilePatternTile.tileIndex / 65536 == tileSetIndex)
+				tilePatternTile.draw(imageG);
 		}
 	}
 
@@ -55,11 +56,11 @@ public class TilePattern implements Serializable
 	}
 	
 
-	public TilePatternTile findTileInTilePattern(int tileX, int tileY)
+	public TilePatternTile findTileInTilePattern(int tileIndex)
 	{
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
 		{
-			if(tilePatternTile.tileX == tileX && tilePatternTile.tileY == tileY)
+			if(tilePatternTile.tileIndex == tileIndex)
 			{
 				return tilePatternTile;
 			}
@@ -68,11 +69,11 @@ public class TilePattern implements Serializable
 	}
 	
 
-	public boolean isTileInTilePattern(int tileX, int tileY)
+	public boolean isTileInTilePattern(int tileIndex)
 	{
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
 		{
-			if(tilePatternTile.tileX == tileX && tilePatternTile.tileY == tileY)
+			if(tilePatternTile.tileIndex == tileIndex)
 			{
 				return true;
 			}
@@ -81,12 +82,12 @@ public class TilePattern implements Serializable
 	}
 
 
-	public void removeTileFromPattern(int tileX, int tileY)
+	public void removeTileFromPattern(int tileIndex)
 	{
 		Vector<TilePatternTile> newTilePatternTiles = new Vector<TilePatternTile>();
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
 		{
-			if(tilePatternTile.tileX != tileX || tilePatternTile.tileY != tileY)
+			if(tilePatternTile.tileIndex != tileIndex)
 			{
 				newTilePatternTiles.add(tilePatternTile);
 			}
@@ -95,9 +96,9 @@ public class TilePattern implements Serializable
 	}
 
 
-	public void changeColor(int tileX, int tileY, int tileThirdX, int tileThirdY)
+	public void changeColor(int tileIndex, int tileThirdX, int tileThirdY)
 	{
-		TilePatternTile tilePatternTile = findTileInTilePattern(tileX,tileY);
+		TilePatternTile tilePatternTile = findTileInTilePattern(tileIndex);
 		if(tilePatternTile == null)
 		{
 			return;
@@ -106,7 +107,7 @@ public class TilePattern implements Serializable
 	}
 
 
-	public void place(Layer layer, TileSet tileSet, int tileX, int tileY, boolean placeNeighborhood)
+	public void place(Layer layer, int tileX, int tileY, boolean placeNeighborhood)
 	{
 		// Determine correct tile to place and set it on layer
 		if(tilePatternTiles.size() == 0)
@@ -114,7 +115,7 @@ public class TilePattern implements Serializable
 			return;
 		}
 		
-		boolean neighborhoodTilePattern[][] = getNeighborhoodTilePattern(layer, tileSet.index, tileX,tileY);
+		boolean neighborhoodTilePattern[][] = getNeighborhoodTilePattern(layer, tileX, tileY);
 		int matchRate, maxMatchRate = -9*4 - 1;
 		TilePatternTile maxRateTilePatternTile = tilePatternTiles.get(0);
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
@@ -128,7 +129,7 @@ public class TilePattern implements Serializable
 			}
 		}
 		//System.out.println("setTile: " + tileX + "," + tileY + ",neighbor:" + placeNeighborhood);
-		layer.setTile(tileX, tileY, tileSet.getTileIndexFromXY(maxRateTilePatternTile.tileX, maxRateTilePatternTile.tileY));
+		layer.setTile(tileX, tileY, maxRateTilePatternTile.tileIndex);
 		if(placeNeighborhood)
 		{
 			// Check all neighborhood tiles that are also in this tilePattern and update them
@@ -143,13 +144,9 @@ public class TilePattern implements Serializable
 					{
 						// Check if in this tilePattern
 						int tileIndex = layer.getTile(nTileX, nTileY);
-						if(tileIndex/65536 == tileSet.index)
+						if(isTileInTilePattern(tileIndex))
 						{
-							Int2d tileXY = TileSet.getTileXYFromIndex(tileIndex);
-							if(isTileInTilePattern(tileXY.x,tileXY.y))
-							{
-								place(layer, tileSet, nTileX, nTileY, false);
-							}
+							place(layer, nTileX, nTileY, false);
 						}
 					}
 				}
@@ -158,7 +155,7 @@ public class TilePattern implements Serializable
 	}
 
 
-	private boolean[][] getNeighborhoodTilePattern(Layer layer, int tileSetIndex, int tileX, int tileY)
+	private boolean[][] getNeighborhoodTilePattern(Layer layer, int tileX, int tileY)
 	{
 		boolean result[][] = new boolean[3][3];
 		for(int y=-1;y<2;y++)
@@ -166,13 +163,12 @@ public class TilePattern implements Serializable
 			for(int x=-1;x<2;x++)
 			{
 				int tileIndex = layer.getTile(tileX + x, tileY + y);
-				if(tileIndex == -1 || tileIndex/65536 != tileSetIndex)
+				if(tileIndex == -1)
 				{
 					result[x+1][y+1] = false;
 				}else
 				{
-					Int2d tileXY = TileSet.getTileXYFromIndex(tileIndex);
-					result[x+1][y+1] = isTileInTilePattern(tileXY.x,tileXY.y);
+					result[x+1][y+1] = isTileInTilePattern(tileIndex);
 				}
 			}
 		}
@@ -218,13 +214,14 @@ public class TilePattern implements Serializable
 		int miny = Integer.MAX_VALUE;
 		for(TilePatternTile tilePatternTile:tilePatternTiles)
 		{
-			if(tilePatternTile.tileX < minx)
+			Int2d xy = TileSet.getTileXYFromIndex(tilePatternTile.tileIndex);
+			if(xy.x < minx)
 			{
-				minx = tilePatternTile.tileX;
+				minx = xy.x;
 			}
-			if(tilePatternTile.tileY < miny)
+			if(xy.y < miny)
 			{
-				miny = tilePatternTile.tileY;
+				miny = xy.y;
 			}
 		}
 		return new Int2d(minx, miny);
