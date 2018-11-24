@@ -9,10 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
-
 import com.aquarius.rpg1.behavior.GameObjectType;
 
 public class LevelState {
@@ -22,7 +20,6 @@ public class LevelState {
 	public LevelStack levelStack;
 	private Int2d levelPos= new Int2d(0,0);
 	private String latestLoadedFileName = "";
-	private boolean inSubLevel;
 	private ObjectPosition playerPositionInSuperLevel;
 
 	
@@ -32,7 +29,6 @@ public class LevelState {
 		levelKeyValues = new HashMap<>();
 		allGameObjects = new Vector<>();
 		levelStack = new LevelStack(bottom_layer, top_layer);
-		inSubLevel = false;
 		playerPositionInSuperLevel = null;
 	}
 
@@ -86,9 +82,9 @@ public class LevelState {
 		return bottom_layer.getHeight();
 	}
 
-	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter) {
+	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter, boolean doFade) {
 		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false);
-		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true);
+		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true && doFade);
 		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
 		for(GameObject gameCharacter: allGameObjects){
 			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny);
@@ -122,6 +118,7 @@ public class LevelState {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void readFromFileInputStream(FileInputStream fileInputStream) {
 		bottom_layer.readFromFileInputStream(fileInputStream);
 		top_layer.readFromFileInputStream(fileInputStream);
@@ -199,8 +196,7 @@ public class LevelState {
 	}
 
 	public void loadLevelByExit(int dx, int dy, Player player) {
-		if(inSubLevel) {
-			inSubLevel = false;
+		if(playerPositionInSuperLevel != null) {
 			player.position = playerPositionInSuperLevel;
 			player.position.x += dx*2;
 			player.position.y += dy*2;
@@ -226,7 +222,6 @@ public class LevelState {
 
 	public void loadSubLevel(String levelToLoad, Player player) {
 		loadLevel(levelToLoad);
-		inSubLevel = true;
 		playerPositionInSuperLevel = player.position.clone();
 	}
 

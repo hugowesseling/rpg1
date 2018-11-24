@@ -3,7 +3,6 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class CharacterTileSet implements Serializable {
 	private static final long serialVersionUID = -8543957292787335445L;

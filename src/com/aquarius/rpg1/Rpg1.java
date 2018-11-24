@@ -90,6 +90,17 @@ features:
 *First create small forest scene for crystal quest
 
 
+SFX:
+Music:
+	Town peaceful: https://musopen.org/music/85-berceuse-op-57/
+	Town bit playful: https://musopen.org/music/2491-2-arabesques-l-66/ (first 2 mins or so)
+	Sacred forest hideout: https://musopen.org/music/4478-danse-sacree-et-danse-profane/
+	
+	Other music:  D:\download\humble_bundle\gamedev\sfx\prosoundcollection_audio\prosoundcollection\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\zzzBonus_Music_16bit44kOnlyzzz
+	
+	
+
+
  */
 
 // DONE: Add house interiors: Walking into another level and out into previous level again
@@ -121,7 +132,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -138,14 +148,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -415,23 +423,46 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		//super.paint(g);
 		worldState.setTimeMs(System.currentTimeMillis());
 		Dimension size = this.getSize();
-		int imageWidth = size.width / 2;
-		int imageHeight = size.height / 2;
-		//System.out.println("Size: " + imageWidth + "," + imageHeight);
 		if(mouseInFrame)
 		{
 			if(!simulating)
 				mouseCornerActions(size);
 			inputPlayerMovement();
 		}
-		//Image image=createVolatileImage(imageWidth,imageHeight);
+		
+		drawEverything(g);
+		
+		try
+		{
+			Thread.sleep(10);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		if(simulating) {
+			frameCounter++;
+			if(frameCounter % 10 == 0) {
+				levelState.think(player, worldState);
+			}
+	
+			levelState.doActionsWeaponAndMovement(worldState);
+			
+			player.doActionAndWeapon(worldState, levelState);
+			player.determineTalkActionCharacter(levelState.allGameObjects);
+			player.checkIfTouching(levelState);
+		}
+	}
+	private void drawEverything(Graphics g) {
+		Dimension size2 = this.getSize();
+		int imageWidth = size2.width / 2;
+		int imageHeight = size2.height / 2;
 		BufferedImage image = new BufferedImage(imageWidth, imageHeight,
 	            BufferedImage.TYPE_INT_ARGB);
 		Graphics2D imageGraphics=image.createGraphics();
 		imageGraphics.setColor(Color.WHITE);
 		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
-		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter);
+		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter, !simulating);
 
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
 		
@@ -468,25 +499,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		imageGraphics.dispose();
 
 		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
-		try
-		{
-			Thread.sleep(10);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		if(simulating) {
-			frameCounter++;
-			if(frameCounter % 10 == 0) {
-				levelState.think(player, worldState);
-			}
-	
-			levelState.doActionsWeaponAndMovement(worldState);
-			
-			player.doActionAndWeapon(worldState, levelState);
-			player.determineTalkActionCharacter(levelState.allGameObjects);
-			player.checkIfTouching(levelState);
-		}
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
@@ -583,9 +595,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			levelState.loadLevelByExit(0, 1, player);
 		}
-	}
-	private ObjectPosition CharacterPosition(ObjectPosition original) {
-		return new ObjectPosition(original.x, original.y);
 	}
 	private void mouseCornerActions(Dimension size) {
 		if(mouseX < 20)

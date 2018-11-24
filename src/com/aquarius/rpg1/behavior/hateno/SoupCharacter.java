@@ -5,7 +5,6 @@ import java.util.HashSet;
 
 import com.aquarius.rpg1.CharacterDrawer;
 import com.aquarius.rpg1.Dialogue;
-import com.aquarius.rpg1.DialogueAction;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
@@ -13,7 +12,6 @@ import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
-import com.aquarius.rpg1.StorableObjectType;
 import com.aquarius.rpg1.WorldState;
 
 public class SoupCharacter extends GameObject {

@@ -14,12 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -27,7 +21,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 
 /*
 TileSelectorFrame:
@@ -56,6 +49,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private JFrame jFrame;
 	private static int drawCounter = 0;
 	private boolean redrawNeeded = true;
+	private ImageChoosingLabel insideChoosingLabel;
+	private ImageChoosingLabel outsideChoosingLabel;
 
     public TileSelectorFrame(String name, EditorState editorState)
 	{
@@ -68,6 +63,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		String[] tileSetStrings = Resources.getTileSetNames();
 		JComboBox<String> tileSetCombobox = new JComboBox<String>(tileSetStrings);
 		tileSetCombobox.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				JComboBox<String> comboBox = (JComboBox<String>) ae.getSource();
@@ -134,10 +130,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		menuBar.add(collisionSwitchMenu);
 		JLabel tilePatternsLabel = new JLabel("TilePattern:");
 		menuBar.add(tilePatternsLabel);
-		ImageChoosingLabel insideTile = new ImageChoosingLabel("inside", jFrame, (ae)->{ System.out.println("inside tileIndex: "+ ae.getID()); }); 
-		menuBar.add(insideTile);
-		ImageChoosingLabel outsideTile = new ImageChoosingLabel("outside", jFrame, (ae)->{ System.out.println("outside tileIndex: "+ ae.getID()); });
-		menuBar.add(outsideTile);
+		insideChoosingLabel = new ImageChoosingLabel("inside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.insideTileIndex =  ae.getID(); }); 
+		menuBar.add(insideChoosingLabel);
+		outsideChoosingLabel = new ImageChoosingLabel("outside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.outsideTileIndex = ae.getID(); });
+		menuBar.add(outsideChoosingLabel);
 		jFrame.setJMenuBar(menuBar);
 
 		jFrame.add(this);
@@ -228,14 +224,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private Int2d getMousePixelLocation(MouseEvent mouseEvent)
@@ -273,6 +265,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					currentTileSet.tilePatterns.add(tilePattern);
 				}
 				selectedTilePattern  = tilePattern;
+				insideChoosingLabel.setTileIndex(selectedTilePattern.insideTileIndex);
+				outsideChoosingLabel.setTileIndex(selectedTilePattern.outsideTileIndex);
 				for(int i=0;i<currentTileSet.tilePatterns.size();i++)
 					if(currentTileSet.tilePatterns.get(i)==tilePattern)
 						System.out.println("Selected tile pattern: "+i);

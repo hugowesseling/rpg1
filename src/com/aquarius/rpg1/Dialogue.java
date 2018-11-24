@@ -1,7 +1,6 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
-import java.io.Serializable;
 
 public class Dialogue {
 	DialogueBlock startDialogueBlock, currentDialogueBlock;

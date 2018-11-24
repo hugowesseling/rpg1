@@ -3,8 +3,6 @@ package com.aquarius.common2dgraphics.util;
 import java.awt.Color;
 import java.util.Random;
 
-import com.aquarius.common2dgraphics.util.Perlin;
-
 public class Util
 {
 	public static Random rnd=new Random();

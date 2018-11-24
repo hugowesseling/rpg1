@@ -1,13 +1,8 @@
 package com.aquarius.rpg1.behavior.hateno;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.aquarius.rpg1.ObjectPosition;
-import com.aquarius.rpg1.CharacterTileSet;
 import com.aquarius.rpg1.Dialogue;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
@@ -16,8 +11,8 @@ import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
-import com.aquarius.rpg1.Resources;
 import com.aquarius.rpg1.TileObjectIndex;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.WaitAction;

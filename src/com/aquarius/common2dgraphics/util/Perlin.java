@@ -1,7 +1,5 @@
 package com.aquarius.common2dgraphics.util;
 
-import java.util.Random;
-
 import com.aquarius.common2dgraphics.util.Util;
 
 public class Perlin

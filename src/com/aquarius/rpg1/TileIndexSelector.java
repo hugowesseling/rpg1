@@ -1,29 +1,23 @@
 package com.aquarius.rpg1;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 
 public class TileIndexSelector extends JDialog implements MouseListener {
 
 	private final class ComponentExtension extends Component {
+		private static final long serialVersionUID = -9113490174840163895L;
+
 		@Override
 		public void paint(Graphics g)
 		{
@@ -58,6 +52,7 @@ public class TileIndexSelector extends JDialog implements MouseListener {
 		JComboBox<String> tileSetCombobox = new JComboBox<String>(tileSetStrings);
 		tileSetCombobox.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				JComboBox<String> comboBox = (JComboBox<String>) ae.getSource();

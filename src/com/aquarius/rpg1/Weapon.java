@@ -1,8 +1,6 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.util.Vector;
 
 public abstract class Weapon {
 

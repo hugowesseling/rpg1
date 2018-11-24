@@ -22,6 +22,7 @@ public class TilePattern implements Serializable
 	private static final long serialVersionUID = -5801611831067687495L;
 	
 	private Vector<TilePatternTile> tilePatternTiles;
+	public int insideTileIndex = 0, outsideTileIndex = 0;
 
 	public TilePattern() {
 		tilePatternTiles = new Vector<TilePatternTile>();
@@ -178,6 +179,7 @@ public class TilePattern implements Serializable
 	}
 
 
+	@SuppressWarnings("unused")
 	private void print2darray(boolean[][] a)
 	{
 		for(int yi=0; yi<a[0].length; yi++)

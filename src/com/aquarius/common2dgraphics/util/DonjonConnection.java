@@ -1,5 +1,5 @@
 package com.aquarius.common2dgraphics.util;
-
+/*
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
-
+*/
 //import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class DonjonConnection

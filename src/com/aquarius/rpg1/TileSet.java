@@ -8,8 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import com.aquarius.common2dgraphics.Art;
@@ -87,6 +85,7 @@ public class TileSet
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void readTileSetDataFromInputStream(FileInputStream fileInputStream)
 	{
 		try
