@@ -9,11 +9,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class ImageChoosingLabel extends JLabel {
+public class TileIndexChoosingLabel extends JLabel {
 	private static final long serialVersionUID = 5210950489506926249L;
 	private int tileIndex = -1;
 
-	public ImageChoosingLabel(String text, Frame frame, ActionListener actionListener) {
+	public TileIndexChoosingLabel(String text, Frame frame, ActionListener actionListener) {
 		super(text);
 		setIcon(new ImageIcon(Resources.getTileImageFromIndex(0)));
 		this.addMouseListener(new MouseAdapter() {

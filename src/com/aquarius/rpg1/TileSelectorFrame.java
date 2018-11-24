@@ -49,8 +49,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private JFrame jFrame;
 	private static int drawCounter = 0;
 	private boolean redrawNeeded = true;
-	private ImageChoosingLabel insideChoosingLabel;
-	private ImageChoosingLabel outsideChoosingLabel;
+	private TileIndexChoosingLabel insideChoosingLabel;
+	private TileIndexChoosingLabel outsideChoosingLabel;
 
     public TileSelectorFrame(String name, EditorState editorState)
 	{
@@ -130,9 +130,9 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		menuBar.add(collisionSwitchMenu);
 		JLabel tilePatternsLabel = new JLabel("TilePattern:");
 		menuBar.add(tilePatternsLabel);
-		insideChoosingLabel = new ImageChoosingLabel("inside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.insideTileIndex =  ae.getID(); }); 
+		insideChoosingLabel = new TileIndexChoosingLabel("inside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.insideTileIndex =  ae.getID(); }); 
 		menuBar.add(insideChoosingLabel);
-		outsideChoosingLabel = new ImageChoosingLabel("outside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.outsideTileIndex = ae.getID(); });
+		outsideChoosingLabel = new TileIndexChoosingLabel("outside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.outsideTileIndex = ae.getID(); });
 		menuBar.add(outsideChoosingLabel);
 		jFrame.setJMenuBar(menuBar);
 

@@ -319,7 +319,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
 				String[] objectSubClassesStrings = Resources.objectSubClasses.toArray(new String[Resources.objectSubClasses.size()]);
 				JComboBox<String> objectSubClassComboBox = new JComboBox<String>(objectSubClassesStrings);
-				ImageChoosingLabel imageChoosingLabel = new ImageChoosingLabel("image",  frame, null); 
+				TileIndexChoosingLabel imageChoosingLabel = new TileIndexChoosingLabel("image",  frame, null); 
 				Object objectSettings[] = {"Specify object settings", objectSubClassComboBox, imageChoosingLabel};
 				
 				JOptionPane optionPane = new JOptionPane();
