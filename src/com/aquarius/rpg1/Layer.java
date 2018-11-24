@@ -141,4 +141,15 @@ public class Layer {
 		}
 	}
 
+	public void resize(int newWidth, int newHeight) {
+		int[][] newTiles = new int[newWidth][newHeight];
+		int index;
+		for(int x=0;x<newTiles.length;x++)
+			for(int y=0;y<newTiles[0].length;y++) {
+				index = getTile(x,y);
+				newTiles[x][y] = index !=-1 ? index : 0;
+			}
+		tiles = newTiles;
+	}
+
 }

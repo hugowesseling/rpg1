@@ -158,6 +158,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
@@ -325,6 +326,33 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			} 
 		});
 		editMenu.add(addObjectMenuItem);
+		
+		JMenuItem resizeMapMenuItem = new JMenuItem("Resize map"); 
+		resizeMapMenuItem.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				
+				JTextField entryWidthTextField = new JTextField(Integer.toString(levelState.getWidth()));
+				JTextField entryHeightTextField = new JTextField(Integer.toString(levelState.getHeight()));
+				Object paneContents[] = {"Set new level size", "width:",entryWidthTextField, "height", entryHeightTextField};
+				
+				JOptionPane optionPane = new JOptionPane();
+			    optionPane.setMessage(paneContents);
+			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+			    JDialog dialog = optionPane.createDialog(null, "Level size");
+			    dialog.setVisible(true);
+			    
+				int newWidth = Integer.parseInt(entryWidthTextField.getText());
+				int newHeight = Integer.parseInt(entryHeightTextField.getText());
+				
+				if(newWidth != levelState.getWidth() || newHeight != levelState.getHeight()) {
+					levelState.levelStack.pushLayers();
+				    levelState.resizeLevel(newWidth, newHeight); 
+				}
+			} 
+		});
+		editMenu.add(resizeMapMenuItem);
+
+		
 		menuBar.add(editMenu);
 		
 		frame.setJMenuBar(menuBar);

@@ -225,4 +225,9 @@ public class LevelState {
 		playerPositionInSuperLevel = player.position.clone();
 	}
 
+	public void resizeLevel(int newWidth, int newHeight) {
+		bottom_layer.resize(newWidth, newHeight);
+		top_layer.resize(newWidth, newHeight);
+	}
+
 }
