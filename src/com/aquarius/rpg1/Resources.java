@@ -16,7 +16,7 @@ public class Resources {
 			new TileSet(8, "/tileB_outside.png", 16,16,0,0, true)
 	};
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
-	public static TileSet characterTileSet = new TileSet(-1, "/characters1.png", 26, 36, 0, 0, false);
+	public static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static ArrayList<String> characterSubClasses = new ArrayList<String>();
     public static ArrayList<String> objectSubClasses = new ArrayList<String>();
@@ -35,11 +35,20 @@ public class Resources {
 		addObjectSubClass("DoorwayObject");
 		addObjectSubClass("StorableObject");
 		
+		addCharacterTileSets(0,"/characters1.png", 26, 36, 0, 0);
+		addCharacterTileSets(1,"/animals5.png", 50, 46, 0, 0);
     }
 
 	public static void addCharacterSubClass(String string) {
 		System.out.println("addCharacterSubClass: Adding " + string);
 		characterSubClasses.add(string);
+	}
+
+	private static void addCharacterTileSets(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight) {
+		TileSet tileSet = new TileSet(index, fileName, tileWidth, tileHeight, marginWidth, marginHeight, false);
+		for(int x = 0; x < tileSet.tiles.length; x+=3)
+			for(int y = 0; y < tileSet.tiles[0].length; y+=4)
+				characterTileSets.add(new CharacterTileSet(tileSet, new Int2d(x, y)));
 	}
 
 	public static void addObjectSubClass(String string) {

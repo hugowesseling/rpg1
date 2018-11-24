@@ -207,7 +207,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
 		
-		player = new Player(new CharacterDrawer(new CharacterTileSet(new Int2d(0,0))), ObjectPosition.createFromTilePosition(new Int2d(5, 5)), Direction.SOUTH);
+		player = new Player(new CharacterDrawer(0), ObjectPosition.createFromTilePosition(new Int2d(5, 5)), Direction.SOUTH);
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
@@ -302,13 +302,38 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		JMenu editMenu = new JMenu("Edit");
 		JMenuItem addCharacterMenuItem = new JMenuItem("Add Character"); 
 		addCharacterMenuItem.addMouseListener(new MouseAdapter() { 
-			public void mousePressed(MouseEvent me) {
+			public void mousePressed(MouseEvent mouseEvent) {
 				System.out.println("addCharacter clicked");
-					if(addCharacterTileSet == null) {
-						addCharacterTileSet = new CharacterTileSet(new Int2d(0,0));
-					} else {
-						addCharacterTileSet = null;
-					}
+				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
+				String[] characterSubClassesStrings = Resources.characterSubClasses.toArray(new String[Resources.characterSubClasses.size()]);
+				JComboBox<String> characterSubClassComboBox = new JComboBox<String>(characterSubClassesStrings);
+				JComboBox<Direction> directionComboBox = new JComboBox<Direction>(Direction.values());
+				CharacterTileSetChoosingLabel characterTileSetChoosingLabel = new CharacterTileSetChoosingLabel("character", frame, null);
+				Object characterSettings[] = {"Specify character settings", characterSubClassComboBox, directionComboBox, characterTileSetChoosingLabel};
+				
+				JOptionPane optionPane = new JOptionPane();
+			    optionPane.setMessage(characterSettings);
+			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+				JDialog dialog = optionPane.createDialog(null, "Character Settings");
+			    dialog.setVisible(true);
+			    
+			    Direction direction = (Direction) directionComboBox.getSelectedItem();
+			    String className = (String) characterSubClassComboBox.getSelectedItem();
+				System.out.println("Placing character: " + className + ", " + direction);
+				
+				addObject = null;
+				CharacterDrawer characterDrawer = new CharacterDrawer(characterTileSetChoosingLabel.getCharacterTileSetIndex());
+				ObjectPosition position = new ObjectPosition(mouseLocation.x, mouseLocation.y);
+				
+				if(className.equals(HenryCharacter.class.getSimpleName())) {
+					addObject = new HenryCharacter(characterDrawer, position, direction);
+				} else 	if(className.equals(SoupCharacter.class.getSimpleName())) {
+					addObject = new SoupCharacter(characterDrawer, position, direction);
+				} else {
+					System.err.println("Could not determine character sub class: " + className);
+				}
+				if(addObject != null)
+					levelState.allGameObjects.add(addObject);
 			} 
 		});
 		editMenu.add(addCharacterMenuItem);
@@ -750,34 +775,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		int tileX = mouseLocation.x / Constant.TILE_WIDTH;
 		int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
 
-		if(addCharacterTileSet != null) {
-			if(mouseDownLeft) {
-				String[] characterSubClassesStrings = Resources.characterSubClasses.toArray(new String[Resources.characterSubClasses.size()]);
-				JComboBox<String> characterSubClassComboBox = new JComboBox<String>(characterSubClassesStrings);
-				JComboBox<Direction> directionComboBox = new JComboBox<Direction>(Direction.values());
-				Object characterSettings[] = {"Specify character settings", characterSubClassComboBox, directionComboBox};
-				
-				JOptionPane optionPane = new JOptionPane();
-			    optionPane.setMessage(characterSettings);
-			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-				JDialog dialog = optionPane.createDialog(null, "Character Settings");
-			    dialog.setVisible(true);
-			    
-			    Direction direction = (Direction) directionComboBox.getSelectedItem();
-			    String className = (String) characterSubClassComboBox.getSelectedItem();
-				System.out.println("Placing character: " + className + ", " + direction);
-				
-				if(className.equals(HenryCharacter.class.getSimpleName())) {
-					levelState.allGameObjects.add(new HenryCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
-				} else 	if(className.equals(SoupCharacter.class.getSimpleName())) {
-					levelState.allGameObjects.add(new SoupCharacter(new CharacterDrawer(addCharacterTileSet), new ObjectPosition(mouseLocation.x, mouseLocation.y), direction));
-				} else {
-					System.err.println("Could not determine character sub class: " + className);
-				}
-				addCharacterTileSet = null;
-				mouseDownLeft = false; //no ongoing clicking
-			}
-		}else
 		if(addObject  != null) {
 			if(mouseDownLeft) {
 				addObject = null;
@@ -837,11 +834,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	}
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent mwe) {
-		System.out.println("Mouse wheel: " + mwe.getWheelRotation());
 		boolean scrollup = mwe.getWheelRotation() <0;
-		if(addCharacterTileSet != null) {
-			addCharacterTileSet.changeTileSetPosition(scrollup);
-		}
+		System.out.println("Mouse wheel: " + mwe.getWheelRotation() + ":"+ scrollup);
 	}
 
 	public static void main(String[] args)

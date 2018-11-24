@@ -5,15 +5,16 @@ import java.awt.Graphics2D;
 public class CharacterDrawer extends ObjectDrawer {
 
 	private static final long serialVersionUID = -8394093202517298150L;
-	private CharacterTileSet characterTileSet;
+	private int characterTileSetIndex;
 	
-	public CharacterDrawer(CharacterTileSet characterTileSet) {
+	public CharacterDrawer(int characterTileSetIndex) {
 		super();
-		this.characterTileSet = characterTileSet;
+		this.characterTileSetIndex = characterTileSetIndex;
 	}
 
 	@Override
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame) {
+		CharacterTileSet characterTileSet = Resources.characterTileSets.get(characterTileSetIndex);
 		characterTileSet.draw(graphics, x, y, direction, frame);		
 	}
 

@@ -41,7 +41,7 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	}
 
 	public GameObject() {
-		this("noname2", new CharacterDrawer(new CharacterTileSet(new Int2d(3,1))), new ObjectPosition(100,100), Direction.EAST);
+		this("noname2", new TileDrawer(0), new ObjectPosition(100,100), Direction.EAST); //(new CharacterTileSet(new Int2d(3,1)))
 	}
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
 		return interactionPossibilities;
