@@ -172,7 +172,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private boolean running = false;
 	private boolean simulating = false;;
 	private CharacterTileSet addCharacterTileSet = null;	//!null means that a character currently is being added
-	private int addObjectIndex = -1;
 	private Input input;
 	private int screenx;
 	private int screeny;
@@ -190,6 +189,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private boolean showInventory = false;
 	private InventoryMenu inventoryMenu;
 	private JFrame frame;
+	private GameObject addObject = null;
 	public Rpg1()
 	{
 		frameCounter = 0;
@@ -314,15 +314,36 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editMenu.add(addCharacterMenuItem);
 		JMenuItem addObjectMenuItem = new JMenuItem("Add Object"); 
 		addObjectMenuItem.addMouseListener(new MouseAdapter() { 
-			public void mousePressed(MouseEvent me) {
-				System.out.println("add Object clicked");
-				if(editorState.tileSelection != null) {
-					Int2d topleft = editorState.tileSelection.topleft;
-					addObjectIndex = tileSelectorFrame.currentTileSet.getTileIndexFromXY(topleft.x, topleft.y);
-				}else{
-					System.out.println("No tile selected for object to add");
-					addObjectIndex = -1;
+			public void mousePressed(MouseEvent mouseEvent) {
+
+				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
+				String[] objectSubClassesStrings = Resources.objectSubClasses.toArray(new String[Resources.objectSubClasses.size()]);
+				JComboBox<String> objectSubClassComboBox = new JComboBox<String>(objectSubClassesStrings);
+				ImageChoosingLabel imageChoosingLabel = new ImageChoosingLabel("image",  frame, null); 
+				Object objectSettings[] = {"Specify object settings", objectSubClassComboBox, imageChoosingLabel};
+				
+				JOptionPane optionPane = new JOptionPane();
+			    optionPane.setMessage(objectSettings);
+			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+			    JDialog dialog = optionPane.createDialog(null, "Object Settings");
+			    dialog.setVisible(true);
+			    
+			    String className = (String) objectSubClassComboBox.getSelectedItem();
+				System.out.println("Adding object: " + className);
+
+				addObject = null;
+				int tileIndex = imageChoosingLabel.getTileIndex();
+				if(className.equals(TreasureObject.class.getSimpleName())) {
+					addObject = new TreasureObject(new TileDrawer(tileIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y));
+				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
+					addObject = new DoorwayObject(new TileDrawer(tileIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState.getLevelPos());
+				} else if(className.equals(StorableObject.class.getSimpleName())) {
+					addObject = StorableObject.createStorableObject(new ObjectPosition(mouseLocation.x, mouseLocation.y));
+				} else{
+					System.err.println("Could not determine object sub class: " + className);
 				}
+				if(addObject != null)
+					levelState.allGameObjects.add(addObject);
 			} 
 		});
 		editMenu.add(addObjectMenuItem);
@@ -456,6 +477,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			if(!simulating)
 				mouseCornerActions(size);
 			inputPlayerMovement();
+			if(addObject != null) {
+				addObject.position.x = mouseX / 2 - screenx;
+				addObject.position.y = mouseY / 2 - screeny;
+			}
+
 		}
 		
 		drawEverything(g);
@@ -521,9 +547,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			addCharacterTileSet.draw(imageGraphics, mouseX/2, mouseY/2, Direction.SOUTH, frameCounter / 10);
 		}
 
-		if(addObjectIndex != -1) {
-			imageGraphics.drawImage(Resources.getTileImageFromIndex(addObjectIndex), mouseX/2, mouseY/2, null);
-		}
 		imageGraphics.dispose();
 
 		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
@@ -755,31 +778,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				mouseDownLeft = false; //no ongoing clicking
 			}
 		}else
-		if(addObjectIndex != -1) {
+		if(addObject  != null) {
 			if(mouseDownLeft) {
-				String[] objectSubClassesStrings = Resources.objectSubClasses.toArray(new String[Resources.objectSubClasses.size()]);
-				JComboBox<String> objectSubClassComboBox = new JComboBox<String>(objectSubClassesStrings);
-				Object objectSettings[] = {"Specify object settings", objectSubClassComboBox};
-				
-				JOptionPane optionPane = new JOptionPane();
-			    optionPane.setMessage(objectSettings);
-			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
-			    JDialog dialog = optionPane.createDialog(null, "Object Settings");
-			    dialog.setVisible(true);
-			    
-			    String className = (String) objectSubClassComboBox.getSelectedItem();
-				System.out.println("Placing object: " + className);
-				
-				if(className.equals(TreasureObject.class.getSimpleName())) {
-					levelState.allGameObjects.add(new TreasureObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y)));
-				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
-					levelState.allGameObjects.add(new DoorwayObject(new TileDrawer(addObjectIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState.getLevelPos()));
-				} else if(className.equals(StorableObject.class.getSimpleName())) {
-					levelState.allGameObjects.add(StorableObject.createStorableObject(addObjectIndex, new ObjectPosition(mouseLocation.x, mouseLocation.y)));
-				} else{
-					System.err.println("Could not determine object sub class: " + className);
-				}
-				addObjectIndex = -1;
+				addObject = null;
 				mouseDownLeft = false; //no ongoing clicking
 			}
 		}else

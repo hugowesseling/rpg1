@@ -25,7 +25,7 @@ public class StorableObject extends GameObject {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TOUCH));
 	}
 
-	public static GameObject createStorableObject(int tileIndex, ObjectPosition position) {
+	public static GameObject createStorableObject(ObjectPosition position) {
 		String[] storableObjectTypeStrings = StorableObjectType.allHashMap.keySet().toArray(new String[StorableObjectType.allHashMap.size()]);
 		JComboBox<String> storableObjectTypeComboBox = new JComboBox<String>(storableObjectTypeStrings);
 		Object objectSettings[] = {"Specify object settings", storableObjectTypeComboBox};
