@@ -36,7 +36,14 @@ public class Resources {
 		addObjectSubClass("StorableObject");
 		
 		addCharacterTileSets(0,"/characters1.png", 26, 36, 0, 0);
+		addCharacterTileSets(1,"/animals1.png", 26, 36, 0, 0);
+		addCharacterTileSets(1,"/animals2.png", 42, 36, 0, 0);
+		addCharacterTileSets(1,"/animals3.png", 42, 36, 0, 0);
+		addCharacterTileSets(1,"/animals4.png", 42, 36, 0, 0);
 		addCharacterTileSets(1,"/animals5.png", 50, 46, 0, 0);
+		addCharacterTileSets(1,"/birds1.png", 42, 36, 0, 0);
+		addCharacterTileSets(1,"/birds2.png", 42, 36, 0, 0);
+		addCharacterTileSets(1,"/horse1.png", 60, 64, 0, 0);
     }
 
 	public static void addCharacterSubClass(String string) {
