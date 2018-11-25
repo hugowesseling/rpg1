@@ -698,9 +698,17 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					player.position.y+=dy;
 					if(player.collided(levelState))
 					{
-						//reset movements and call it a day
+						//reset movements and check player's current location
 						player.position.y-=dy;
-						playerMoved = false;
+						if(player.collided(levelState))
+						{
+							//player is collided on the place where he's standing, allow all movements.
+							player.position.x+=dx;
+							player.position.y+=dy;
+							playerMoved = true;
+						}else {
+							playerMoved = false;
+						}
 					}
 				}
 			}
@@ -708,14 +716,17 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(playerMoved){
 			screenx = player.position.x - 150;
 			screeny = player.position.y - 150;
+			Dimension size = this.getSize();
+			int imageWidth = size.width / 2;
+			int imageHeight = size.height / 2;
 
 			if(screenx<0)screenx=0;
 			if(screeny<0)screeny=0;
-			if(screenx > levelState.getWidth() * Constant.TILE_WIDTH) {
-				screenx = levelState.getWidth()*Constant.TILE_WIDTH;
+			if(screenx > levelState.getWidth() * Constant.TILE_WIDTH - imageWidth) {
+				screenx = levelState.getWidth()*Constant.TILE_WIDTH - imageWidth;
 			}
-			if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT) {
-				screeny = levelState.getHeight() * Constant.TILE_HEIGHT;
+			if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT - imageHeight) {
+				screeny = levelState.getHeight() * Constant.TILE_HEIGHT - imageHeight;
 			}				
 		}
 		if(player.position.x < Constant.TILE_WIDTH * 1)
