@@ -16,6 +16,7 @@ public class TileSet
 {
 	public BufferedImage[][] tiles;
     boolean[][] tileCollision;
+	boolean[][] layerHeight;
 
 	public String fileName;
 	public int index;
@@ -31,6 +32,7 @@ public class TileSet
 		this.hasTilePattern = hasTilePattern;
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
 		tileCollision = new boolean[tiles.length][tiles[0].length];
+		layerHeight = new boolean[tiles.length][tiles[0].length];
 		if(this.hasTilePattern) {
 			loadTilePattern();
 		}
@@ -49,7 +51,7 @@ public class TileSet
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(tilePatterns);
 			oos.writeObject(tileCollision);
-			//oos.writeObject(tileCollision);
+			oos.writeObject(layerHeight);
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -93,6 +95,7 @@ public class TileSet
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			tilePatterns = (Vector<TilePattern>) objectInputStream.readObject();
 			tileCollision = (boolean[][]) objectInputStream.readObject();
+			layerHeight = (boolean[][]) objectInputStream.readObject();
 		}catch(IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -145,10 +148,22 @@ public class TileSet
 		return false;
 	}
 
+	public boolean getLayerHeightFromIndex(int i) {
+		int y = (i / 256) % 256;
+		int x = i % 256;
+		return getLayerHeightFromXY(x, y);
+	}
+	public boolean getLayerHeightFromXY(int x, int y) {
+		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
+			return layerHeight[x][y];
+		return false;
+	}
+
 	public Image getTileImageFromXY(int x, int y)
 	{
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return tiles[x][y];
 		return tiles[0][0];
 	}
+
 }

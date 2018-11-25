@@ -42,7 +42,7 @@ public class DialogStyle  {
 		}
 		AffineTransform transform = graphics.getTransform();
 		graphics.translate(x, y);
-		layer.drawLayer(graphics, (w/Constant.TILE_WIDTH -1)*Constant.TILE_WIDTH, (h/ Constant.TILE_HEIGHT-1)* Constant.TILE_HEIGHT, 0, 0, false);
+		layer.drawLayer(graphics, (w/Constant.TILE_WIDTH -1)*Constant.TILE_WIDTH, (h/ Constant.TILE_HEIGHT-1)* Constant.TILE_HEIGHT, 0, 0, false, Layer.DRAW_LOW_AND_HIGH);
 		graphics.setTransform(transform);
 	}
 }

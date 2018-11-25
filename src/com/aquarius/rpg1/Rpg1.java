@@ -494,6 +494,21 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		//System.out.println("Key pressed");
 		int keyCode = ke.getKeyCode();
 		input.set(keyCode, true);
+		if(keyCode == KeyEvent.VK_E) {
+			//System.out.println("Finding closest object: "+ mouseX/2+","+mouseY/2);
+			float mindistance = 20;
+			GameObject closestObject = null;
+			ObjectPosition mousePosition = new ObjectPosition(mouseX/2 +screenx, mouseY/2 +screeny);
+			for(GameObject gameObject:levelState.allGameObjects) {
+				//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
+				if(gameObject.position.distanceTo(mousePosition) < mindistance) {
+					mindistance = gameObject.position.distanceTo(mousePosition);
+					closestObject = gameObject;
+				}
+			}
+			if(closestObject != null)
+				addObject = closestObject;
+		}
 		if(keyCode == KeyEvent.VK_A)
 		{
 			System.out.println("Do action");
@@ -604,12 +619,12 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		imageGraphics.setColor(Color.WHITE);
 		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
-		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter, !simulating);
+		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter, simulating, player);
 
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
 		
 		if(simulating) {
-			player.draw(imageGraphics, frameCounter, screenx, screeny);
+			//player.draw(imageGraphics, frameCounter, screenx, screeny);
 	
 			if(dialogue != null) {
 				//System.out.println("Drawing dialogue");

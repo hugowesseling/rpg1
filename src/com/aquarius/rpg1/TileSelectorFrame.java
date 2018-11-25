@@ -35,7 +35,7 @@ Things that belong together:
 public class TileSelectorFrame extends Component implements MouseListener, MouseMotionListener
 {
 	private enum EditMode {
-	    SELECT_TILES, TILE_PATTERN_SELECTION, TILE_PATTERN_EDIT, TILE_PATTERN_COLORING, TILE_COLLISION_EDIT 
+	    SELECT_TILES, TILE_PATTERN_SELECTION, TILE_PATTERN_EDIT, TILE_PATTERN_COLORING, TILE_COLLISION_EDIT, LAYER_HEIGHT_EDIT 
 	}
 	private static final long serialVersionUID = 1L;
 	private int imageWidth;
@@ -76,8 +76,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		tileSetCombobox.setMaximumRowCount(50);
 		menuBar.add(tileSetCombobox);
 		
-		JMenu tilePatternSwitchMenu = new JMenu("");
-		tilePatternSwitchMenu.setIcon(new ImageIcon("star_icon.png"));
+		JMenu tilePatternSwitchMenu = new JMenu("Patt");
+		//tilePatternSwitchMenu.setIcon(new ImageIcon("star_icon.png"));
 		tilePatternSwitchMenu.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				  if(editMode != EditMode.TILE_PATTERN_SELECTION)
@@ -112,8 +112,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	          });
 		menuBar.add(tilePatternColoringSwitchMenu);
 		
-		JMenu collisionSwitchMenu = new JMenu("");
-		collisionSwitchMenu.setIcon(new ImageIcon("red_square_icon.png"));
+		JMenu collisionSwitchMenu = new JMenu("Coll");
+		//collisionSwitchMenu.setIcon(new ImageIcon("red_square_icon.png"));
 		collisionSwitchMenu.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				  if(editMode != EditMode.TILE_COLLISION_EDIT)
@@ -129,6 +129,25 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	            } 
 	          });
 		menuBar.add(collisionSwitchMenu);
+
+		JMenu layerSwitchMenu = new JMenu("Layer");
+		//layerSwitchMenu .setIcon(new ImageIcon("red_square_icon.png"));
+		layerSwitchMenu .addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				  if(editMode != EditMode.LAYER_HEIGHT_EDIT)
+				  {
+					  editMode = EditMode.LAYER_HEIGHT_EDIT;
+				  }else
+				  if(editMode == EditMode.LAYER_HEIGHT_EDIT)
+				  {
+					  editMode = EditMode.SELECT_TILES;
+				  }
+	        	  System.out.println("tileSelectionModeActive: " + editMode);
+	        	  redrawNeeded = true;
+	            } 
+	          });
+		menuBar.add(layerSwitchMenu );		
+		
 		JLabel tilePatternsLabel = new JLabel("TilePattern:");
 		menuBar.add(tilePatternsLabel);
 		insideChoosingLabel = new TileIndexChoosingLabel("inside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.insideTileIndex =  ae.getID(); }); 
@@ -179,6 +198,11 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 						if(editMode == EditMode.TILE_COLLISION_EDIT)
 						{
 							imageG.setColor(currentTileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
+							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+						}else
+						if(editMode == EditMode.LAYER_HEIGHT_EDIT)
+						{
+							imageG.setColor(currentTileSet.layerHeight[x][y] ? Color.BLUE : Color.ORANGE);
 							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
 						}
 					}
@@ -319,7 +343,15 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				   tileY >= 0 &&
 				   tileY < currentTileSet.tileCollision[0].length)
 					currentTileSet.tileCollision[tileX][tileY] = !currentTileSet.tileCollision[tileX][tileY]; 
-			}else		
+			}else
+			if(editMode == EditMode.LAYER_HEIGHT_EDIT)
+			{
+				if(tileX >= 0 &&
+				   tileX < currentTileSet.layerHeight.length &&
+				   tileY >= 0 &&
+				   tileY < currentTileSet.layerHeight[0].length)
+					currentTileSet.layerHeight[tileX][tileY] = !currentTileSet.layerHeight[tileX][tileY]; 
+			}else
 			if(editMode == EditMode.SELECT_TILES)
 			{
 				int tileX1 = mouseStart.x / Constant.TILE_WIDTH;

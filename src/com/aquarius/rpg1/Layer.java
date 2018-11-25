@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 
 public class Layer {
 
+	public static final int DRAW_LOW = 1;
+	public static final int DRAW_HIGH = 2;
+	public static final int DRAW_LOW_AND_HIGH = 3;
 	public int[][] tiles;
 	private int drawCounter = 0;
 	
@@ -18,7 +21,7 @@ public class Layer {
 		tiles = new int[width][width];
 	}
 
-	public void drawLayer(Graphics2D graphics, int imageWidth, int imageHeight, int screenx, int screeny, boolean animate)
+	public void drawLayer(Graphics2D graphics, int imageWidth, int imageHeight, int screenx, int screeny, boolean animate, int draw_low_high)
 	{
 		float alpha = 1f;
 		if(animate)
@@ -30,17 +33,32 @@ public class Layer {
 		int tileswidth = imageWidth/16 + 2;
 		int tilesheight = imageHeight/16 + 2;
 		int screenblockx=screenx/16,screenblocky=screeny/16;
-		for(int y=screenblocky;y<screenblocky+tilesheight;y++)
+		int ystart = screenblocky, yend = screenblocky+tilesheight;
+		if(ystart<0)ystart=0;
+		if(yend>=tiles[0].length)yend=tiles[0].length-1;
+		int xstart = screenblockx, xend = screenblockx+tileswidth;
+		if(xstart<0)xstart=0;
+		if(xend>=tiles.length)xend=tiles.length-1;
+		int index;
+		boolean draw = false;
+		for(int y=ystart;y<yend;y++)
 		{
-			if(y >= 0 && y < tiles[0].length)
+			for(int x=xstart;x<xend;x++)
 			{
-				for(int x=screenblockx;x<screenblockx+tileswidth;x++)
+				index = tiles[x][y];
+				switch (draw_low_high)
 				{
-					if(x >= 0 && x < tiles.length)
-					{
-						graphics.drawImage(Resources.getTileImageFromIndex(tiles[x][y]), x*16-screenx, y*16-screeny, null);
-					}
+					case DRAW_LOW_AND_HIGH:
+						draw = true;
+						break;
+					case DRAW_LOW:
+						draw = !Resources.getLayerHeightFromIndex(index);
+						break;
+					case DRAW_HIGH:
+						draw = Resources.getLayerHeightFromIndex(index);
 				}
+				if(draw)
+					graphics.drawImage(Resources.getTileImageFromIndex(index), x*16-screenx, y*16-screeny, null);
 			}
 		}
 		graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));

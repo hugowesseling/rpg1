@@ -83,14 +83,17 @@ public class LevelState {
 		return bottom_layer.getHeight();
 	}
 
-	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter, boolean doFade) {
-		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false);
-		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, true && doFade);
+	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter, boolean simulating, Player player) {
+		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false, Layer.DRAW_LOW_AND_HIGH);
+		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_LOW);
 		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
 		for(GameObject gameCharacter: allGameObjects){
 			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny);
 		}
-			}
+		if(simulating)
+			player.draw(imageGraphics, frameCounter, screenx, screeny);
+		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_HIGH);
+	}
 
 	public void doActionsWeaponAndMovement(WorldState worldState) {
 		// Do actions and movement

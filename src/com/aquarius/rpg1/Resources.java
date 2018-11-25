@@ -72,10 +72,12 @@ public class Resources {
 	public static Image getTileImageFromIndex(int i) {
 		return levelTileSets[i / 65536].getTileImageFromIndex(i % 65536);
 	}
-	 public static boolean getTileCollisionFromIndex(int i) {
-		 return levelTileSets[i / 65536].getTileCollisionFromIndex(i % 65536);
-	 }
-
+	public static boolean getTileCollisionFromIndex(int i) {
+		return levelTileSets[i / 65536].getTileCollisionFromIndex(i % 65536);
+	}
+	public static boolean getLayerHeightFromIndex(int i) {
+		return levelTileSets[i / 65536].getLayerHeightFromIndex(i % 65536);
+	}
 	public static String[] getTileSetNames() {
 		String[] names = new String[levelTileSets.length];
 		int index = 0;
