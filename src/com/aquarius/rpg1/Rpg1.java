@@ -148,6 +148,10 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -155,6 +159,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -404,32 +409,63 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					levelState.levelStack.pushLayers();
 				    levelState.resizeLevel(newWidth, newHeight); 
 				}
-			} 
+			}
 		});
 		editMenu.add(resizeMapMenuItem);
-
 		
+		JMenuItem editMapParametersMenuItem = new JMenuItem("Edit map parameters"); 
+		editMapParametersMenuItem.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent me) {
+				JButton jAddParameterButton = new JButton("Add");
+				HashMap<JComboBox<String>, JTextField> parameterTextFields = new HashMap<>();
+				ArrayList<Object> paneContents = new ArrayList<Object>();
+				paneContents.add("Set level parameters");
+				paneContents.add(jAddParameterButton);
+				for(Entry<String, String> entry:levelState.levelKeyValues.entrySet()) {
+					
+					JTextField jTextField = new JTextField(entry.getValue());
+					JComboBox<String> jComboBox = new JComboBox<String>(Resources.defaultLevelParameters);
+					jComboBox.setEditable(true);
+					jComboBox.getEditor().setItem(entry.getKey());
+					parameterTextFields.put(jComboBox, jTextField);
+					paneContents.add(jComboBox);
+					paneContents.add(jTextField);
+				}
+				JOptionPane optionPane = new JOptionPane();
+			    optionPane.setMessage(paneContents.toArray());
+			    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+			    JDialog dialog = optionPane.createDialog(null, "Level parameters");
+
+				jAddParameterButton.addActionListener((ae) -> {
+					JTextField jTextField = new JTextField("value");
+					JComboBox<String> jComboBox = new JComboBox<String>(Resources.defaultLevelParameters);
+					jComboBox.setEditable(true);
+					jComboBox.getEditor().setItem("key");
+					parameterTextFields.put(jComboBox, jTextField);
+					paneContents.add(jComboBox);
+					paneContents.add(jTextField);
+					
+					optionPane.setMessage(paneContents.toArray());
+					dialog.pack();
+					dialog.repaint();
+				});
+			    
+			    dialog.setVisible(true);
+			    
+			    for(Entry<JComboBox<String>, JTextField> entry:parameterTextFields.entrySet()) {
+			    	String key = (String) entry.getKey().getEditor().getItem();
+			    	String value = entry.getValue().getText();
+			    	System.out.println("levelKeyValues setting: " + key + "=" + value);
+			    	levelState.levelKeyValues.put(key, value);
+			    }
+			}
+		});
+		editMenu.add(editMapParametersMenuItem);
+
 		menuBar.add(editMenu);
 		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
-		
-		Clip clip;
-		try {
-			clip = AudioSystem.getClip();
-			final AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animals_Nature_Ambiences\\swamp_ambience_frogs_03_loop.wav"));
-			clip.open(inputStream);
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-		} catch (LineUnavailableException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedAudioFileException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 	public void start()
 	{

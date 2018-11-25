@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Vector;
 import com.aquarius.rpg1.behavior.GameObjectType;
@@ -112,6 +113,7 @@ public class LevelState {
 		try {
 			objectOutputStream = new  ObjectOutputStream(fileOutputStream);
 			objectOutputStream.writeObject(allGameObjects);
+			objectOutputStream.writeObject(levelKeyValues);
 		} catch (IOException e)
 		{
 			e.printStackTrace();
@@ -130,6 +132,10 @@ public class LevelState {
 			allGameObjects = (Vector<GameObject>) ois.readObject();
 			for(GameObject character:allGameObjects) {
 				System.out.println("Read GameCharacter: " + character);
+			}
+			levelKeyValues = (HashMap<String, String>) ois.readObject();
+			for(Entry<String, String> entry:levelKeyValues.entrySet()) {
+				System.out.println("Read key value: \"" + entry.getKey() + "\" = \"" + entry.getValue() + "\"");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -151,6 +157,11 @@ public class LevelState {
 		String fileName = levelPos2FileName(levelPos);
 		System.out.println("Reading layer from " + fileName);
 		loadLevel(fileName);
+		
+		String backgroundFileNameToPlay = levelKeyValues.get(Resources.PARAM_BACKGROUND_SOUND);
+		if(backgroundFileNameToPlay != null) {
+			AudioSystemPlayer.playSound(backgroundFileNameToPlay, true);
+		}
 	}
 	
 	public void loadLevel(String fileName) {
@@ -214,6 +225,8 @@ public class LevelState {
 				player.position.y = Constant.TILE_HEIGHT * 2;
 		}
 		loadLevelByPosition();
+		AudioSystemPlayer.stopAll();
+		AudioSystemPlayer.playSound("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animals_Nature_Ambiences\\swamp_ambience_frogs_03_loop.wav", true);
 	}
 
 	public Int2d getLevelPos() {

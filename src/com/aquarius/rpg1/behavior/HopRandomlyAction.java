@@ -1,4 +1,4 @@
-package com.aquarius.rpg1.behavior.hateno;
+package com.aquarius.rpg1.behavior;
 
 import java.io.Serializable;
 
@@ -7,7 +7,6 @@ import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.WorldState;
-import com.aquarius.rpg1.behavior.ObjectAction;
 
 public class HopRandomlyAction implements ObjectAction, Serializable {
 

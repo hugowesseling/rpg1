@@ -9,6 +9,7 @@ import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.behavior.HopRandomlyAction;
 
 public class HoppingCharacter extends GameObject {
 

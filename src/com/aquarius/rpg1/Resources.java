@@ -3,7 +3,10 @@ package com.aquarius.rpg1;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.swing.ComboBoxModel;
+
 public class Resources {
+	public static final String PARAM_BACKGROUND_SOUND = "background_sound";
 	public static TileSet[] levelTileSets = {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1, true),
 			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true),
@@ -20,6 +23,7 @@ public class Resources {
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static ArrayList<String> characterSubClasses = new ArrayList<String>();
     public static ArrayList<String> objectSubClasses = new ArrayList<String>();
+	protected static String defaultLevelParameters[] = {PARAM_BACKGROUND_SOUND};
     
 
     static {
