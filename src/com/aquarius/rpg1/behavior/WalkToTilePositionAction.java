@@ -11,22 +11,22 @@ public class WalkToTilePositionAction implements ObjectAction, Serializable{
 
 	private static final long serialVersionUID = -2497869400457681585L;
 	private Int2d toPosition;
-	GameObject character;
+	GameObject gameObject;
 
-	public WalkToTilePositionAction(GameObject character, Int2d position) {
+	public WalkToTilePositionAction(GameObject gameObject, Int2d position) {
 		toPosition = position;
-		this.character = character;
+		this.gameObject = gameObject;
 	}
 
 	@Override
 	public boolean doAction(WorldState worldState) {
-		Int2d characterTilePosition = character.getPosition().tileAsInt2d();
+		Int2d characterTilePosition = gameObject.getPosition().tileAsInt2d();
 		Direction direction = Direction.getDirectionFromTo(characterTilePosition, toPosition);
-		character.setDirection(direction);
-		character.setMovement(direction.movement);		
+		gameObject.setDirection(direction);
+		gameObject.setMovement(direction.movement);		
 		boolean isDone = characterTilePosition.nearby(toPosition, 1);
 		if(isDone) {
-			character.setMovement(new Int2d(0,0));
+			gameObject.setMovement(new Int2d(0,0));
 		}
 		return isDone;
 	}

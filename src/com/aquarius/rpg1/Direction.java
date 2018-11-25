@@ -39,4 +39,8 @@ public enum Direction {
 			}			
 		}
 	}
+	public static Direction random() {
+		int random = (int )(Math.random() * Direction.values().length);
+		return Direction.values()[random];
+	}
 }

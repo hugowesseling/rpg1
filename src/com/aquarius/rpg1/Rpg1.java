@@ -97,7 +97,8 @@ Music:
 	Sacred forest hideout: https://musopen.org/music/4478-danse-sacree-et-danse-profane/
 	
 	Other music:  D:\download\humble_bundle\gamedev\sfx\prosoundcollection_audio\prosoundcollection\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\zzzBonus_Music_16bit44kOnlyzzz
-	
+		town: music_harp_peaceful_loop.wav
+	forest: "D:\download\humble_bundle\gamedev\sfx\prosoundcollection_audio\prosoundcollection\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\Animals_Nature_Ambiences\swamp_ambience_frogs_03_loop.wav"
 	
 
 
@@ -146,7 +147,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
@@ -162,6 +169,7 @@ import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
+import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 
 public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -329,6 +337,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					addObject = new HenryCharacter(characterDrawer, position, direction);
 				} else 	if(className.equals(SoupCharacter.class.getSimpleName())) {
 					addObject = new SoupCharacter(characterDrawer, position, direction);
+				} else 	if(className.equals(HoppingCharacter.class.getSimpleName())) {
+					addObject = new HoppingCharacter(characterDrawer, position, direction);
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}
@@ -403,6 +413,23 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
+		
+		Clip clip;
+		try {
+			clip = AudioSystem.getClip();
+			final AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animals_Nature_Ambiences\\swamp_ambience_frogs_03_loop.wav"));
+			clip.open(inputStream);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		} catch (LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedAudioFileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	public void start()
 	{
@@ -503,8 +530,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				mouseCornerActions(size);
 			inputPlayerMovement();
 			if(addObject != null) {
-				addObject.position.x = mouseX / 2 - screenx;
-				addObject.position.y = mouseY / 2 - screeny;
+				addObject.position.x = mouseX / 2 + screenx;
+				addObject.position.y = mouseY / 2 + screeny;
 			}
 
 		}

@@ -30,6 +30,7 @@ public class Resources {
 		
 		addCharacterSubClass("HenryCharacter");
 		addCharacterSubClass("SoupCharacter");
+		addCharacterSubClass("HoppingCharacter");
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");
