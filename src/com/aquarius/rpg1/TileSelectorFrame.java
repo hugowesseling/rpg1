@@ -73,6 +73,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				redrawNeeded = true;
 			}
 		});
+		tileSetCombobox.setMaximumRowCount(50);
 		menuBar.add(tileSetCombobox);
 		
 		JMenu tilePatternSwitchMenu = new JMenu("");

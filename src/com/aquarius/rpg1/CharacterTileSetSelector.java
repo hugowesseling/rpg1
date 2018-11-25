@@ -51,7 +51,7 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 
 		drawingComponent = new ComponentExtension();
 		this.add(drawingComponent);
-		drawingComponent.setPreferredSize(new Dimension(300,300));
+		drawingComponent.setPreferredSize(new Dimension(500,500));
 		this.pack();
 		drawingComponent.addMouseListener(this);
 	}

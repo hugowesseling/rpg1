@@ -158,6 +158,7 @@ public class LevelState {
 		System.out.println("Reading layer from " + fileName);
 		loadLevel(fileName);
 		
+		AudioSystemPlayer.stopAll();
 		String backgroundFileNameToPlay = levelKeyValues.get(Resources.PARAM_BACKGROUND_SOUND);
 		if(backgroundFileNameToPlay != null) {
 			AudioSystemPlayer.playSound(backgroundFileNameToPlay, true);
@@ -225,8 +226,6 @@ public class LevelState {
 				player.position.y = Constant.TILE_HEIGHT * 2;
 		}
 		loadLevelByPosition();
-		AudioSystemPlayer.stopAll();
-		AudioSystemPlayer.playSound("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animals_Nature_Ambiences\\swamp_ambience_frogs_03_loop.wav", true);
 	}
 
 	public Int2d getLevelPos() {
