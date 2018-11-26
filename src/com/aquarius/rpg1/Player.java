@@ -35,7 +35,11 @@ public class Player extends GameObject {
 		}
 	}
 	public boolean collided(LevelState levelState) {
-		return levelState.collides(this.position, 16);
+		if(levelState.collides(new ObjectPosition(position.x+6, position.y+8), 16))return true;
+		if(levelState.collides(new ObjectPosition(position.x-8, position.y+8), 16))return true;
+		if(levelState.collides(new ObjectPosition(position.x-8, position.y-5), 16))return true;
+		if(levelState.collides(new ObjectPosition(position.x+6, position.y-5), 16))return true;
+		return false;
 	}
 	public void checkIfTouching(LevelState levelState) {
 		for(GameObject gameObject: levelState.allGameObjects) {

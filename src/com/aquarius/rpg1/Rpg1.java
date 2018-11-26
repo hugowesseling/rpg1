@@ -579,13 +579,13 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			if(!simulating)
 				mouseCornerActions(size);
-			inputPlayerMovement();
 			if(addObject != null) {
 				addObject.position.x = mouseX / 2 + screenx;
 				addObject.position.y = mouseY / 2 + screeny;
 			}
 
 		}
+		inputPlayerMovement();
 		
 		drawEverything(g);
 		
