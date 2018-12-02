@@ -30,23 +30,17 @@ public class LevelStack
 	
 	public void pushLayers()
 	{
-		StackLayer stackLayer = new StackLayer(clone2dArray(layer1.tiles), clone2dArray(layer2.tiles));
+		StackLayer stackLayer = new StackLayer(layer1.cloneTiles(), layer2.cloneTiles());
 		System.out.println("Pushing");
 		stack.push(stackLayer);
-	}
-	private int[][] clone2dArray(int[][] array2d)
-	{
-		int [][] theClone = new int[array2d.length][];
-		for(int i = 0; i < array2d.length; i++)
-			theClone[i] = array2d[i].clone();
-		return theClone;
 	}
 	
 	public void popLayersIfNoChange()
 	{
 		// Compare layer1 and layer2 to the top of the stack, if equal, pop it off
 		StackLayer stackLayer = stack.peek();
-		if(layerEqual(stackLayer.tiles1, layer1.tiles) && layerEqual(stackLayer.tiles2, layer2.tiles))
+		if(layer1.areTilesEqual(stackLayer.tiles1) &&
+		   layer2.areTilesEqual(stackLayer.tiles2))
 		{
 			System.out.println("Popping due to no change");
 			stack.pop();
@@ -57,27 +51,12 @@ public class LevelStack
 		if(!stack.empty()) 
 		{
 			StackLayer stackLayer = stack.pop();
-			layer1.tiles = stackLayer.tiles1;
-			layer2.tiles = stackLayer.tiles2;
+			layer1.setTiles(stackLayer.tiles1);
+			layer2.setTiles(stackLayer.tiles2);
 		}else
 		{
 			System.out.println("Nothing to pop");
 		}
-	}
-
-	private boolean layerEqual(int[][] tiles1, int[][] tiles2) 
-	{
-		// returns true if all tiles are equal
-		if(tiles1.length != tiles2.length || tiles1[0].length != tiles2[0].length)
-			return false;
-		for(int x=0;x<tiles1.length;x++)
-			for(int y=0;y<tiles1[0].length;y++)
-				if(tiles1[x][y] != tiles2[x][y])return false;
-		/*System.out.println("equal layers: ");
-		printLayer(tiles1);
-		System.out.println("==");
-		printLayer(tiles2);*/
-		return true;
 	}
 
 	@SuppressWarnings("unused")

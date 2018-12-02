@@ -888,7 +888,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				{
 					for(int y = 0; y <= bottomright.y - topleft.y; y++)
 					{
-						layer.setTile(x + tileX, y + tileY, layer.getTile(x + topleft.x, y + topleft.y));
+						layer.setTileIndexForCheckedXY(x + tileX, y + tileY, layer.getTile(x + topleft.x, y + topleft.y));
 					}
 				}
 				levelState.levelStack.popLayersIfNoChange();
@@ -913,7 +913,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					{
 						for(int y = 0; y <= bottomright.y - topleft.y; y++)
 						{
-							layer.setTile(x + tileX, y + tileY, tileSelectorFrame.currentTileSet.getTileIndexFromXY(x + topleft.x, y + topleft.y));
+							layer.setTileIndexForCheckedXY(x + tileX, y + tileY, tileSelectorFrame.currentTileSet.getTileIndexFromXY(x + topleft.x, y + topleft.y));
 						}
 					}
 					levelState.levelStack.popLayersIfNoChange();

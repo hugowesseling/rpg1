@@ -39,6 +39,15 @@ public class ObjectPosition implements Position, Serializable {
 	public int getYTile() {
 		return y / Constant.TILE_HEIGHT;
 	}
+	
+	public static int getXTileFromX(int x) {
+		return x / Constant.TILE_WIDTH;
+	}
+	
+	public static int getYTileFromY(int y) {
+		return y / Constant.TILE_HEIGHT;
+	}
+	
 
 	public Int2d tileAsInt2d() {
 		return new Int2d(getXTile(), getYTile());

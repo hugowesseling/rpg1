@@ -41,7 +41,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private int imageWidth;
 	private int imageHeight;
 	private EditorState editorState;
-	private boolean mouseDownLeft;
+	private boolean mouseDownLeft = false, mouseDownRight = false;
 	private Int2d mouseStart = null;
     private EditMode editMode;
 	public TilePattern selectedTilePattern = null;
@@ -263,7 +263,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	@Override
 	public void mousePressed(MouseEvent mouseEvent)
 	{
-		mouseDownLeft = true;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON1)
+			mouseDownLeft = true;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON3)
+			mouseDownRight = true;
 		mouseStart  = getMousePixelLocation(mouseEvent);
 		int tileX = mouseStart.x / Constant.TILE_WIDTH;
 		int tileY = mouseStart.y / Constant.TILE_HEIGHT;
@@ -319,7 +322,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent)
 	{
-		mouseDownLeft = false;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON1)
+			mouseDownLeft = false;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON3)
+			mouseDownRight = false;
 	}
 
 	@Override
@@ -331,8 +337,9 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	public void mouseDragged(MouseEvent mouseEvent)
 	{
 		//System.out.println("Mouse dragged");
-		if(mouseDownLeft)
+		if(mouseDownLeft || mouseDownRight)
 		{
+			boolean newState = mouseDownLeft ? true : false;
 			Int2d mouseLocation = getMousePixelLocation(mouseEvent);
 			int tileX = mouseLocation.x / Constant.TILE_WIDTH;
 			int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
@@ -342,7 +349,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				   tileX < currentTileSet.tileCollision.length &&
 				   tileY >= 0 &&
 				   tileY < currentTileSet.tileCollision[0].length)
-					currentTileSet.tileCollision[tileX][tileY] = !currentTileSet.tileCollision[tileX][tileY]; 
+					currentTileSet.tileCollision[tileX][tileY] = newState; 
 			}else
 			if(editMode == EditMode.LAYER_HEIGHT_EDIT)
 			{
@@ -350,7 +357,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				   tileX < currentTileSet.layerHeight.length &&
 				   tileY >= 0 &&
 				   tileY < currentTileSet.layerHeight[0].length)
-					currentTileSet.layerHeight[tileX][tileY] = !currentTileSet.layerHeight[tileX][tileY]; 
+					currentTileSet.layerHeight[tileX][tileY] = newState; 
 			}else
 			if(editMode == EditMode.SELECT_TILES)
 			{

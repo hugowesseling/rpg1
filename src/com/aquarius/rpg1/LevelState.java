@@ -59,10 +59,9 @@ public class LevelState {
 		ArrayList<Int2d> positions = new ArrayList<>();
 		for(int y = y1; y < y2; y++)
 		{
-			for(int x = x1; x < x2; x++)
-			{
-				if(bottom_layer.tiles[x][y] == tileIndex || top_layer.tiles[x][y] == tileIndex)
-				{
+			for(int x = x1; x < x2; x++) {
+				if(bottom_layer.getTileIndexForUncheckedXY(x,y) == tileIndex ||
+				   top_layer.getTileIndexForUncheckedXY(x,y) == tileIndex) {
 					positions.add(new Int2d(x,y));
 				}
 			}
@@ -149,12 +148,6 @@ public class LevelState {
 		}
 	}
 
-	public boolean collides(ObjectPosition position, int radius) {
-		// Return true if one of the layers collides
-		if(this.top_layer.collides(position.getXTile(), position.getYTile(), radius))
-			return true;
-		return this.bottom_layer.collides(position.getXTile(), position.getYTile(), radius); 
-	}
 	public void loadLevelByPosition()
 	{
 		String fileName = levelPos2FileName(levelPos);
@@ -243,6 +236,21 @@ public class LevelState {
 	public void resizeLevel(int newWidth, int newHeight) {
 		bottom_layer.resize(newWidth, newHeight);
 		top_layer.resize(newWidth, newHeight);
+	}
+
+	public boolean collidesTilePosition(int xTile, int yTile) {
+		// Return true if one of the layers collides
+		if(top_layer.collidesForCheckedXY(xTile, yTile))
+			return true;
+		return bottom_layer.collidesForCheckedXY(xTile, yTile); 
+	}
+	
+	public boolean collidesObjectPositionHitbox(int x, int y, int xMin, int yMin, int xMax, int yMax) {
+		if(collidesTilePosition(ObjectPosition.getXTileFromX(x+xMax), ObjectPosition.getYTileFromY(y+yMax)))return true;
+		if(collidesTilePosition(ObjectPosition.getXTileFromX(x+xMin), ObjectPosition.getYTileFromY(y+yMax)))return true;
+		if(collidesTilePosition(ObjectPosition.getXTileFromX(x+xMin), ObjectPosition.getYTileFromY(y+yMin)))return true;
+		if(collidesTilePosition(ObjectPosition.getXTileFromX(x+xMax), ObjectPosition.getYTileFromY(y+yMin)))return true;
+		return false;
 	}
 
 }

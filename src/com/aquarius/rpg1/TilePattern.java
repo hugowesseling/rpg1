@@ -130,7 +130,7 @@ public class TilePattern implements Serializable
 			}
 		}
 		//System.out.println("setTile: " + tileX + "," + tileY + ",neighbor:" + placeNeighborhood);
-		layer.setTile(tileX, tileY, maxRateTilePatternTile.tileIndex);
+		layer.setTileIndexForCheckedXY(tileX, tileY, maxRateTilePatternTile.tileIndex);
 		if(placeNeighborhood)
 		{
 			// Check all neighborhood tiles that are also in this tilePattern and update them
