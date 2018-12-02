@@ -98,7 +98,7 @@ public class LevelState {
 		// Do actions and movement
 		for(GameObject gameCharacter: allGameObjects) {
 			gameCharacter.doActionAndWeapon(worldState, this);
-			gameCharacter.doMovement();
+			//gameCharacter.doMovement(this);
 		}
 	}
 	public void think(Player player, WorldState worldState) {

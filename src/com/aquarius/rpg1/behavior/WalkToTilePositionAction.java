@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 
 public class WalkToTilePositionAction implements ObjectAction, Serializable{
@@ -19,7 +20,7 @@ public class WalkToTilePositionAction implements ObjectAction, Serializable{
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState) {
+	public boolean doAction(WorldState worldState, LevelState levelState) {
 		Int2d characterTilePosition = gameObject.getPosition().tileAsInt2d();
 		Direction direction = Direction.getDirectionFromTo(characterTilePosition, toPosition);
 		gameObject.setDirection(direction);

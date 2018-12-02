@@ -34,9 +34,6 @@ public class Player extends GameObject {
 			}
 		}
 	}
-	public boolean collided(LevelState levelState) {
-		return levelState.collidesObjectPositionHitbox(position.x, position.y, -8, -5, 6, 8);
-	}
 	public void checkIfTouching(LevelState levelState) {
 		for(GameObject gameObject: levelState.allGameObjects) {
 			if(colliding(gameObject)) {

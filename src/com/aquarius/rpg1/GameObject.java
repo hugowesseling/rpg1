@@ -90,13 +90,13 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		this.movement = movement;
 	}
 
-	public void doMovement() {
-		position.add(movement);
+	private void doMovement(LevelState levelState) {
+		moveAndLevelCollide(levelState, movement.x, movement.y);
 	}
 	
 	public void doActionAndWeapon(WorldState worldState, LevelState levelState) {
 		if(action != null) {
-			if(action.doAction(worldState)) {
+			if(action.doAction(worldState, levelState)) {
 				action = null;
 			}
 		}
@@ -170,4 +170,42 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		System.out.println("No touch action defined for: "+name);
 	}
 
+	public boolean collided(LevelState levelState) {
+		return levelState.collidesObjectPositionHitbox(position.x, position.y, -8, -5, 6, 8);
+	}
+
+	public boolean moveAndLevelCollide(LevelState levelState, int dx, int dy) {
+		boolean playerMoved = false;
+		if(dx != 0 || dy != 0)
+		{
+			position.x+=dx;
+			position.y+=dy;
+			playerMoved = true;
+			if(collided(levelState))
+			{
+				//try only x movement
+				position.y-=dy;
+				if(collided(levelState))
+				{
+					//try only y movement
+					position.x-=dx;
+					position.y+=dy;
+					if(collided(levelState))
+					{
+						//reset movements and check player's current location
+						position.y-=dy;
+						if(collided(levelState))
+						{
+							//player is collided on the place where he's standing, allow all movements.
+							position.x+=dx;
+							position.y+=dy;
+						}else {
+							playerMoved = false;
+						}
+					}
+				}
+			}
+		}
+		return playerMoved;
+	}
 }

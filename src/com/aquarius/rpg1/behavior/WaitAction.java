@@ -2,6 +2,7 @@ package com.aquarius.rpg1.behavior;
 
 import java.io.Serializable;
 
+import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 
 public class WaitAction implements ObjectAction, Serializable {
@@ -15,7 +16,7 @@ public class WaitAction implements ObjectAction, Serializable {
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState) {
+	public boolean doAction(WorldState worldState, LevelState levelState) {
 		return worldState.getTimeMs() > startTime + standingaroundDuration;
 	}
 }

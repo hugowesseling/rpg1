@@ -190,6 +190,7 @@ public class Layer {
 	}
 
 	public boolean collidesForCheckedXY(int tileX, int tileY) {
+		// returns true if x,y out of bounds to ensure that game objects will stay in level
 		/*int tileIndex = getTile(xTile, yTile);
 		if(tileIndex != -1) {
 			boolean result = Resources.getTileCollisionFromIndex(tileIndex);
@@ -202,7 +203,7 @@ public class Layer {
 		if(tileX >= 0 && tileX < tiles[0].length)
 			if(tileY >= 0 && tileY < tiles.length)
 				return collisions[tileX][tileY];
-		return false;
+		return true;
 	}
 
 	public void resize(int newWidth, int newHeight) {

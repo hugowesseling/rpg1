@@ -6,6 +6,7 @@ import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 
 public class WalkToPositionAction implements ObjectAction, Serializable {
@@ -20,7 +21,7 @@ public class WalkToPositionAction implements ObjectAction, Serializable {
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState) {
+	public boolean doAction(WorldState worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toPosition);
 		character.setDirection(direction);
 		character.setMovement(direction.movement);		

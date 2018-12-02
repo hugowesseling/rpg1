@@ -697,37 +697,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			dx += bouncedx / bouncecount;
 			dy += bouncedy / bouncecount;
 		}
-			
-		player.position.x+=dx;
-		player.position.y+=dy;
-		if(playerMoved)
-		{
-			if(player.collided(levelState))
-			{
-				//try only x movement
-				player.position.y-=dy;
-				if(player.collided(levelState))
-				{
-					//try only y movement
-					player.position.x-=dx;
-					player.position.y+=dy;
-					if(player.collided(levelState))
-					{
-						//reset movements and check player's current location
-						player.position.y-=dy;
-						if(player.collided(levelState))
-						{
-							//player is collided on the place where he's standing, allow all movements.
-							player.position.x+=dx;
-							player.position.y+=dy;
-							playerMoved = true;
-						}else {
-							playerMoved = false;
-						}
-					}
-				}
-			}
-		}
+
+		
+		playerMoved = player.moveAndLevelCollide(levelState, dx, dy);
+		
 		if(playerMoved){
 			screenx = player.position.x - 150;
 			screeny = player.position.y - 150;
