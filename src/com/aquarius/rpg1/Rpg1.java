@@ -175,6 +175,7 @@ import javax.swing.JTextField;
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
+import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 
 public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -344,6 +345,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					addObject = new SoupCharacter(characterDrawer, position, direction);
 				} else 	if(className.equals(HoppingCharacter.class.getSimpleName())) {
 					addObject = new HoppingCharacter(characterDrawer, position, direction);
+				} else 	if(className.equals(RunningCharacter.class.getSimpleName())) {
+					addObject = new RunningCharacter(characterDrawer, position, direction);
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}
@@ -495,19 +498,22 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		int keyCode = ke.getKeyCode();
 		input.set(keyCode, true);
 		if(keyCode == KeyEvent.VK_E) {
-			//System.out.println("Finding closest object: "+ mouseX/2+","+mouseY/2);
-			float mindistance = 20;
-			GameObject closestObject = null;
-			ObjectPosition mousePosition = new ObjectPosition(mouseX/2 +screenx, mouseY/2 +screeny);
-			for(GameObject gameObject:levelState.allGameObjects) {
-				//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
-				if(gameObject.position.distanceTo(mousePosition) < mindistance) {
-					mindistance = gameObject.position.distanceTo(mousePosition);
-					closestObject = gameObject;
+			if(addObject != null) {
+				addObject = null;
+			}else {
+				float mindistance = 20;
+				GameObject closestObject = null;
+				ObjectPosition mousePosition = new ObjectPosition(mouseX/2 +screenx, mouseY/2 +screeny);
+				for(GameObject gameObject:levelState.allGameObjects) {
+					//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
+					if(gameObject.position.distanceTo(mousePosition) < mindistance) {
+						mindistance = gameObject.position.distanceTo(mousePosition);
+						closestObject = gameObject;
+					}
 				}
+				if(closestObject != null)
+					addObject = closestObject;
 			}
-			if(closestObject != null)
-				addObject = closestObject;
 		}
 		if(keyCode == KeyEvent.VK_A)
 		{

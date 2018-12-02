@@ -37,6 +37,8 @@ public class Resources {
 		addCharacterSubClass("HenryCharacter");
 		addCharacterSubClass("SoupCharacter");
 		addCharacterSubClass("HoppingCharacter");
+		addCharacterSubClass("RunningCharacter");
+		
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");

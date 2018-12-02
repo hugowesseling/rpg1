@@ -9,33 +9,24 @@ import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.WorldState;
 
-public class HopRandomlyAction implements ObjectAction, Serializable {
+public class RunAction implements ObjectAction, Serializable {
 
 	private static final long serialVersionUID = 6863101672701913439L;
 	private GameObject gameObject;
-	private boolean doNewHop;
 	private float dz, z;
 
-	public HopRandomlyAction(GameObject gameObject) {
+	public RunAction(GameObject gameObject) {
 		this.gameObject = gameObject;
-		doNewHop = true;
+		gameObject.setDirection(Direction.random());
 	}
 
 	@Override
 	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
-		if(doNewHop) {
-			doNewHop = false;
-			gameObject.setDirection(Direction.random());
-			dz = 2;
-			z =0;
+		boolean moved = gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x * 4, gameObject.getDirection().movement.y *4);
+		if(!moved) {
+			System.out.println("RunAction: " + gameObject + " collided with something");
 		}
-		gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x, (int)(gameObject.getDirection().movement.y - dz));  
-		z += dz;
-		dz -= 0.3;
-		if(z < 0) {
-			doNewHop = true;
-		}
-		return false;
+		return !moved;
 	}
 
 }

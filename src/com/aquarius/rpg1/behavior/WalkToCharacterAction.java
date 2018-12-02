@@ -24,7 +24,7 @@ public class WalkToCharacterAction implements ObjectAction, Serializable{
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toCharacter.getPosition());
 		character.setDirection(direction);
 		character.setMovement(direction.movement);

@@ -96,7 +96,7 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	
 	public void doActionAndWeapon(WorldState worldState, LevelState levelState) {
 		if(action != null) {
-			if(action.doAction(worldState, levelState)) {
+			if(action.doActionAndCheckIfDone(worldState, levelState)) {
 				action = null;
 			}
 		}
@@ -170,42 +170,41 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		System.out.println("No touch action defined for: "+name);
 	}
 
-	public boolean collided(LevelState levelState) {
-		return levelState.collidesObjectPositionHitbox(position.x, position.y, -8, -5, 6, 8);
+	public static boolean collided(int x, int y, LevelState levelState) {
+		return levelState.collidesObjectPositionHitbox(x, y, -8, -5, 6, 8);
 	}
 
 	public boolean moveAndLevelCollide(LevelState levelState, int dx, int dy) {
-		boolean moved = false;
 		if(dx != 0 || dy != 0)
 		{
-			position.x+=dx;
-			position.y+=dy;
-			moved = true;
-			if(collided(levelState))
-			{
-				//try only x movement
-				position.y-=dy;
-				if(collided(levelState))
-				{
-					//try only y movement
-					position.x-=dx;
-					position.y+=dy;
-					if(collided(levelState))
-					{
-						//reset movements and check player's current location
-						position.y-=dy;
-						if(collided(levelState))
-						{
-							//player is collided on the place where he's standing, allow all movements.
-							position.x+=dx;
-							position.y+=dy;
-						}else {
-							moved = false;
-						}
-					}
-				}
+			if(dx != 0 && dy != 0 && !collided(position.x + dx, position.y + dy, levelState)){
+				position.x+=dx;
+				position.y+=dy;
+				return true;
 			}
+			//try only x movement
+			if(dx != 0 && !collided(position.x + dx, position.y, levelState))
+			{
+				position.x+=dx;
+				return true;
+			}
+			//try only y movement
+			if(dy != 0 && !collided(position.x, position.y + dy, levelState))
+			{
+				position.y+=dy;
+				return true;
+			}
+
+			//check player's current location
+			if(collided(position.x, position.y, levelState))
+			{
+				//player is collided on the place where he's standing, allow all movements.
+				position.x+=dx;
+				position.y+=dy;
+				return true;
+			}
+			return false;
 		}
-		return moved;
+		return false;
 	}
 }

@@ -16,7 +16,7 @@ public class WaitAction implements ObjectAction, Serializable {
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		return worldState.getTimeMs() > startTime + standingaroundDuration;
 	}
 }

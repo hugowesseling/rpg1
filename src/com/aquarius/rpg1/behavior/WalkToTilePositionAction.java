@@ -20,7 +20,7 @@ public class WalkToTilePositionAction implements ObjectAction, Serializable{
 	}
 
 	@Override
-	public boolean doAction(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		Int2d characterTilePosition = gameObject.getPosition().tileAsInt2d();
 		Direction direction = Direction.getDirectionFromTo(characterTilePosition, toPosition);
 		gameObject.setDirection(direction);
