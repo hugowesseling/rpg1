@@ -12,7 +12,7 @@ import com.aquarius.rpg1.behavior.CharacterBehavior;
 public abstract class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
-	private static final int DEFAULT_RADIUS = 18;
+	private static final int DEFAULT_RADIUS = 20; //18;
 	protected ObjectPosition position;
 	private ObjectAction action;
 	private Direction direction;
@@ -22,11 +22,8 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	protected String name;
 	protected Weapon weapon = null;
 	protected ObjectDrawer objectDrawer;
+	protected transient int frameDivider;
 
-	public GameObject(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
-		this("noname", objectDrawer, position, direction);
-	}
-	
 	public GameObject(String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super();
 		this.name = name;
@@ -37,19 +34,26 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		this.movement = new Int2d(0,0);
 		this.health = 0;
 		this.interactionPossibilities = new HashSet<>();
+		frameDivider = 10;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
+		init();
 	}
 
-	public GameObject() {
-		this("noname2", new TileDrawer(0), new ObjectPosition(100,100), Direction.EAST); //(new CharacterTileSet(new Int2d(3,1)))
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		System.out.println("Read position: "  +position + ", for name " + name);
+		frameDivider = 10;
+		init();
 	}
+
 	public HashSet<InteractionPossibility> getInteractionPossibilities() {
 		return interactionPossibilities;
 	}
 
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
 	{
-		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / 10);
+		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / frameDivider );
+		graphics.drawRect(position.x - screenx, position.y - screeny, 1, 1);
 		if(weapon != null) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}
@@ -66,17 +70,6 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	protected ObjectAction getAction() {
 		return action;
 	}
-
-	/*
-	@Override
-	public void writeSaveState(FileOutputStream fileOutputStream) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void readSaveState(FileInputStream fileInputStream) {
-		// TODO Auto-generated method stub
-	}*/
 
 	public Direction getDirection() {
 		return direction;
@@ -117,7 +110,9 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	}
 
 	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
-
+		return null;
+	}
+	public StorableObjectType open() {
 		return null;
 	}
 	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
@@ -126,11 +121,6 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	}
 	protected abstract void init();
 
-	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-		ois.defaultReadObject();
-		System.out.println("Read position: "  +position + ", for name " + name);
-		init();
-	}
 
 	public void useWeapon() {
 		if(weapon != null) {
@@ -206,5 +196,10 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 			return false;
 		}
 		return false;
+	}
+
+	public void setFrameDivider(int frameDivider) {
+		this.frameDivider = frameDivider; 
+		
 	}
 }

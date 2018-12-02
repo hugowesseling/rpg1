@@ -23,6 +23,7 @@ public class RunAction implements ObjectAction, Serializable {
 	@Override
 	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		boolean moved = gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x * 4, gameObject.getDirection().movement.y *4);
+		gameObject.setFrameDivider(2);
 		if(!moved) {
 			System.out.println("RunAction: " + gameObject + " collided with something");
 		}

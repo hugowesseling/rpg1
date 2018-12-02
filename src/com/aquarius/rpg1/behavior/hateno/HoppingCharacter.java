@@ -17,7 +17,6 @@ public class HoppingCharacter extends GameObject {
 
 	public HoppingCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("HoppingCharacter", objectDrawer, position, direction);
-		init();
 	}
 	@Override
 	protected void init() {

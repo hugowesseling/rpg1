@@ -5,34 +5,45 @@ import java.util.Vector;
 public class Player extends GameObject {
 	private static final long serialVersionUID = 1752542798493227606L;
 	Vector<CarryableItem> itemsCarried;
-	private GameObject talkActionGameObject = null;
+	private GameObject interactionGameObject = null;
 	public Bag<String> inventory;
+	private InteractionPossibility interactionPossibilty;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
 		weapon = new Sword(this);
 		inventory = new Bag<>();
 	}
-	public GameObject getTalkActionGameObject() {
-		return talkActionGameObject;
+	public GameObject getInteractionGameObject() {
+		return interactionGameObject;
 	}
-	public void setTalkActionGameObject(GameObject talkActionGameObject) {
-		this.talkActionGameObject = talkActionGameObject;
+	public void setInteractionGameObject(GameObject interactionGameObject) {
+		this.interactionGameObject = interactionGameObject;
 	}
 	
 	public void determineTalkActionCharacter(Vector<GameObject> allGameObjects) {
-		setTalkActionGameObject(null);
+		setInteractionGameObject(null);
 		for(GameObject gameObject: allGameObjects)
 		{
 			if(hasInSight(gameObject.getPosition(), 64))
 			{
 				//System.out.println("hasInSight: " + gameObject.name);
-				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TALK))
-				{
-					setTalkActionGameObject(gameObject);
+				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TALK)) {
+					setInteractionGameObject(gameObject);
+					setInteractionPossibility(InteractionPossibility.TALK);
 					//System.out.println("Player has in sight!");
-				}
+				}else
+				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.OPEN)) {
+					setInteractionGameObject(gameObject);
+					setInteractionPossibility(InteractionPossibility.OPEN);
+					//System.out.println("Player has in sight!");
+				}					
+				
 			}
 		}
+	}
+	private void setInteractionPossibility(InteractionPossibility interactionPossibilty) {
+		this.interactionPossibilty = interactionPossibilty;
+		
 	}
 	public void checkIfTouching(LevelState levelState) {
 		for(GameObject gameObject: levelState.allGameObjects) {
@@ -51,5 +62,9 @@ public class Player extends GameObject {
 	}
 	@Override
 	protected void init() {
+	}
+	
+	public InteractionPossibility getInteractionPossiblity() {
+		return interactionPossibilty;
 	}
 }

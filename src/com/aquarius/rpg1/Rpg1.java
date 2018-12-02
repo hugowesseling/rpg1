@@ -152,6 +152,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -204,6 +205,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private InventoryMenu inventoryMenu;
 	private JFrame frame;
 	private GameObject addObject = null;
+	private StorableObjectType pickupStorableObjectType = null;
+	private int pickupTimer = 0;
 	public Rpg1()
 	{
 		frameCounter = 0;
@@ -523,9 +526,28 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					dialogue = null;
 				}
 			}else {
-				if(player.getTalkActionGameObject() != null)
+				if(player.getInteractionGameObject() != null)
 				{
-					startDialog();
+					switch(player.getInteractionPossiblity()) {
+					case FIGHT:
+						break;
+					case OPEN:
+						StorableObjectType storableObjectType = player.getInteractionGameObject().open();
+						if(storableObjectType != null)
+							startPickupAnimation(storableObjectType);
+						break;
+					case PICKUP:
+						break;
+					case TALK:
+						startDialog(player.getInteractionGameObject());
+						AudioSystemPlayer.playRandomExpression();
+						break;
+					case TOUCH:
+						break;
+					default:
+						break;
+					
+					}
 				}				
 			}
 		}
@@ -553,9 +575,19 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			showInventory = !showInventory;
 		}
 	}
-	private void startDialog() {
+	private void startPickupAnimation(StorableObjectType storableObjectType) {
+		System.out.println("Starting pickup dialogue");
+		pickupStorableObjectType = storableObjectType;
+		player.inventory.add(pickupStorableObjectType.name);
+		AudioSystemPlayer.playSound(
+			"D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Collectibles_Items_Powerup\\collect_item_05.wav"
+			, false);
+		
+		pickupTimer = 0;
+	}
+	private void startDialog(GameObject dialogueGameObject) {
 		System.out.println("Starting dialogue");
-		dialogue = player.getTalkActionGameObject().startDialog(player, worldState, levelState);
+		dialogue = dialogueGameObject.startDialog(player, worldState, levelState);
 		
 	}
 	@Override
@@ -630,19 +662,24 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
 		
 		if(simulating) {
-			//player.draw(imageGraphics, frameCounter, screenx, screeny);
-	
-			if(dialogue != null) {
+			if(pickupStorableObjectType != null) {
+				System.out.println("Picking up item: " + pickupStorableObjectType.name + ":" + pickupTimer);
+				imageGraphics.drawImage(Resources.getTileImageFromIndex(pickupStorableObjectType.tileIndex), player.position.x - screenx - 8, player.position.y - screeny - pickupTimer - 30, null);
+				pickupTimer ++;
+				if(pickupTimer > 40) {
+					pickupStorableObjectType = null;
+				}
+			}else if(dialogue != null) {
 				//System.out.println("Drawing dialogue");
 				dialogue.draw(imageGraphics, 
 						50, imageHeight-100, 
 						imageWidth-100, 2 * Constant.TILE_HEIGHT);
 			}else {		
-				if(player.getTalkActionGameObject() != null) {
+				if(player.getInteractionGameObject() != null) {
 					imageGraphics.setColor(Color.BLUE);
 					imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
 					imageGraphics.setColor(Color.WHITE);
-					imageGraphics.drawString("Talk", imageWidth - 60, 35);
+					imageGraphics.drawString(player.getInteractionPossiblity().toString(), imageWidth - 60, 35);
 				}
 			}
 			if(showInventory)
@@ -708,6 +745,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		playerMoved = player.moveAndLevelCollide(levelState, dx, dy);
 		
 		if(playerMoved){
+			
+			if(frameCounter % 15 == 0) {
+				
+				int walkSoundIndex = (int )(Math.random() * 12) + 1;
+				String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Footsteps\\footstep_dirt_walk_run_%02d.wav", 
+						walkSoundIndex);
+				AudioSystemPlayer.playSound(audioFileName, false);
+			}
 			screenx = player.position.x - 150;
 			screeny = player.position.y - 150;
 			Dimension size = this.getSize();

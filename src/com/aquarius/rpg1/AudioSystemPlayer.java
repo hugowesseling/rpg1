@@ -13,15 +13,18 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioSystemPlayer {
 	public static HashMap<String, Clip> clips = new HashMap<>();
+	public static int lastPlayedRandomIndex = 0;
 	
 	public static void playSound(String fileName, boolean looping) {
 		if(clips.get(fileName) != null) {
 			System.out.println("Replaying " + fileName);
 			Clip clip = clips.get(fileName); 
 			clip.stop();
-			clip.start();
+			clip.setMicrosecondPosition(0);
 			if(looping)
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
+			else
+				clip.start();
 		}else {
 			System.out.println("Playing " + fileName);
 			try {
@@ -30,6 +33,8 @@ public class AudioSystemPlayer {
 				clip.open(inputStream);
 				if(looping)
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
+				else
+					clip.start();
 				clips.put(fileName, clip);
 			} catch (LineUnavailableException e1) {
 				// TODO Auto-generated catch block
@@ -48,6 +53,17 @@ public class AudioSystemPlayer {
 			clip.stop();
 			clip.setMicrosecondPosition(0);
 		}
+	}
+	
+	public static void playRandomExpression() {
+		int randomIndex;
+		do{
+			randomIndex = (int )(Math.random() * 9) + 1;
+		}while(lastPlayedRandomIndex == randomIndex);
+		lastPlayedRandomIndex = randomIndex;
+		String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
+				randomIndex);
+		playSound(audioFileName, false);		
 	}
 	
 	

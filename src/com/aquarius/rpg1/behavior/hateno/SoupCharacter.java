@@ -20,8 +20,7 @@ public class SoupCharacter extends GameObject {
 	private transient Dialogue nosoupDialogue, soupDialogue;
 
 	public SoupCharacter(CharacterDrawer characterDrawer, ObjectPosition objectPosition, Direction direction) {
-		super(characterDrawer, objectPosition, direction);
-		init();
+		super("SoupCharacter", characterDrawer, objectPosition, direction);
 	}
 
 	@Override

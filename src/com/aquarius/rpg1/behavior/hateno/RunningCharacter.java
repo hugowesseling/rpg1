@@ -17,7 +17,6 @@ public class RunningCharacter extends GameObject {
 
 	public RunningCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("RunningCharacter", objectDrawer, position, direction);
-		init();
 	}
 	@Override
 	protected void init() {

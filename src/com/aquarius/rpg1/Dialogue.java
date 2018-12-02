@@ -24,6 +24,7 @@ public class Dialogue {
 			return false;
 		}else {
 			currentDialogueBlock.doAction(levelState, player);
+			AudioSystemPlayer.playRandomExpression();
 			return true;
 		}
 		

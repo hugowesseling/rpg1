@@ -24,15 +24,14 @@ public class HenryCharacter extends GameObject
 	private static final long serialVersionUID = 2895154313614688180L;
 	protected transient Dialogue dialogue1 = null, dialogue2 = null;
 
-	public HenryCharacter()
+	/*public HenryCharacter()
 	{
 		super();
 		System.out.println("HenryCharacter: Empty Constructor position: "  +position + ", for name " + name);
-	}
+	}*/
 	
 	public HenryCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("henryCharacter", objectDrawer, position, direction);
-		init();
 		System.out.println("HenryCharacter: Constructor position: "  +position + ", for name " + name);
 	}
 
