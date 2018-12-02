@@ -13,36 +13,27 @@ public class HopRandomlyAction implements ObjectAction, Serializable {
 
 	private static final long serialVersionUID = 6863101672701913439L;
 	private GameObject gameObject;
-	//private ObjectPosition groundPosition;
-	private Direction hopDirection;
-	private Int2d dPos;
+	private boolean doNewHop;
 	private float dz, z;
 
 	public HopRandomlyAction(GameObject gameObject) {
 		this.gameObject = gameObject;
-		//this.groundPosition = gameObject.getPosition().clone();
-		this.hopDirection = null;
-		dPos = new Int2d(0,0);
+		doNewHop = true;
 	}
 
 	@Override
 	public boolean doAction(WorldState worldState, LevelState levelState) {
-		if(hopDirection == null) {
-			hopDirection = Direction.random();
-			gameObject.setDirection(hopDirection);
-			dPos = hopDirection.movement;
+		if(doNewHop) {
+			doNewHop = false;
+			gameObject.setDirection(Direction.random());
 			dz = 2;
 			z =0;
 		}
-		//gameObject.getPosition().x = groundPosition.x; 
-		//gameObject.getPosition().y = (int)(groundPosition.y - z);
-		gameObject.moveAndLevelCollide(levelState, dPos.x, (int)(dPos.y - dz));  
-		//gameObject.getPosition().x += ;
-		//gameObject.getPosition().y += ;
+		gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x, (int)(gameObject.getDirection().movement.y - dz));  
 		z += dz;
 		dz -= 0.3;
 		if(z < 0) {
-			hopDirection = null;
+			doNewHop = true;
 		}
 		return false;
 	}

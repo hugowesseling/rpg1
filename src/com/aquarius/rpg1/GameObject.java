@@ -175,12 +175,12 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	}
 
 	public boolean moveAndLevelCollide(LevelState levelState, int dx, int dy) {
-		boolean playerMoved = false;
+		boolean moved = false;
 		if(dx != 0 || dy != 0)
 		{
 			position.x+=dx;
 			position.y+=dy;
-			playerMoved = true;
+			moved = true;
 			if(collided(levelState))
 			{
 				//try only x movement
@@ -200,12 +200,12 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 							position.x+=dx;
 							position.y+=dy;
 						}else {
-							playerMoved = false;
+							moved = false;
 						}
 					}
 				}
 			}
 		}
-		return playerMoved;
+		return moved;
 	}
 }
