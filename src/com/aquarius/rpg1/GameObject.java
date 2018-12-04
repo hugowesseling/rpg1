@@ -9,7 +9,7 @@ import java.util.HashSet;
 import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
-public abstract class GameObject implements CharacterBehavior, Serializable
+public class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
 	private static final int DEFAULT_RADIUS = 20; //18;
@@ -33,7 +33,6 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		this.action = null;
 		this.movement = new Int2d(0,0);
 		this.health = 0;
-		this.interactionPossibilities = new HashSet<>();
 		frameDivider = 10;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 		init();
@@ -53,7 +52,7 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
 	{
 		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / frameDivider );
-		graphics.drawRect(position.x - screenx, position.y - screeny, 1, 1);
+		graphics.drawRect(position.x - screenx, position.y - screeny, 0, 0);
 		if(weapon != null) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}
@@ -119,7 +118,9 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 		System.out.println("Writing position: "  + position + ", for name " + name);
 		oos.defaultWriteObject();
 	}
-	protected abstract void init();
+	protected void init() {
+		interactionPossibilities = new HashSet<>();
+	}
 
 
 	public void useWeapon() {
@@ -165,6 +166,7 @@ public abstract class GameObject implements CharacterBehavior, Serializable
 	}
 
 	public boolean moveAndLevelCollide(LevelState levelState, int dx, int dy) {
+		// Returns true if movement was done
 		if(dx != 0 || dy != 0)
 		{
 			if(dx != 0 && dy != 0 && !collided(position.x + dx, position.y + dy, levelState)){

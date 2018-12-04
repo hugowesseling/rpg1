@@ -60,9 +60,6 @@ public class Player extends GameObject {
 	public void doTouchAction(LevelState levelState, Player player) {
 		System.out.println("Don't touch yourself!");
 	}
-	@Override
-	protected void init() {
-	}
 	
 	public InteractionPossibility getInteractionPossiblity() {
 		return interactionPossibilty;

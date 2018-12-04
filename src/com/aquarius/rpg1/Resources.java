@@ -38,6 +38,7 @@ public class Resources {
 		addCharacterSubClass("SoupCharacter");
 		addCharacterSubClass("HoppingCharacter");
 		addCharacterSubClass("RunningCharacter");
+		addCharacterSubClass("ProximityRunCharacter");
 		
 		
 		addObjectSubClass("TreasureObject");
@@ -53,6 +54,8 @@ public class Resources {
 		addCharacterTileSets(1,"/birds1.png", 42, 36, 0, 0);
 		addCharacterTileSets(1,"/birds2.png", 42, 36, 0, 0);
 		addCharacterTileSets(1,"/horse1.png", 60, 64, 0, 0);
+		addCharacterTileSets(1,"/monster1.png", 60, 64, 0, 0);
+		addCharacterTileSets(1,"/monster2.png", 60, 64, 0, 0);
     }
 
 	public static void addCharacterSubClass(String string) {

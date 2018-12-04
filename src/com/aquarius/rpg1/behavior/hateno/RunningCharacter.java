@@ -12,8 +12,7 @@ import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.RunAction;
 
 public class RunningCharacter extends GameObject {
-
-	private static final long serialVersionUID = -8441410676271321272L;
+	private static final long serialVersionUID = -1952527416412810356L;
 
 	public RunningCharacter(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("RunningCharacter", objectDrawer, position, direction);

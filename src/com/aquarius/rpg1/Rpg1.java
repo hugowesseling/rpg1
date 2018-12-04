@@ -176,6 +176,7 @@ import javax.swing.JTextField;
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
+import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 
@@ -350,6 +351,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					addObject = new HoppingCharacter(characterDrawer, position, direction);
 				} else 	if(className.equals(RunningCharacter.class.getSimpleName())) {
 					addObject = new RunningCharacter(characterDrawer, position, direction);
+				} else 	if(className.equals(ProximityRunCharacter.class.getSimpleName())) {
+					addObject = new ProximityRunCharacter(characterDrawer, position, direction);
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}

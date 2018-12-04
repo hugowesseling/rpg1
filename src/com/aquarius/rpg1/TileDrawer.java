@@ -19,5 +19,4 @@ public class TileDrawer extends ObjectDrawer {
 		Image image = Resources.getTileImageFromIndex(tileIndex);
 		graphics.drawImage(image, x - image.getWidth(null)/2, y - image.getHeight(null)/2, null);
 	}
-
 }

@@ -15,10 +15,15 @@ public class HopRandomlyAction implements ObjectAction, Serializable {
 	private GameObject gameObject;
 	private boolean doNewHop;
 	private float dz, z;
+	private int hopTimeMs;
+	private long startTime;
 
-	public HopRandomlyAction(GameObject gameObject) {
+	public HopRandomlyAction(GameObject gameObject, WorldState worldState, int hopTimeMs) {
 		this.gameObject = gameObject;
+		this.hopTimeMs = hopTimeMs;
+		startTime = worldState.getTimeMs();
 		doNewHop = true;
+		
 	}
 
 	@Override
@@ -35,6 +40,8 @@ public class HopRandomlyAction implements ObjectAction, Serializable {
 		if(z < 0) {
 			doNewHop = true;
 		}
+		if(hopTimeMs > 0)
+			return worldState.getTimeMs() > startTime + hopTimeMs;
 		return false;
 	}
 

@@ -55,15 +55,25 @@ public class AudioSystemPlayer {
 		}
 	}
 	
-	public static void playRandomExpression() {
+	private static int newRandomIndex(int max) {
 		int randomIndex;
 		do{
-			randomIndex = (int )(Math.random() * 9) + 1;
+			randomIndex = (int )(Math.random() * max) + 1;
 		}while(lastPlayedRandomIndex == randomIndex);
 		lastPlayedRandomIndex = randomIndex;
+		return randomIndex;
+	}
+	
+	public static void playRandomExpression() {
 		String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
-				randomIndex);
+				newRandomIndex(9));
 		playSound(audioFileName, false);		
+	}
+	public static void playRandomChicken() {
+		String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animal_Impersonations\\chicken_2_bwak_%02d.wav",
+				newRandomIndex(10));
+		playSound(audioFileName, false);		
+		
 	}
 	
 	
