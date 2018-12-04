@@ -23,6 +23,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	protected Weapon weapon = null;
 	protected ObjectDrawer objectDrawer;
 	protected transient int frameDivider;
+	public final static int FRAME_DIVIDER_DEFAULT = 10;
 
 	public GameObject(String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super();
@@ -33,7 +34,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.action = null;
 		this.movement = new Int2d(0,0);
 		this.health = 0;
-		frameDivider = 10;
+		frameDivider = FRAME_DIVIDER_DEFAULT;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 		init();
 	}
@@ -41,7 +42,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
 		System.out.println("Read position: "  +position + ", for name " + name);
-		frameDivider = 10;
+		frameDivider = FRAME_DIVIDER_DEFAULT;
 		init();
 	}
 

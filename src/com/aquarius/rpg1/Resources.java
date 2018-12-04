@@ -2,10 +2,19 @@ package com.aquarius.rpg1;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import javax.swing.ComboBoxModel;
+import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
+import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
+import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
+import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
+import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
+
 
 public class Resources {
+	public interface CharacterCreatorFunction {
+		public GameObject create(CharacterDrawer characterDrawer, ObjectPosition position, Direction direction);
+	}
 	public static final String PARAM_BACKGROUND_SOUND = "background_sound";
 	public static TileSet[] levelTileSets = {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1, true),
@@ -23,7 +32,7 @@ public class Resources {
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
-    public static ArrayList<String> characterSubClasses = new ArrayList<String>();
+    public static HashMap<String, CharacterCreatorFunction> characterSubClasses = new HashMap<>();
     public static ArrayList<String> objectSubClasses = new ArrayList<String>();
 	protected static String defaultLevelParameters[] = {PARAM_BACKGROUND_SOUND};
     
@@ -34,12 +43,11 @@ public class Resources {
 		dialogStyles.add(new DialogStyle(levelTileSets[0].tilePatterns.get(0), true));
 		dialogStyles.add(new DialogStyle(levelTileSets[3].tilePatterns.get(0), true));
 		
-		addCharacterSubClass("HenryCharacter");
-		addCharacterSubClass("SoupCharacter");
-		addCharacterSubClass("HoppingCharacter");
-		addCharacterSubClass("RunningCharacter");
-		addCharacterSubClass("ProximityRunCharacter");
-		
+		addCharacterSubClass("HenryCharacter", (drawer, pos, dir) -> {return new HenryCharacter(drawer, pos, dir);});
+		addCharacterSubClass("SoupCharacter", (drawer, pos, dir) -> {return new SoupCharacter(drawer, pos, dir);});
+		addCharacterSubClass("HoppingCharacter", (drawer, pos, dir) -> {return new HoppingCharacter(drawer, pos, dir);});
+		addCharacterSubClass("RunningCharacter", (drawer, pos, dir) -> {return new RunningCharacter(drawer, pos, dir);});
+		addCharacterSubClass("ProximityRunCharacter", (drawer, pos, dir) -> {return new ProximityRunCharacter(drawer, pos, dir);});
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");
@@ -58,9 +66,9 @@ public class Resources {
 		addCharacterTileSets(1,"/monster2.png", 60, 64, 0, 0);
     }
 
-	public static void addCharacterSubClass(String string) {
+	public static void addCharacterSubClass(String string, CharacterCreatorFunction func) {
 		System.out.println("addCharacterSubClass: Adding " + string);
-		characterSubClasses.add(string);
+		characterSubClasses.put(string, func);
 	}
 
 	private static void addCharacterTileSets(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight) {

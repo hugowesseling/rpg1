@@ -174,6 +174,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
+import com.aquarius.rpg1.Resources.CharacterCreatorFunction;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
@@ -223,7 +224,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		// Load level at beginning location
 		levelState.loadLevelByPosition();
 
-		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses));
+		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses.keySet()));
 		
 		player = new Player(new CharacterDrawer(0), ObjectPosition.createFromTilePosition(new Int2d(13, 30)), Direction.SOUTH);
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
@@ -323,7 +324,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			public void mousePressed(MouseEvent mouseEvent) {
 				System.out.println("addCharacter clicked");
 				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
-				String[] characterSubClassesStrings = Resources.characterSubClasses.toArray(new String[Resources.characterSubClasses.size()]);
+				String[] characterSubClassesStrings = Resources.characterSubClasses.keySet().toArray(new String[Resources.characterSubClasses.size()]);
 				JComboBox<String> characterSubClassComboBox = new JComboBox<String>(characterSubClassesStrings);
 				JComboBox<Direction> directionComboBox = new JComboBox<Direction>(Direction.values());
 				CharacterTileSetChoosingLabel characterTileSetChoosingLabel = new CharacterTileSetChoosingLabel("character", frame, null);
@@ -342,17 +343,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				addObject = null;
 				CharacterDrawer characterDrawer = new CharacterDrawer(characterTileSetChoosingLabel.getCharacterTileSetIndex());
 				ObjectPosition position = new ObjectPosition(mouseLocation.x, mouseLocation.y);
-				
-				if(className.equals(HenryCharacter.class.getSimpleName())) {
-					addObject = new HenryCharacter(characterDrawer, position, direction);
-				} else 	if(className.equals(SoupCharacter.class.getSimpleName())) {
-					addObject = new SoupCharacter(characterDrawer, position, direction);
-				} else 	if(className.equals(HoppingCharacter.class.getSimpleName())) {
-					addObject = new HoppingCharacter(characterDrawer, position, direction);
-				} else 	if(className.equals(RunningCharacter.class.getSimpleName())) {
-					addObject = new RunningCharacter(characterDrawer, position, direction);
-				} else 	if(className.equals(ProximityRunCharacter.class.getSimpleName())) {
-					addObject = new ProximityRunCharacter(characterDrawer, position, direction);
+
+				if(Resources.characterSubClasses.containsKey(className)) {
+					CharacterCreatorFunction func = Resources.characterSubClasses.get(className);
+					addObject = func.create(characterDrawer, position, direction);
 				} else {
 					System.err.println("Could not determine character sub class: " + className);
 				}

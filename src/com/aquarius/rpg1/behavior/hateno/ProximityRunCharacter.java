@@ -26,14 +26,17 @@ public class ProximityRunCharacter extends GameObject
 		if(!(getAction() instanceof RunRandomlyAction)){
 			if(player.getPosition().subnearby(position, 70)) {
 				AudioSystemPlayer.playRandomChicken();
+				setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
 				setAction(new RunRandomlyAction(this, worldState, 5000));
 				System.out.println("ProximityRunCharacter.think: Run!");
 				return;
 			}
 		}
 		if(getAction() == null)	{
+			setDirection(Direction.SOUTH);
+			setFrameDivider(FRAME_DIVIDER_DEFAULT * 2);
 			setAction(new WaitAction(worldState, STANDINGAROUND_DURATION));
-			System.out.println("HenryCharacter.think: WaitAction");
+			System.out.println("ProximityRunCharacter.think: WaitAction");
 		}
 	}
 }
