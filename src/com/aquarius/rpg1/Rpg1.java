@@ -576,9 +576,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		System.out.println("Starting pickup dialogue");
 		pickupStorableObjectType = storableObjectType;
 		player.inventory.add(pickupStorableObjectType.name);
-		AudioSystemPlayer.playSound(
-			"D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Collectibles_Items_Powerup\\collect_item_05.wav"
-			, false);
+		AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\collect_item_05.wav", false);
 		
 		pickupTimer = 0;
 	}
@@ -746,7 +744,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			if(frameCounter % 15 == 0) {
 				
 				int walkSoundIndex = (int )(Math.random() * 12) + 1;
-				String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Footsteps\\footstep_dirt_walk_run_%02d.wav", 
+				String audioFileName = String.format(AudioSystemPlayer.AUDIO_FOLDER + "Footsteps\\footstep_dirt_walk_run_%02d.wav", 
 						walkSoundIndex);
 				AudioSystemPlayer.playSound(audioFileName, false);
 			}

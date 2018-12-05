@@ -10,7 +10,7 @@ public class Player extends GameObject {
 	private InteractionPossibility interactionPossibilty;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
-		weapon = new Sword(this);
+		weapon = new BeamWeapon(this);
 		inventory = new Bag<>();
 	}
 	public GameObject getInteractionGameObject() {

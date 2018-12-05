@@ -5,6 +5,7 @@ public enum Direction {
     NORTH, SOUTH, EAST, WEST;
 
     public Int2d movement;
+    public int degrees;
     public int tileOffset;
 
     static {
@@ -12,6 +13,11 @@ public enum Direction {
         SOUTH.movement = new Int2d( 0,  1);
         EAST.movement =  new Int2d( 1,  0);
         WEST.movement =  new Int2d(-1,  0);
+
+        NORTH.degrees = 0;
+        EAST.degrees = 90;
+        SOUTH.degrees = 180;
+        WEST.degrees = 270;
         
         SOUTH.tileOffset =  0;
         WEST.tileOffset =  1; 

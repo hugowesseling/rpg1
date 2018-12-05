@@ -12,6 +12,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioSystemPlayer {
+	public static final String AUDIO_FOLDER = "D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\";
 	public static HashMap<String, Clip> clips = new HashMap<>();
 	public static int lastPlayedRandomIndex = 0;
 	
@@ -65,16 +66,25 @@ public class AudioSystemPlayer {
 	}
 	
 	public static void playRandomExpression() {
-		String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
+		String audioFileName = String.format(AUDIO_FOLDER + "Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
 				newRandomIndex(9));
 		playSound(audioFileName, false);		
 	}
 	public static void playRandomChicken() {
-		String audioFileName = String.format("D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\Animal_Impersonations\\chicken_2_bwak_%02d.wav",
+		String audioFileName = String.format(AUDIO_FOLDER + "Animal_Impersonations\\chicken_2_bwak_%02d.wav",
 				newRandomIndex(10));
 		playSound(audioFileName, false);		
 		
 	}
-	
-	
+	public static void playRandomSwish() {
+		String audioFileName = String.format(AUDIO_FOLDER +"Whooshes\\whoosh_weapon_knife_swing_%02d.wav",
+				newRandomIndex(4));
+		playSound(audioFileName, false);		
+				
+	}
+	public static void playRandomImpact() {
+		String audioFileName = String.format(AUDIO_FOLDER +"Guns_Weapons\\Bullets\\bullet_impact_body_flesh_%02d.wav",
+				newRandomIndex(7));
+		playSound(audioFileName, false);		
+	}
 }

@@ -52,9 +52,12 @@ public class GameObject implements CharacterBehavior, Serializable
 
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
 	{
+		if(weapon != null && (direction == Direction.NORTH || direction == Direction.WEST)) {
+			weapon.draw(graphics,frameCounter, screenx, screeny);
+		}
 		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / frameDivider );
 		graphics.drawRect(position.x - screenx, position.y - screeny, 0, 0);
-		if(weapon != null) {
+		if(weapon != null && !(direction == Direction.NORTH || direction == Direction.WEST)) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}
 	}
