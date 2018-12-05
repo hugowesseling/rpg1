@@ -12,10 +12,12 @@ public class RunRandomlyAction implements ObjectAction, Serializable {
 	private int runTimeMs;
 	private long startTime;
 	private int counter;
+	private int speed;
 
-	public RunRandomlyAction(GameObject gameObject, WorldState worldState, int runTimeMs) {
+	public RunRandomlyAction(GameObject gameObject, WorldState worldState, int runTimeMs, int speed) {
 		this.gameObject = gameObject;
 		this.runTimeMs = runTimeMs;
+		this.speed = speed;
 		startTime = worldState.getTimeMs();
 		counter = 0;
 	}
@@ -27,8 +29,8 @@ public class RunRandomlyAction implements ObjectAction, Serializable {
 			gameObject.setDirection(Direction.random());
 			counter = (int)(Math.random() * 10) + 20;
 		}
-		if(!gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x*3, (int)(gameObject.getDirection().movement.y*3)))
-			counter = 0;
+		if(!gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x*speed, (int)(gameObject.getDirection().movement.y*speed)))
+			return true;
 		if(runTimeMs > 0)
 			return worldState.getTimeMs() > startTime + runTimeMs;
 		return false;

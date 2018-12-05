@@ -25,7 +25,7 @@ public class WalkToPositionAction implements ObjectAction, Serializable {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toPosition);
 		character.setDirection(direction);
 		character.setMovement(direction.movement);		
-		boolean isDone = character.getPosition().subnearby(toPosition, 1);
+		boolean isDone = character.getPosition().isNearby(toPosition, 1);
 		if(isDone) {
 			character.setMovement(new Int2d(0,0));
 		}

@@ -24,10 +24,10 @@ public class ProximityRunCharacter extends GameObject
 	public void think(Player player, WorldState worldState, LevelState levelState)
 	{
 		if(!(getAction() instanceof RunRandomlyAction)){
-			if(player.getPosition().subnearby(position, 70)) {
+			if(player.getPosition().isNearby(position, 70)) {
 				AudioSystemPlayer.playRandomChicken();
 				setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
-				setAction(new RunRandomlyAction(this, worldState, 5000));
+				setAction(new RunRandomlyAction(this, worldState, 5000, 3));
 				System.out.println("ProximityRunCharacter.think: Run!");
 				return;
 			}

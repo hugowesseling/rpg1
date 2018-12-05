@@ -9,6 +9,7 @@ import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
+import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
 
 
 public class Resources {
@@ -48,6 +49,8 @@ public class Resources {
 		addCharacterSubClass("HoppingCharacter", (drawer, pos, dir) -> {return new HoppingCharacter(drawer, pos, dir);});
 		addCharacterSubClass("RunningCharacter", (drawer, pos, dir) -> {return new RunningCharacter(drawer, pos, dir);});
 		addCharacterSubClass("ProximityRunCharacter", (drawer, pos, dir) -> {return new ProximityRunCharacter(drawer, pos, dir);});
+		addCharacterSubClass("StraightLineRunCharacter", (drawer, pos, dir) -> {return new StraightLineRunCharacter(drawer, pos, dir);});
+		
 		
 		addObjectSubClass("TreasureObject");
 		addObjectSubClass("DoorwayObject");

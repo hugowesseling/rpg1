@@ -57,7 +57,7 @@ public class ObjectPosition implements Position, Serializable {
 		return (int) Math.hypot(x - pos.x, y - pos.y);
 	}
 	
-	public boolean subnearby(ObjectPosition pos, int distance) {
+	public boolean isNearby(ObjectPosition pos, int distance) {
 		return distanceTo(pos) <= distance;
 	}
 
@@ -87,6 +87,26 @@ public class ObjectPosition implements Position, Serializable {
 	    throws ClassNotFoundException, IOException {
 	  x = (int) ois.readInt();
 	  y = (int) ois.readInt();
+	}
+
+	public boolean isOnStraightLine(ObjectPosition position, int margin) {
+		return (Math.abs(position.x - x) < margin) ||
+			(Math.abs(position.y - y) < margin);
+	}
+
+	public Direction getDirectionTo(ObjectPosition position) {
+		int dx = position.x - x, dy = position.y - y;
+		if(dx > dy){ // NE
+			if(dx > -dy)
+				return Direction.EAST;
+			else
+				return Direction.NORTH;
+		}else {//SW
+			if(dx > -dy)
+				return Direction.SOUTH;
+			else
+				return Direction.WEST;
+		}
 	}
 	
 }
