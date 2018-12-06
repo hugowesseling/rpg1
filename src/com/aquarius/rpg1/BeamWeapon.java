@@ -55,8 +55,8 @@ public class BeamWeapon extends Weapon {
 						System.out.println("Character " + character.name + " in range");
 						if( vf.x  * rx + vf.y *ry > 0) {
 							System.out.println("Hitting character " + character.name);
-							character.position.x += vf.x * 20;	//bump away
-							character.position.y += vf.y * 20;
+							for(int i=0;i<10;i++)
+								character.moveAndLevelCollide(levelState, vf.x * 2, vf.y * 2);
 							AudioSystemPlayer.playRandomImpact();
 						}
 					}
