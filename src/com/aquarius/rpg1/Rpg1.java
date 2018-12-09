@@ -212,6 +212,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private int pickupTimer = 0;
 	public Rpg1()
 	{
+		deleteFilesInUserFolder();
 		frameCounter = 0;
 		mouseInFrame = true;
 		editorState = new EditorState();
@@ -467,6 +468,14 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
+	}
+	private void deleteFilesInUserFolder() {
+		File dir= new File(LevelState.USER_SAVE_FOLDER);
+		for(File file: dir.listFiles()) 
+		    if (!file.isDirectory() && file.toString().endsWith(".rpg1")) {
+		    	System.out.println("Deleting "+ file);
+		        file.delete();
+		    }
 	}
 	public void start()
 	{

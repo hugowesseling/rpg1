@@ -1,6 +1,7 @@
 package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,12 +16,13 @@ import java.util.Vector;
 import com.aquarius.rpg1.behavior.GameObjectType;
 
 public class LevelState {
+	static final String USER_SAVE_FOLDER = "saves/";
 	public Layer bottom_layer, top_layer;
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
 	public Vector<GameObject> allGameObjects;	// All characters in this level
 	public LevelStack levelStack;
 	private Int2d levelPos= new Int2d(0,0);
-	private String latestLoadedFileName = "";
+	private String latestLoadedFileName = null;
 	private ObjectPosition playerPositionInSuperLevel;
 
 	
@@ -162,10 +164,18 @@ public class LevelState {
 	}
 	
 	public void loadLevel(String fileName) {
+		if(latestLoadedFileName != null)
+			saveToFile(USER_SAVE_FOLDER + latestLoadedFileName);
 		latestLoadedFileName = fileName;
 		FileInputStream fileInputStream;
 		try {
-			fileInputStream = new FileInputStream(fileName);
+			// Try to load level from save folder
+			File fileToLoad = new File(USER_SAVE_FOLDER + fileName);
+			if(!fileToLoad.exists()) {
+				System.out.println("User saved file " + fileToLoad + " does not exist, loading beginning level");
+				fileToLoad =  new File(fileName);
+			}
+			fileInputStream = new FileInputStream(fileToLoad);
 			readFromFileInputStream(fileInputStream);
 			fileInputStream.close();
 		} catch (FileNotFoundException e) {
@@ -200,7 +210,9 @@ public class LevelState {
 	}
 
 	public String getLevelFileName() {
-		return latestLoadedFileName;
+		if(latestLoadedFileName != null)
+			return latestLoadedFileName;
+		return "";
 	}
 
 	public void loadLevelByExit(int dx, int dy, Player player) {
