@@ -14,8 +14,8 @@ public class StorableObject extends GameObject {
 	private static final long serialVersionUID = -103755530791188265L;
 	private StorableObjectType storableObjectType;
 
-	public StorableObject(StorableObjectType storableObjectType, TileDrawer tileDrawer, ObjectPosition position){
-		super("StorableObject", tileDrawer, position, Direction.NORTH);
+	public StorableObject(StorableObjectType storableObjectType, ItemTileDrawer itemTileDrawer, ObjectPosition position){
+		super("StorableObject", itemTileDrawer, position, Direction.NORTH);
 		this.storableObjectType = storableObjectType;
 		init();
 	}
@@ -38,7 +38,7 @@ public class StorableObject extends GameObject {
 	    
 	    String storableObjectTypeString = (String) storableObjectTypeComboBox.getSelectedItem();
 	    StorableObjectType sot = StorableObjectType.allHashMap.get(storableObjectTypeString);
-	    return new StorableObject(sot, new TileDrawer(sot.tileIndex), position );
+	    return new StorableObject(sot, new ItemTileDrawer(sot.itemTileIndex), position);
 	}
 
 	@Override

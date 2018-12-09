@@ -12,6 +12,7 @@ public class Player extends GameObject {
 		super("player", objectDrawer, position, direction);
 		weapon = new BeamWeapon(this);
 		inventory = new Bag<>();
+		inventory.add("broccoli ring");
 	}
 	public GameObject getInteractionGameObject() {
 		return interactionGameObject;
@@ -20,7 +21,7 @@ public class Player extends GameObject {
 		this.interactionGameObject = interactionGameObject;
 	}
 	
-	public void determineTalkActionCharacter(Vector<GameObject> allGameObjects) {
+	public void determineInteractionGameObject(Vector<GameObject> allGameObjects) {
 		setInteractionGameObject(null);
 		for(GameObject gameObject: allGameObjects)
 		{
@@ -35,6 +36,11 @@ public class Player extends GameObject {
 				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.OPEN)) {
 					setInteractionGameObject(gameObject);
 					setInteractionPossibility(InteractionPossibility.OPEN);
+					//System.out.println("Player has in sight!");
+				}else					
+				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.UNLOCK)) {
+					setInteractionGameObject(gameObject);
+					setInteractionPossibility(InteractionPossibility.UNLOCK);
 					//System.out.println("Player has in sight!");
 				}					
 				

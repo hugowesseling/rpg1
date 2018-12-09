@@ -15,7 +15,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	private static final int DEFAULT_RADIUS = 20; //18;
 	protected ObjectPosition position;
 	private ObjectAction action;
-	private Direction direction;
+	protected Direction direction;
 	private Int2d movement;
 	float health;
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
@@ -118,6 +118,10 @@ public class GameObject implements CharacterBehavior, Serializable
 	public StorableObjectType open() {
 		return null;
 	}
+	public boolean unlock(Player player, LevelState levelState) {
+		return false;
+	}
+
 	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
 		System.out.println("Writing position: "  + position + ", for name " + name);
 		oos.defaultWriteObject();

@@ -17,7 +17,7 @@ public class InventoryMenu {
 		for (Map.Entry<String, Integer> entry : inventory.entrySet())
 		{
 			StorableObjectType sot = StorableObjectType.allHashMap.get(entry.getKey());
-			graphics.drawImage(Resources.getTileImageFromIndex(sot.tileIndex), x + 20, yItem-10, null);
+			graphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(sot.itemTileIndex), x + 20, yItem-10, null);
 			graphics.drawString(entry.getKey() + ":" + entry.getValue(), x + 40, yItem);
 			yItem+=20;
 		} 

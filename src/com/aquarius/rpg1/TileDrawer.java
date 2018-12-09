@@ -5,7 +5,7 @@ import java.awt.Image;
 
 public class TileDrawer extends ObjectDrawer {
 	private static final long serialVersionUID = 5856422740357583069L;
-	private int tileIndex = 0;
+	int tileIndex = 0;
 	
 	
 	public TileDrawer(int tileIndex) {

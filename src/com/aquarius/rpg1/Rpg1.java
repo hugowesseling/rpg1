@@ -175,6 +175,7 @@ import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.Resources.CharacterCreatorFunction;
+import com.aquarius.rpg1.Resources.ObjectCreatorFunction;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
@@ -360,7 +361,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			public void mousePressed(MouseEvent mouseEvent) {
 
 				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
-				String[] objectSubClassesStrings = Resources.objectSubClasses.toArray(new String[Resources.objectSubClasses.size()]);
+				String[] objectSubClassesStrings = Resources.objectSubClasses.keySet().toArray(new String[Resources.objectSubClasses.size()]);
 				JComboBox<String> objectSubClassComboBox = new JComboBox<String>(objectSubClassesStrings);
 				TileIndexChoosingLabel imageChoosingLabel = new TileIndexChoosingLabel("image",  frame, null); 
 				Object objectSettings[] = {"Specify object settings", objectSubClassComboBox, imageChoosingLabel};
@@ -376,13 +377,10 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 
 				addObject = null;
 				int tileIndex = imageChoosingLabel.getTileIndex();
-				if(className.equals(TreasureObject.class.getSimpleName())) {
-					addObject = new TreasureObject(new TileDrawer(tileIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y));
-				} else if(className.equals(DoorwayObject.class.getSimpleName())) {
-					addObject = new DoorwayObject(new TileDrawer(tileIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState.getLevelPos());
-				} else if(className.equals(StorableObject.class.getSimpleName())) {
-					addObject = StorableObject.createStorableObject(new ObjectPosition(mouseLocation.x, mouseLocation.y));
-				} else{
+				if(Resources.objectSubClasses.containsKey(className)) {
+					ObjectCreatorFunction func = Resources.objectSubClasses.get(className);
+					addObject = func.create(new TileDrawer(tileIndex), new ObjectPosition(mouseLocation.x, mouseLocation.y), levelState);
+				} else {
 					System.err.println("Could not determine object sub class: " + className);
 				}
 				if(addObject != null)
@@ -526,14 +524,13 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				if(player.getInteractionGameObject() != null)
 				{
 					switch(player.getInteractionPossiblity()) {
-					case FIGHT:
-						break;
 					case OPEN:
 						StorableObjectType storableObjectType = player.getInteractionGameObject().open();
 						if(storableObjectType != null)
 							startPickupAnimation(storableObjectType);
 						break;
-					case PICKUP:
+					case UNLOCK:
+						player.getInteractionGameObject().unlock(player, levelState);
 						break;
 					case TALK:
 						startDialog(player.getInteractionGameObject());
@@ -575,7 +572,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private void startPickupAnimation(StorableObjectType storableObjectType) {
 		System.out.println("Starting pickup dialogue");
 		pickupStorableObjectType = storableObjectType;
-		player.inventory.add(pickupStorableObjectType.name);
+		player.inventory.add(pickupStorableObjectType.name, pickupStorableObjectType.amount);
 		AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\collect_item_05.wav", false);
 		
 		pickupTimer = 0;
@@ -638,7 +635,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			levelState.doActionsWeaponAndMovement(worldState);
 			
 			player.doActionAndWeapon(worldState, levelState);
-			player.determineTalkActionCharacter(levelState.allGameObjects);
+			player.determineInteractionGameObject(levelState.allGameObjects);
 			player.checkIfTouching(levelState);
 		}
 	}
@@ -659,7 +656,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(simulating) {
 			if(pickupStorableObjectType != null) {
 				System.out.println("Picking up item: " + pickupStorableObjectType.name + ":" + pickupTimer);
-				imageGraphics.drawImage(Resources.getTileImageFromIndex(pickupStorableObjectType.tileIndex), player.position.x - screenx - 8, player.position.y - screeny - pickupTimer - 30, null);
+				imageGraphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(pickupStorableObjectType.itemTileIndex), player.position.x - screenx - 8, player.position.y - screeny - pickupTimer - 30, null);
 				pickupTimer ++;
 				if(pickupTimer > 40) {
 					pickupStorableObjectType = null;

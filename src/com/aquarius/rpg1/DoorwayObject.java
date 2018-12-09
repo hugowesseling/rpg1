@@ -11,9 +11,16 @@ import javax.swing.JTextField;
 
 public class DoorwayObject extends GameObject {
 	private static final long serialVersionUID = 8928597995294293843L;
-	private String levelToLoad;
-	private Int2d entryPoint;
-	
+	protected String levelToLoad;
+	protected Int2d entryPoint;
+
+	public DoorwayObject(String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction,
+			String levelToLoad, Int2d entryPoint) {
+		super(name, objectDrawer, position, direction);
+		this.levelToLoad = levelToLoad;
+		this.entryPoint = entryPoint;
+	}
+
 	public DoorwayObject(TileDrawer tileDrawer, ObjectPosition position, Int2d levelpos){
 		super("doorway", tileDrawer, position, Direction.NORTH);
 		init();

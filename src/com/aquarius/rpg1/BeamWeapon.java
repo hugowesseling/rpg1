@@ -26,7 +26,7 @@ public class BeamWeapon extends Weapon {
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny) {
 		// TODO Auto-generated method stub
 		if(slashCounter < 8) {
-			Image swordimage = Resources.weaponTileSet.tiles[0][0];
+			Image swordimage = Resources.itemTileSet.tiles[7][107];
 			AffineTransform oldTransform = graphics.getTransform();
 			graphics.translate(user.position.x - screenx + user.getDirection().movement.x*2, user.position.y - screeny - 7 + user.getDirection().movement.y*4);
 			graphics.rotate(Math.toRadians(slashCounter * 20 + user.getDirection().degrees));
