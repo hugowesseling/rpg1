@@ -11,7 +11,8 @@ public class StorableObjectType implements Serializable{
 			new FoodObjectType("soup", 133385, 60),
 			new ValueObjectType("crystal", 5930, 100),
 			new RingObjectType("broccoli ring", 17678, ObjectColor.GREEN),
-			new UsableObjectType("Hammer", 2+101*256)
+			new UsableObjectType("Hammer", 2+101*256),
+			new StorableObjectType("Stone", 4+28*256)
 			};
 	public static transient HashMap<String, StorableObjectType> allHashMap;
 	

@@ -1,6 +1,7 @@
 package com.aquarius.rpg1.behavior.hateno;
 
 import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.LevelState;
@@ -25,7 +26,7 @@ public class ProximityRunCharacter extends GameObject
 	{
 		if(!(getAction() instanceof RunRandomlyAction)){
 			if(player.getPosition().isNearby(position, 70)) {
-				AudioSystemPlayer.playRandomChicken();
+				AudioSystemPlayer.playRandom(RandomSound.CHICKEN);
 				setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
 				setAction(new RunRandomlyAction(this, worldState, 5000, 3));
 				System.out.println("ProximityRunCharacter.think: Run!");

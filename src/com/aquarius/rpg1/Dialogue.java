@@ -2,6 +2,8 @@ package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
 
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+
 public class Dialogue {
 	DialogueBlock startDialogueBlock, currentDialogueBlock;
 	DialogStyle dialogStyle;
@@ -24,7 +26,7 @@ public class Dialogue {
 			return false;
 		}else {
 			currentDialogueBlock.doAction(levelState, player);
-			AudioSystemPlayer.playRandomExpression();
+			AudioSystemPlayer.playRandom(RandomSound.EXPRESSION);
 			return true;
 		}
 		

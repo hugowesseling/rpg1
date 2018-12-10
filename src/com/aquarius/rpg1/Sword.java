@@ -3,6 +3,8 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+
 public class Sword extends Weapon {
 
 	private GameObject user;
@@ -55,7 +57,7 @@ public class Sword extends Weapon {
 							System.out.println("Hitting character " + character.name);
 							for(int i=0;i<10;i++)
 								character.moveAndLevelCollide(levelState, vf.x * 2, vf.y * 2);
-							AudioSystemPlayer.playRandomImpact();
+							AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);
 						}
 					}
 				}

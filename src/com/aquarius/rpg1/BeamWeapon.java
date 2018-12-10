@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+
 public class BeamWeapon extends Weapon {
 
 	private GameObject user;
@@ -18,7 +20,7 @@ public class BeamWeapon extends Weapon {
 
 	@Override
 	public void startUse() {
-		AudioSystemPlayer.playRandomSwish();
+		AudioSystemPlayer.playRandom(RandomSound.SWISH);
 		slashCounter  = 0;
 	}
 
@@ -57,7 +59,7 @@ public class BeamWeapon extends Weapon {
 							System.out.println("Hitting character " + character.name);
 							for(int i=0;i<10;i++)
 								character.moveAndLevelCollide(levelState, vf.x * 2, vf.y * 2);
-							AudioSystemPlayer.playRandomImpact();
+							AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);
 						}
 					}
 				}

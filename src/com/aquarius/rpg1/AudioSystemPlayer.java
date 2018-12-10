@@ -15,6 +15,21 @@ public class AudioSystemPlayer {
 	public static final String AUDIO_FOLDER = "D:\\download\\humble_bundle\\gamedev\\sfx\\prosoundcollection_audio\\prosoundcollection\\Gamemaster Audio - Pro Sound Collection v1.3 - 16bit 48k\\";
 	public static HashMap<String, Clip> clips = new HashMap<>();
 	public static int lastPlayedRandomIndex = 0;
+	public enum RandomSound{
+		WHOOSH("Whooshes\\whoosh_low_deep_soft_",3), 
+		ROCK_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_rock_",8),
+		EXPRESSION("Voice\\Human Female A\\voice_female_a_expression_emote_",9),
+		CHICKEN("Animal_Impersonations\\chicken_2_bwak_",10),
+		SWISH("Whooshes\\whoosh_weapon_knife_swing_", 4),
+		FLESH_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_body_flesh_", 7);
+		
+		public String path;
+		public int count;
+		RandomSound(String path, int count){
+			this.path = path;
+			this.count = count;
+		}
+	}
 	
 	public static void playSound(String fileName, boolean looping) {
 		if(clips.get(fileName) != null) {
@@ -65,6 +80,14 @@ public class AudioSystemPlayer {
 		return randomIndex;
 	}
 	
+	public static void playRandom(RandomSound randomSound)
+	{
+		String audioFileName = String.format(AUDIO_FOLDER + randomSound.path + "%02d.wav",
+				newRandomIndex(randomSound.count));
+		playSound(audioFileName, false);		
+		
+	}
+	/*
 	public static void playRandomExpression() {
 		String audioFileName = String.format(AUDIO_FOLDER + "Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
 				newRandomIndex(9));
@@ -82,9 +105,16 @@ public class AudioSystemPlayer {
 		playSound(audioFileName, false);		
 				
 	}
+	public static void playRandomWhoosh() {
+		String audioFileName = String.format(AUDIO_FOLDER +"Whooshes\\whoosh_low_deep_soft_%02d.wav",
+				newRandomIndex(3));
+		playSound(audioFileName, false);		
+				
+	}
+	
 	public static void playRandomImpact() {
 		String audioFileName = String.format(AUDIO_FOLDER +"Guns_Weapons\\Bullets\\bullet_impact_body_flesh_%02d.wav",
 				newRandomIndex(7));
 		playSound(audioFileName, false);		
-	}
+	}*/
 }

@@ -265,4 +265,20 @@ public class LevelState {
 		return false;
 	}
 
+	public int getTopCollidingTileForXYChecked(int tileX, int tileY) {
+		// Returns the tileIndex of the top most colliding tile, if out of bounds or nothing is colliding, return -1
+		if(top_layer.collidesForCheckedXY(tileX, tileY))
+			return top_layer.getTile(tileX, tileY);
+		if(bottom_layer.collidesForCheckedXY(tileX, tileY))
+			return bottom_layer.getTile(tileX, tileY);
+		return -1;
+	}
+
+	public void replaceTopCollidingTileForXYChecked(int tileX, int tileY, int tileIndex) {
+		if(top_layer.collidesForCheckedXY(tileX, tileY))
+			top_layer.setTileIndexForCheckedXY(tileX, tileY, tileIndex);
+		if(bottom_layer.collidesForCheckedXY(tileX, tileY))
+			bottom_layer.setTileIndexForCheckedXY(tileX, tileY, tileIndex);
+	}
+
 }

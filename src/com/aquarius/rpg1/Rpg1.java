@@ -174,6 +174,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Resources.CharacterCreatorFunction;
 import com.aquarius.rpg1.Resources.ObjectCreatorFunction;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
@@ -543,7 +544,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 						break;
 					case TALK:
 						startDialog(player.getInteractionGameObject());
-						AudioSystemPlayer.playRandomExpression();
+						AudioSystemPlayer.playRandom(RandomSound.EXPRESSION);
 						break;
 					case TOUCH:
 						break;
@@ -555,6 +556,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}
 		}
 		if(keyCode == KeyEvent.VK_X) {
+			player.weapon = new BeamWeapon(player);
+			player.useWeapon();
+		}
+		if(keyCode == KeyEvent.VK_H) {
+			player.weapon = new Hammer(player);
 			player.useWeapon();
 		}
 		if(keyCode == KeyEvent.VK_S) {
