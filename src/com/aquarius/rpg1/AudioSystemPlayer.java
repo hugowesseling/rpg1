@@ -17,7 +17,9 @@ public class AudioSystemPlayer {
 	public static int lastPlayedRandomIndex = 0;
 	public enum RandomSound{
 		WHOOSH("Whooshes\\whoosh_low_deep_soft_",3), 
-		ROCK_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_rock_",8),
+		ROCK_IMPACT("Impacts_Smashable\\rock_impact_small_hit_",3),
+		ROCK_BREAK("Impacts_Smashable\\rock_smashable_hit_impact_large_", 3),
+		ROCK_HEAVY_SLAM("Impacts_Smashable\\rock_impact_heavy_slam_", 4),
 		EXPRESSION("Voice\\Human Female A\\voice_female_a_expression_emote_",9),
 		CHICKEN("Animal_Impersonations\\chicken_2_bwak_",10),
 		SWISH("Whooshes\\whoosh_weapon_knife_swing_", 4),

@@ -209,8 +209,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private InventoryMenu inventoryMenu;
 	private JFrame frame;
 	private GameObject addObject = null;
-	private StorableObjectType pickupStorableObjectType = null;
-	private int pickupTimer = 0;
 	public Rpg1()
 	{
 		deleteFilesInUserFolder();
@@ -536,8 +534,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					switch(player.getInteractionPossiblity()) {
 					case OPEN:
 						StorableObjectType storableObjectType = player.getInteractionGameObject().open();
-						if(storableObjectType != null)
-							startPickupAnimation(storableObjectType);
+						if(storableObjectType != null) {
+							player.startItemAbovePlayerAnimation(storableObjectType);
+							player.inventory.add(storableObjectType.name, storableObjectType.amount);
+							AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\collect_item_05.wav", false);
+						}
 						break;
 					case UNLOCK:
 						player.getInteractionGameObject().unlock(player, levelState);
@@ -583,14 +584,12 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(keyCode == KeyEvent.VK_I) {
 			showInventory = !showInventory;
 		}
-	}
-	private void startPickupAnimation(StorableObjectType storableObjectType) {
-		System.out.println("Starting pickup dialogue");
-		pickupStorableObjectType = storableObjectType;
-		player.inventory.add(pickupStorableObjectType.name, pickupStorableObjectType.amount);
-		AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\collect_item_05.wav", false);
-		
-		pickupTimer = 0;
+		if(keyCode == KeyEvent.VK_DELETE) {
+			if(addObject != null) {
+				levelState.allGameObjects.remove(addObject);
+				addObject = null;
+			}
+		}
 	}
 	private void startDialog(GameObject dialogueGameObject) {
 		System.out.println("Starting dialogue");
@@ -669,14 +668,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		editorState.drawMapSelection(imageGraphics, screenx, screeny);
 		
 		if(simulating) {
-			if(pickupStorableObjectType != null) {
-				System.out.println("Picking up item: " + pickupStorableObjectType.name + ":" + pickupTimer);
-				imageGraphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(pickupStorableObjectType.itemTileIndex), player.position.x - screenx - 8, player.position.y - screeny - pickupTimer - 30, null);
-				pickupTimer ++;
-				if(pickupTimer > 40) {
-					pickupStorableObjectType = null;
-				}
-			}else if(dialogue != null) {
+			if(dialogue != null) {
 				//System.out.println("Drawing dialogue");
 				dialogue.draw(imageGraphics, 
 						50, imageHeight-100, 
@@ -686,7 +678,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					imageGraphics.setColor(Color.BLUE);
 					imageGraphics.fillOval(imageWidth - 80,  10,  60, 40);
 					imageGraphics.setColor(Color.WHITE);
-					imageGraphics.drawString(player.getInteractionPossiblity().toString(), imageWidth - 60, 35);
+					String actionText = player.getInteractionPossiblity().toString();
+					int estimatedTextWidth = 4 * actionText.length();
+					imageGraphics.drawString(actionText, imageWidth - 50 - estimatedTextWidth, 35);
 				}
 			}
 			if(showInventory)

@@ -49,6 +49,8 @@ public class Hammer extends Weapon {
 			if(tileIndex == 68865) {
 				levelState.replaceTopCollidingTileForXYChecked(tileX, tileY, 68867);
 				levelState.replaceTopCollidingTileForXYChecked(tileX, tileY - 1, 68611);
+				AudioSystemPlayer.playRandom(RandomSound.ROCK_HEAVY_SLAM);
+				AudioSystemPlayer.playRandom(RandomSound.ROCK_BREAK);
 			}else
 			if(tileIndex != -1){
 				AudioSystemPlayer.playRandom(RandomSound.ROCK_IMPACT);
