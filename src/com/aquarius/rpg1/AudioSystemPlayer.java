@@ -23,7 +23,8 @@ public class AudioSystemPlayer {
 		EXPRESSION("Voice\\Human Female A\\voice_female_a_expression_emote_",9),
 		CHICKEN("Animal_Impersonations\\chicken_2_bwak_",10),
 		SWISH("Whooshes\\whoosh_weapon_knife_swing_", 4),
-		FLESH_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_body_flesh_", 7);
+		FLESH_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_body_flesh_", 7),
+		DOOR_LOCK_FAIL("Doors\\door_lock_fail_", 5);
 		
 		public String path;
 		public int count;

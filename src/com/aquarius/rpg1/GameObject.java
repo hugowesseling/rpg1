@@ -50,13 +50,16 @@ public class GameObject implements CharacterBehavior, Serializable
 		return interactionPossibilities;
 	}
 
-	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny)
+	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny, boolean simulating)
 	{
 		if(weapon != null && (direction == Direction.NORTH || direction == Direction.WEST)) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}
 		objectDrawer.draw(graphics, position.x - screenx, position.y - screeny, direction, frameCounter / frameDivider );
-		graphics.drawRect(position.x - screenx, position.y - screeny, 0, 0);
+		if(!simulating) {
+			graphics.drawRect(position.x - screenx, position.y - screeny, 0, 0);
+			graphics.drawRect(position.x - screenx - 8, position.y - screeny - 8, 16,16);
+		}
 		if(weapon != null && !(direction == Direction.NORTH || direction == Direction.WEST)) {
 			weapon.draw(graphics,frameCounter, screenx, screeny);
 		}

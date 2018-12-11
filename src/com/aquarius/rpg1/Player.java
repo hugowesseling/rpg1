@@ -15,7 +15,6 @@ public class Player extends GameObject {
 		super("player", objectDrawer, position, direction);
 		weapon = new BeamWeapon(this);
 		inventory = new Bag<>();
-		inventory.add("broccoli ring");
 	}
 	public GameObject getInteractionGameObject() {
 		return interactionGameObject;
@@ -79,8 +78,8 @@ public class Player extends GameObject {
 		itemAbovePlayerTimer = 0;
 	}
 	@Override
-	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny) {
-		super.draw(graphics, frameCounter, screenx, screeny);
+	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny, boolean simulating) {
+		super.draw(graphics, frameCounter, screenx, screeny, simulating);
 		if(itemAbovePlayerStorableObjectType != null) {
 			System.out.println("Showing item above: " + itemAbovePlayerStorableObjectType.name + ":" + itemAbovePlayerTimer);
 			graphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(itemAbovePlayerStorableObjectType.itemTileIndex), position.x - screenx - 8, position.y - screeny - itemAbovePlayerTimer - 30, null);

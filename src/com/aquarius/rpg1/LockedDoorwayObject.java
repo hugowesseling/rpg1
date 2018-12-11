@@ -7,6 +7,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+
 public class LockedDoorwayObject extends DoorwayObject {
 	private static final long serialVersionUID = -2825870237300156872L;
 	public StorableObjectType storableObjectType;
@@ -44,6 +46,7 @@ public class LockedDoorwayObject extends DoorwayObject {
 			return true;
 		}
 		System.out.println("Player does not have the " + storableObjectType.name);
+		AudioSystemPlayer.playRandom(RandomSound.DOOR_LOCK_FAIL);
 		return false;
 	}
 

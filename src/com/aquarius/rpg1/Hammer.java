@@ -46,14 +46,22 @@ public class Hammer extends Weapon {
 			int tileY = ObjectPosition.getYTileFromY(user.position.y + user.direction.movement.y*16);
 			int tileIndex = levelState.getTopCollidingTileForXYChecked(tileX, tileY);
 			System.out.println("Hammer hits " + tileIndex);
-			if(tileIndex == 68865) {
-				levelState.replaceTopCollidingTileForXYChecked(tileX, tileY, 68867);
-				levelState.replaceTopCollidingTileForXYChecked(tileX, tileY - 1, 68611);
-				AudioSystemPlayer.playRandom(RandomSound.ROCK_HEAVY_SLAM);
-				AudioSystemPlayer.playRandom(RandomSound.ROCK_BREAK);
-			}else
 			if(tileIndex != -1){
-				AudioSystemPlayer.playRandom(RandomSound.ROCK_IMPACT);
+				//Check if there is a DoorWayObject one tile above (x,y-1)
+				boolean foundDoorway = false;
+				for(GameObject gameObject: levelState.allGameObjects) {
+					if(gameObject instanceof DoorwayObject) {
+						if(gameObject.position.getXTile() == tileX && gameObject.position.getYTile() == tileY - 1) {
+							levelState.replaceTopCollidingTileForXYChecked(tileX, tileY, 68867);
+							levelState.replaceTopCollidingTileForXYChecked(tileX, tileY - 1, 68611);
+							AudioSystemPlayer.playRandom(RandomSound.ROCK_HEAVY_SLAM);
+							AudioSystemPlayer.playRandom(RandomSound.ROCK_BREAK);
+							foundDoorway = true;
+						}
+					}
+				}
+				if(!foundDoorway)
+					AudioSystemPlayer.playRandom(RandomSound.ROCK_IMPACT);
 			}
 
 		}

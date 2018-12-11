@@ -89,10 +89,10 @@ public class LevelState {
 		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_LOW);
 		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
 		for(GameObject gameCharacter: allGameObjects){
-			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny);
+			gameCharacter.draw(imageGraphics, frameCounter, screenx, screeny, simulating);
 		}
 		if(simulating)
-			player.draw(imageGraphics, frameCounter, screenx, screeny);
+			player.draw(imageGraphics, frameCounter, screenx, screeny, simulating);
 		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_HIGH);
 	}
 

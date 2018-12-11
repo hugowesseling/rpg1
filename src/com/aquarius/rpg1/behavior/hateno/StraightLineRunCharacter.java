@@ -23,11 +23,28 @@ public class StraightLineRunCharacter extends GameObject
 	{
 		if(!(getAction() instanceof RunUntilWallAction)){
 			if(player.getPosition().isOnStraightLine(position, 16)) {
-				setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
-				setDirection(position.getDirectionTo(player.getPosition()));
-				setAction(new RunUntilWallAction(this, 4));
-				System.out.println("StraightLineRunCharacter.think: Run!");
-				return;
+				//Check if the straight path is not blocked
+				int x = position.getXTile(), y = position.getYTile();
+				int endx = player.getPosition().getXTile(), endy = player.getPosition().getYTile();
+				Direction directionToPlayer = position.getDirectionTo(player.getPosition());
+				boolean blocked = false;
+				while((x != endx || directionToPlayer.movement.x == 0) && 
+					  (y != endy || directionToPlayer.movement.y == 0))
+				{
+					if(levelState.collidesTilePosition(x, y)) {
+						blocked = true;
+						break;
+					}
+					x+=directionToPlayer.movement.x;
+					y+=directionToPlayer.movement.y;
+				}
+				if(!blocked) {
+					setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
+					setDirection(directionToPlayer );
+					setAction(new RunUntilWallAction(this, 4));
+					System.out.println("StraightLineRunCharacter.think: Run!");
+					return;
+				}
 			}
 		}
 		if(getAction() == null)	{
