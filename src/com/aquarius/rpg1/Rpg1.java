@@ -34,10 +34,10 @@ Minimal additions:
 	- you get the ring and bring it back to person in village,that gives you soup in his house (his mother's recipe)
 
 	*Needed additions:
-	TODO: Running, hiding, following behavior
+	TODO: hiding, following behavior
 	DONE: Entering house
-	TODO: Object storage, behavior and pickup
-	TODO: Dialogue based on stored object
+	DONE: Object storage, behavior and pickup
+	DONE: Dialogue based on stored object
 	TODO: Worldstate containing everything including player?
 
 Then:

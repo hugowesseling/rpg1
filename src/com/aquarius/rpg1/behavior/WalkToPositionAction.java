@@ -14,21 +14,24 @@ public class WalkToPositionAction implements ObjectAction, Serializable {
 	private static final long serialVersionUID = 5956310423103168473L;
 	private ObjectPosition toPosition;
 	private GameObject character;
+	private int runTimeMs;
+	private long startTime;
 
-	public WalkToPositionAction(GameObject character, ObjectPosition position) {
+	public WalkToPositionAction(GameObject character, WorldState worldState, ObjectPosition position, int runTimeMs) {
 		toPosition = position;
 		this.character = character;
+		this.runTimeMs = runTimeMs;
+		startTime = worldState.getTimeMs();
 	}
 
 	@Override
 	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toPosition);
 		character.setDirection(direction);
-		character.setMovement(direction.movement);		
+		character.moveAndLevelCollide(levelState, direction.movement.x, direction.movement.y);
 		boolean isDone = character.getPosition().isNearby(toPosition, 1);
-		if(isDone) {
-			character.setMovement(new Int2d(0,0));
-		}
+		if(runTimeMs > 0)
+			return isDone || worldState.getTimeMs() > startTime + runTimeMs;
 		return isDone;
 	}
 

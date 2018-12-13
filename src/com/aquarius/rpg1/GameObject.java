@@ -16,7 +16,6 @@ public class GameObject implements CharacterBehavior, Serializable
 	protected ObjectPosition position;
 	private ObjectAction action;
 	protected Direction direction;
-	private Int2d movement;
 	float health;
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
 	protected String name;
@@ -32,7 +31,6 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.position = position;
 		this.direction = direction;
 		this.action = null;
-		this.movement = new Int2d(0,0);
 		this.health = 0;
 		frameDivider = FRAME_DIVIDER_DEFAULT;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
@@ -83,14 +81,6 @@ public class GameObject implements CharacterBehavior, Serializable
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
-	}
-
-	public void setMovement(Int2d movement) {
-		this.movement = movement;
-	}
-
-	private void doMovement(LevelState levelState) {
-		moveAndLevelCollide(levelState, movement.x, movement.y);
 	}
 	
 	public void doActionAndWeapon(WorldState worldState, LevelState levelState) {
@@ -214,5 +204,9 @@ public class GameObject implements CharacterBehavior, Serializable
 	public void setFrameDivider(int frameDivider) {
 		this.frameDivider = frameDivider; 
 		
+	}
+
+	public String getName() {
+		return name;
 	}
 }

@@ -281,4 +281,12 @@ public class LevelState {
 			bottom_layer.setTileIndexForCheckedXY(tileX, tileY, tileIndex);
 	}
 
+	public Int2d findHidingPlace(ObjectPosition position, int radius) {
+		// returns null if nothing found
+		int tileX = position.getXTile(), tileY = position.getYTile();
+		// get all hiding places and find closest
+		Int2d tilePosition = top_layer.findClosestCollisionLayerHeight(tileX, tileY, false, true);
+		return tilePosition;
+	}
+
 }

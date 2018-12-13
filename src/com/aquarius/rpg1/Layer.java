@@ -257,5 +257,27 @@ public class Layer {
 		initAndUpdateImagesCollisionsLayerHeights();
 	}
 
+	public Int2d findClosestCollisionLayerHeight(int tileX, int tileY, boolean colliding, boolean layerHeight) {
+		int closestDistance = tiles.length + tiles[0].length;
+		int distance;
+		boolean found = false;
+		Int2d closestPosition = new Int2d(0,0); 
+		for(int x=0;x<tiles.length;x++)
+			for(int y=0;y<tiles[0].length;y++) {
+				if(collisions[x][y] == colliding && layerHeights[x][y] == layerHeight) {
+					distance = Math.abs(tileX - x) + Math.abs(tileY - y); 
+					if(distance < closestDistance) {
+						closestDistance = distance;
+						closestPosition.x = x;
+						closestPosition.y = y;
+						found = true;
+					}
+				}
+			}
+		if(found)
+			return closestPosition;
+		return null;
+	}
+
 
 }

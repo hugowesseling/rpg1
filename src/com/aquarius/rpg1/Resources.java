@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
+import com.aquarius.rpg1.behavior.hateno.HidingCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
@@ -54,7 +55,8 @@ public class Resources {
 		addCharacterSubClass("RunningCharacter", (drawer, pos, dir) -> {return new RunningCharacter(drawer, pos, dir);});
 		addCharacterSubClass("ProximityRunCharacter", (drawer, pos, dir) -> {return new ProximityRunCharacter(drawer, pos, dir);});
 		addCharacterSubClass("StraightLineRunCharacter", (drawer, pos, dir) -> {return new StraightLineRunCharacter(drawer, pos, dir);});
-		
+		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});		
+
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});
 		addObjectSubClass("DoorwayObject", (drawer, pos, state) -> {return new DoorwayObject(drawer, pos, state.getLevelPos());});
 		addObjectSubClass("LockedDoorwayObject", (drawer, pos, state) -> {return new LockedDoorwayObject(drawer, pos, state.getLevelPos());});

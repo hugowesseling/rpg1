@@ -33,4 +33,8 @@ public class Int2d implements Position, Serializable
 	public Int2d rotate90() {
 		return new Int2d(y, -x);
 	}
+
+	public boolean is(Int2d pos) {
+		return pos.x == x && pos.y == y;
+	}
 }

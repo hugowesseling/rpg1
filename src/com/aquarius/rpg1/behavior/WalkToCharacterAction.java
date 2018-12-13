@@ -27,13 +27,11 @@ public class WalkToCharacterAction implements ObjectAction, Serializable{
 	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toCharacter.getPosition());
 		character.setDirection(direction);
-		character.setMovement(direction.movement);
+		character.moveAndLevelCollide(levelState, direction.movement.x, direction.movement.y);
+		
 		
 		int distance = toCharacter.getPosition().distanceTo(character.getPosition());
 		boolean isDone = (distance < mindistance) || (distance > maxdistance);
-		if(isDone) {
-			character.setMovement(new Int2d(0,0));
-		}
 		return isDone;
 	}
 

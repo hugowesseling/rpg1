@@ -66,7 +66,7 @@ public class HenryCharacter extends GameObject
 		if(getAction() == null)	{
 			Int2d treePosition = levelState.findRandomPositionInNeighborhood(TileObjectIndex.TREE1, position.tileAsInt2d(), 10);
 			if(treePosition != null) {
-				setAction(new WalkToTilePositionAction(this, treePosition));
+				setAction(new WalkToTilePositionAction(this, worldState, treePosition, 0));
 				System.out.println("HenryCharacter.think: WalkToPositionAction");
 			}else {
 				setAction(new WaitAction(worldState, STANDINGAROUND_DURATION));
