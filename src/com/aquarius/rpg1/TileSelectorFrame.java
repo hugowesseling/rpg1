@@ -35,7 +35,7 @@ Things that belong together:
 public class TileSelectorFrame extends Component implements MouseListener, MouseMotionListener
 {
 	private enum EditMode {
-	    SELECT_TILES, TILE_PATTERN_SELECTION, TILE_PATTERN_EDIT, TILE_PATTERN_COLORING, TILE_COLLISION_EDIT, LAYER_HEIGHT_EDIT 
+	    SELECT_TILES, TILE_PATTERN_SELECTION, TILE_PATTERN_EDIT, TILE_PATTERN_COLORING, TILE_COLLISION_EDIT, LAYER_HEIGHT_EDIT, TILE_COVER_EDIT 
 	}
 	private static final long serialVersionUID = 1L;
 	private int imageWidth;
@@ -130,6 +130,24 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	          });
 		menuBar.add(collisionSwitchMenu);
 
+		JMenu coverSwitchMenu = new JMenu("Cover");
+		//collisionSwitchMenu.setIcon(new ImageIcon("red_square_icon.png"));
+		coverSwitchMenu.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				  if(editMode != EditMode.TILE_COVER_EDIT)
+				  {
+					  editMode = EditMode.TILE_COVER_EDIT;
+				  }else
+				  if(editMode == EditMode.TILE_COVER_EDIT)
+				  {
+					  editMode = EditMode.SELECT_TILES;
+				  }
+	        	  System.out.println("tileSelectionModeActive: " + editMode);
+	        	  redrawNeeded = true;
+	            } 
+	          });
+		menuBar.add(coverSwitchMenu);
+
 		JMenu layerSwitchMenu = new JMenu("Layer");
 		//layerSwitchMenu .setIcon(new ImageIcon("red_square_icon.png"));
 		layerSwitchMenu .addMouseListener(new MouseAdapter() { 
@@ -190,20 +208,34 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					if(x >= 0 && x< currentTileSet.tiles.length)
 					{
 						imageG.drawImage(currentTileSet.tiles[x][y], x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, null);
-						if(editMode == EditMode.TILE_PATTERN_SELECTION)
-						{
-							imageG.setColor(Color.GRAY);
-							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
-						}else
-						if(editMode == EditMode.TILE_COLLISION_EDIT)
-						{
-							imageG.setColor(currentTileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
-							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
-						}else
-						if(editMode == EditMode.LAYER_HEIGHT_EDIT)
-						{
+						switch(editMode) {
+						case LAYER_HEIGHT_EDIT:
 							imageG.setColor(currentTileSet.layerHeight[x][y] ? Color.BLUE : Color.ORANGE);
 							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+							break;
+						case SELECT_TILES:
+							break;
+						case TILE_COLLISION_EDIT:
+							imageG.setColor(currentTileSet.tileCollision[x][y] ? Color.RED : Color.GREEN);
+							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+							break;
+						case TILE_COVER_EDIT:
+							int coverage = currentTileSet.getCoverageForUncheckedXY(x,y);
+							if(coverage<0)coverage = 0;
+							if(coverage>255)coverage = 255;
+							imageG.setColor(new Color(coverage, 255-coverage,0));
+							imageG.fillRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+							break;
+						case TILE_PATTERN_COLORING:
+							break;
+						case TILE_PATTERN_EDIT:
+							break;
+						case TILE_PATTERN_SELECTION:
+							imageG.setColor(Color.GRAY);
+							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
+							break;
+						default:
+							break;
 						}
 					}
 				}

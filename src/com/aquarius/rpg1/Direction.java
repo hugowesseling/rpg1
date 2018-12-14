@@ -27,26 +27,28 @@ public enum Direction {
 
 	public static Direction getDirectionFromTo(Position from, Position to)
 	{
-		int distY = to.getY() - from.getY(); 
-		int distX = to.getX() - from.getX();
-		if(Math.abs(distX) > Math.abs(distY))
-		{
-			if(distX>0){
+		int dx = to.getX() - from.getX(), dy = to.getY() - from.getY();
+		if(dx > dy){ // NE
+			if(dx > -dy)
 				return Direction.EAST;
-			}else{
-				return Direction.WEST;
-			}
-		}else
-		{
-			if(distY>0) {
-				return Direction.SOUTH;
-			}else{
+			else
 				return Direction.NORTH;
-			}			
-		}
+		}else {//SW
+			if(dx > -dy)
+				return Direction.SOUTH;
+			else
+				return Direction.WEST;
+		}		
+		
 	}
 	public static Direction random() {
 		int random = (int )(Math.random() * Direction.values().length);
 		return Direction.values()[random];
+	}
+
+	public static Int2d getMovementFromTo(Position from, Position to) {
+		int distY = to.getY() - from.getY(); 
+		int distX = to.getX() - from.getX();
+		return new Int2d(Integer.signum(distX),Integer.signum(distY));
 	}
 }

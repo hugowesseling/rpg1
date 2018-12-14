@@ -62,7 +62,7 @@ public class ObjectPosition implements Position, Serializable {
 	}
 
 	public static ObjectPosition createFromTilePosition(Int2d tilePosition) {
-		return new ObjectPosition(tilePosition.x * Constant.TILE_WIDTH, tilePosition.y * Constant.TILE_HEIGHT);
+		return new ObjectPosition(tilePosition.x * Constant.TILE_WIDTH + 8, tilePosition.y * Constant.TILE_HEIGHT + 6);
 	}
 
 	public void focusScreen(Int2d screen){

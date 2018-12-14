@@ -102,6 +102,12 @@ public class Resources {
 	public static boolean getLayerHeightFromIndex(int i) {
 		return levelTileSets[i / 65536].getLayerHeightFromIndex(i % 65536);
 	}
+
+	public static int getCoverageFromIndex(int i) {
+		return levelTileSets[i / 65536].getCoverageFromIndex(i % 65536);
+
+	}
+
 	public static String[] getTileSetNames() {
 		String[] names = new String[levelTileSets.length];
 		int index = 0;
@@ -122,6 +128,7 @@ public class Resources {
 		LevelState levelState = new LevelState(new Layer(width, height), new Layer(width, height));
 		levelState.saveToFile(fileName);
 	}
+
 
 
 }

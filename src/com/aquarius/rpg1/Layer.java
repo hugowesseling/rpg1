@@ -19,6 +19,7 @@ public class Layer {
 	private Image[][] images;
 	private boolean[][] collisions;
 	private boolean[][] layerHeights;
+	private int[][] coverages;
 	
 	public Layer(int width, int height)
 	{
@@ -31,22 +32,24 @@ public class Layer {
 		images = new Image[width][height];
 		collisions = new boolean[width][height];
 		layerHeights = new boolean[width][height];
-		updateImagesCollisionsLayerHeights();
+		coverages = new int[width][height];
+		updateImagesCollisionsLayerHeightsCoverage();
 	}
 
-	private void updateImagesCollisionsLayerHeights() {
+	private void updateImagesCollisionsLayerHeightsCoverage() {
 		System.out.println("updateImagesCollisionsLayerHeights()");
 		for(int x=0;x<tiles.length;x++) {
 			for(int y=0;y<tiles[0].length;y++) {
-				updateImageCollisionLayerHeightForUncheckedXY(x, y);
+				updateImageCollisionLayerHeightCoverageForUncheckedXY(x, y);
 			}
 		}
 	}
 
-	private void updateImageCollisionLayerHeightForUncheckedXY(int x, int y) {
+	private void updateImageCollisionLayerHeightCoverageForUncheckedXY(int x, int y) {
 		updateImageForUnCheckedXY(x, y);
 		updateCollisionsForUncheckedXY(x, y);
 		updateLayerHeightsForUncheckedXY(x, y);
+		updateCoverageForUncheckedXY(x, y);
 	}
 	
 	private void updateLayerHeightsForUncheckedXY(int x, int y) {
@@ -57,9 +60,15 @@ public class Layer {
 		collisions[x][y] = Resources.getTileCollisionFromIndex(tiles[x][y]);
 	}
 
+	private void updateCoverageForUncheckedXY(int x, int y) {
+		coverages[x][y] = Resources.getCoverageFromIndex(tiles[x][y]);
+	}
+
 	private void updateImageForUnCheckedXY(int x, int y) {
 		images[x][y] = Resources.getTileImageFromIndex(tiles[x][y]);
 	}
+
+
 
 	public void drawLayer(Graphics2D graphics, int imageWidth, int imageHeight, int screenx, int screeny, boolean animate, int draw_low_high)
 	{
@@ -121,7 +130,7 @@ public class Layer {
 			{
 				//System.out.println("Setting tile " + tileX + "," + tileY + " to " + tile);
 				tiles[tileX][tileY] = tileIndex;
-				updateImageCollisionLayerHeightForUncheckedXY(tileX, tileY);
+				updateImageCollisionLayerHeightCoverageForUncheckedXY(tileX, tileY);
 			}
 	}
 
@@ -142,7 +151,7 @@ public class Layer {
 		for(int x=0;x<tiles.length;x++)
 			for(int y=0;y<tiles[0].length;y++)
 				tiles[x][y] = tileIndex;
-		updateImagesCollisionsLayerHeights();
+		updateImagesCollisionsLayerHeightsCoverage();
 	}
 	
 
@@ -276,6 +285,40 @@ public class Layer {
 			}
 		if(found)
 			return closestPosition;
+		return null;
+	}
+
+	public Int2d findBestCoverage(int tileX, int tileY, int range, boolean doubleHeight) {
+		int xmin = tileX - range, xmax = tileX + range;
+		int ymin = tileY - range, ymax = tileY + range;
+		if(xmin<0)xmin=0;
+		if(ymin<0)ymin=0;
+		if(doubleHeight)
+			if(ymin<1)ymin=1;
+
+		if(xmax>tiles.length)xmax=tiles.length;
+		if(ymax>tiles[0].length)ymax=tiles.length;
+
+		int maxCoverage = 0;
+		int coverage;
+		boolean found = false;
+		Int2d maxCoveragePosition = new Int2d(0,0); 
+		for(int x=xmin;x<xmax;x++)
+			for(int y=ymin;y<ymax;y++) {
+				if((!collisions[x][y]) && layerHeights[x][y]) {
+					coverage = coverages[x][y] - (Math.abs(x-tileX) + Math.abs(y-tileY)) * 10;
+					if(doubleHeight)
+						coverage += coverages[x][y-1];
+					if(coverage>maxCoverage) {
+						maxCoverage = coverage;
+						found = true;
+						maxCoveragePosition.x = x;
+						maxCoveragePosition.y = y;
+					}
+				}
+			}
+		if(found)
+			return maxCoveragePosition;
 		return null;
 	}
 

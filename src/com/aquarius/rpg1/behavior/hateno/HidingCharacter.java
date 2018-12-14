@@ -10,7 +10,6 @@ import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.RunRandomlyAction;
 import com.aquarius.rpg1.behavior.WalkToPositionAction;
-import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
 
 public class HidingCharacter extends GameObject
 {
@@ -28,26 +27,26 @@ public class HidingCharacter extends GameObject
 	public void think(Player player, WorldState worldState, LevelState levelState)
 	{
 		if(getAction() == null) {
-			System.out.println("HidingCharacter: Choosing new action");
+			//System.out.println("HidingCharacter: Choosing new action");
 			if(player.getPosition().distanceTo(this.position) < 100) {
 				// Hide behind higher layer object
-				Int2d hidingPosition = levelState.findHidingPlace(position, 32);
+				Int2d hidingPosition = levelState.findHidingPlace(position, 32, true);
 				if(hidingPosition != null) {
 					System.out.println("HidingCharacter: Hiding to " + hidingPosition);
-					setAction(new WalkToTilePositionAction(this, worldState, hidingPosition, 5000));
+					setAction(new WalkToPositionAction(this, worldState, hidingPosition, 5000, 2));
 				}
 			}else {
 				// Look around a bit and sometimes walk a bit
 				counter ++;
-				if(counter > 4) {
+				if(worldState.timeMs > waitUntil){
+					//System.out.println("HidingCharacter: Running randomly");
+					// Walk in current direction
+					waitUntil = worldState.timeMs + 1000; // Wait 5 seconds
+					setAction(new RunRandomlyAction(this, worldState, 100, 2));
+				}else
+				if(counter > 3) {
 					setDirection(Direction.random());
 					counter = 0;
-				}
-				if(worldState.timeMs > waitUntil){
-					System.out.println("HidingCharacter: Running randomly");
-					// Walk in current direction
-					waitUntil = worldState.timeMs + 5000; // Wait 5 seconds
-					setAction(new RunRandomlyAction(this, worldState, 500, 2));
 				}
 			}
 		}

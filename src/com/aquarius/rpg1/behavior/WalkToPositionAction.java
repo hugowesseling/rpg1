@@ -16,11 +16,17 @@ public class WalkToPositionAction implements ObjectAction, Serializable {
 	private GameObject character;
 	private int runTimeMs;
 	private long startTime;
+	private int speed;
 
-	public WalkToPositionAction(GameObject character, WorldState worldState, ObjectPosition position, int runTimeMs) {
+	public WalkToPositionAction(GameObject character, WorldState worldState, Int2d tilePosition, int runTimeMs, int speed) {
+		this(character, worldState, ObjectPosition.createFromTilePosition(tilePosition), runTimeMs, speed);
+		
+	}
+	public WalkToPositionAction(GameObject character, WorldState worldState, ObjectPosition position, int runTimeMs, int speed) {
 		toPosition = position;
 		this.character = character;
 		this.runTimeMs = runTimeMs;
+		this.speed = speed;
 		startTime = worldState.getTimeMs();
 	}
 
@@ -28,7 +34,8 @@ public class WalkToPositionAction implements ObjectAction, Serializable {
 	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toPosition);
 		character.setDirection(direction);
-		character.moveAndLevelCollide(levelState, direction.movement.x, direction.movement.y);
+		Int2d movement = Direction.getMovementFromTo(character.getPosition(), toPosition);
+		character.moveAndLevelCollide(levelState, movement.x * speed, movement.y * speed);
 		boolean isDone = character.getPosition().isNearby(toPosition, 1);
 		if(runTimeMs > 0)
 			return isDone || worldState.getTimeMs() > startTime + runTimeMs;

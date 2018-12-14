@@ -17,7 +17,7 @@ import com.aquarius.rpg1.TileObjectIndex;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
-import com.aquarius.rpg1.behavior.WalkToTilePositionAction;
+import com.aquarius.rpg1.behavior.WalkToPositionAction;
 
 public class HenryCharacter extends GameObject
 {
@@ -66,7 +66,7 @@ public class HenryCharacter extends GameObject
 		if(getAction() == null)	{
 			Int2d treePosition = levelState.findRandomPositionInNeighborhood(TileObjectIndex.TREE1, position.tileAsInt2d(), 10);
 			if(treePosition != null) {
-				setAction(new WalkToTilePositionAction(this, worldState, treePosition, 0));
+				setAction(new WalkToPositionAction(this, worldState, treePosition, 0, 1));
 				System.out.println("HenryCharacter.think: WalkToPositionAction");
 			}else {
 				setAction(new WaitAction(worldState, STANDINGAROUND_DURATION));

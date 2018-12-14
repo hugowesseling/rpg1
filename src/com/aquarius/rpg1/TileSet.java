@@ -2,6 +2,8 @@ package com.aquarius.rpg1;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +19,7 @@ public class TileSet
 	public BufferedImage[][] tiles;
     boolean[][] tileCollision;
 	boolean[][] layerHeight;
+	int[][] coverage;
 
 	public String fileName;
 	public int index;
@@ -33,11 +36,14 @@ public class TileSet
 		tiles = Art.split(Art.load(fileName), tileWidth, tileHeight, marginWidth, marginHeight);
 		tileCollision = new boolean[tiles.length][tiles[0].length];
 		layerHeight = new boolean[tiles.length][tiles[0].length];
+		coverage = new int[tiles.length][tiles[0].length];
+		determineCoverageForAll();
 		if(this.hasTilePattern) {
 			loadTilePattern();
 		}
 	}
 	
+
 	public void saveTileSetData()
 	{
 		if(!hasTilePattern)
@@ -165,5 +171,41 @@ public class TileSet
 			return tiles[x][y];
 		return tiles[0][0];
 	}
+
+	public int getCoverageFromIndex(int i) {
+		int y = (i / 256) % 256;
+		int x = i % 256;
+		return getCoverageForCheckedXY(x, y);
+	}
+
+	private int getCoverageForCheckedXY(int x, int y) {
+		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
+			return coverage[x][y];
+		return 0;
+	}
+
+	public int getCoverageForUncheckedXY(int x, int y) {
+		return coverage[x][y];
+	}
+
+	private static int determineCoverage(BufferedImage image) {
+		final int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+        int alphaCount = 0;
+        for(int pixel:pixels) {
+            if( (pixel & 0xff) != 0) alphaCount ++;
+		}
+		return alphaCount;
+	}
+	private void determineCoverageForAll() {
+
+		for(int x=0 ; x< tiles.length ; x++) {
+			for(int y =0; y<tiles[0].length; y++) {
+				//System.out.println("Coverage for: "+x+","+y);
+				coverage[x][y] = determineCoverage(tiles[x][y]);
+			}
+		}
+	}
+
+
 
 }
