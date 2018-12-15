@@ -220,16 +220,13 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		input=new com.aquarius.common2dgraphics.util.Input();
 		dialogue = null;
 		inventoryMenu = new InventoryMenu(Resources.dialogStyles.get(1));
-		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
-		levelState.setLevelPos(new Int2d(500,500));
 		tileSelectorFrame = new TileSelectorFrame("TileSet", editorState);
-
-		// Load level at beginning location
-		levelState.loadLevelByPosition();
+		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
+		player = new Player(new CharacterDrawer(0), new ObjectPosition(0,0), Direction.SOUTH);
+		player.setBeginPosition(levelState);
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses.keySet()));
 		
-		player = new Player(new CharacterDrawer(0), ObjectPosition.createFromTilePosition(new Int2d(13, 30)), Direction.SOUTH);
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		worldState = new WorldState();
@@ -701,12 +698,13 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	
 	private void drawHUD(Graphics2D graphics, Player player) {
 		int currentHeartPos = 20;
-		for(int i=1;i<player.health;i++) {
+		for(int i=3;i<player.health;i+=4) {
 			graphics.drawImage(Resources.heartTileSet.tiles[0][10], currentHeartPos , 20 ,null);
 			currentHeartPos+=14;
 		}
-		int lastHeart = (int)((player.health -(int)player.health) *4); // = 0..3
-		graphics.drawImage(Resources.heartTileSet.tiles[0][14 - lastHeart], currentHeartPos , 20 ,null);
+		int lastHeart = player.health % 4; // = 0..3
+		if(lastHeart>0)
+			graphics.drawImage(Resources.heartTileSet.tiles[0][14 - lastHeart], currentHeartPos , 20 ,null);
 			
 	}
 	private void inputPlayerMovement() {
@@ -745,7 +743,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				bouncedx += bounce.x;
 				bouncedy += bounce.y;
 				bouncecount ++;
-				player.health-=0.25;
+				player.getDamage(levelState,1);
 			}
 		}
 		if(bouncecount != 0)

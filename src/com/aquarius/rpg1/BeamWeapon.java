@@ -59,7 +59,7 @@ public class BeamWeapon extends Weapon {
 							System.out.println("Hitting character " + character.name);
 							for(int i=0;i<10;i++)
 								character.moveAndLevelCollide(levelState, vf.x * 2, vf.y * 2);
-							AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);
+							character.getDamage(levelState, 5);
 						}
 					}
 				}

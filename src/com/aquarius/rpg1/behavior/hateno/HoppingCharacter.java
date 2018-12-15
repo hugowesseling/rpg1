@@ -1,7 +1,5 @@
 package com.aquarius.rpg1.behavior.hateno;
 
-import java.util.HashSet;
-
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.LevelState;
@@ -19,7 +17,7 @@ public class HoppingCharacter extends GameObject {
 	@Override
 	public void think(Player player, WorldState worldState, LevelState levelState){
 		if(getAction() == null){
-			setAction(new HopRandomlyAction(this, worldState, 2));
+			setAction(new HopRandomlyAction(this, worldState, 0));
 		}
 	}
 

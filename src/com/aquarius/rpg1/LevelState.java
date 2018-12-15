@@ -105,9 +105,15 @@ public class LevelState {
 	}
 	public void think(Player player, WorldState worldState) {
 		// Do actions and movement
+		Vector<GameObject> newGameObjects = new Vector<>();
 		for(GameObject gameCharacter: allGameObjects) {
 			gameCharacter.think(player, worldState, this);
+			//Remove everything with zero or less health
+			if(gameCharacter.health > 0)
+				newGameObjects.add(gameCharacter);
 		}
+		player.think(player, worldState, this);
+		allGameObjects = newGameObjects;
 	}
 
 	public void writeToFileOutputStream(FileOutputStream fileOutputStream) {
@@ -159,7 +165,7 @@ public class LevelState {
 		AudioSystemPlayer.stopAll();
 		String backgroundFileNameToPlay = levelKeyValues.get(Resources.PARAM_BACKGROUND_SOUND);
 		if(backgroundFileNameToPlay != null) {
-			AudioSystemPlayer.playSound(backgroundFileNameToPlay, true);
+			AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + backgroundFileNameToPlay, true);
 		}
 	}
 	
@@ -205,8 +211,11 @@ public class LevelState {
 	}
 
 	public void setLevelPos(Int2d levelPos) {
-		this.levelPos = levelPos;
-		
+		if(!this.levelPos.is(levelPos)) {
+			this.levelPos = levelPos;
+			// Load level at beginning location
+			loadLevelByPosition();
+		}
 	}
 
 	public String getLevelFileName() {

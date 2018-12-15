@@ -50,8 +50,8 @@ public class StraightLineRunCharacter extends GameObject
 		if(getAction() == null)	{
 			setDirection(Direction.SOUTH);
 			setFrameDivider(FRAME_DIVIDER_DEFAULT);
-			setAction(new RunRandomlyAction(this, worldState, -1, 1));
-			System.out.println("StraightLineRunCharacter.think: RunRandomlyAction");
+			setAction(new RunRandomlyAction(this, worldState, 0, 1));
+			//System.out.println("StraightLineRunCharacter.think: RunRandomlyAction");
 		}
 	}
 }

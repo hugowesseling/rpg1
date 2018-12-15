@@ -3,16 +3,21 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+
 public class Player extends GameObject {
 	private static final long serialVersionUID = 1752542798493227606L;
+	private static final int PLAYER_BEGIN_HEALTH = 12;
 	Vector<CarryableItem> itemsCarried;
 	private GameObject interactionGameObject = null;
 	public Bag<String> inventory;
 	private InteractionPossibility interactionPossibilty;
 	private StorableObjectType itemAbovePlayerStorableObjectType = null;
 	private int itemAbovePlayerTimer = 0;
+	private int cooldown = 0;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
+		health = PLAYER_BEGIN_HEALTH;
 		weapon = new BeamWeapon(this);
 		inventory = new Bag<>();
 	}
@@ -49,6 +54,13 @@ public class Player extends GameObject {
 			}
 		}
 	}
+	
+	@Override
+	public void think(Player player, WorldState worldState, LevelState levelState) {
+		if(cooldown>0)
+			cooldown --;
+		
+	}
 	private void setInteractionPossibility(InteractionPossibility interactionPossibilty) {
 		this.interactionPossibilty = interactionPossibilty;
 		
@@ -79,7 +91,9 @@ public class Player extends GameObject {
 	}
 	@Override
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny, boolean simulating) {
-		super.draw(graphics, frameCounter, screenx, screeny, simulating);
+		if(cooldown == 0 || (frameCounter % 2 == 0)) {
+			super.draw(graphics, frameCounter, screenx, screeny, simulating);
+		}
 		if(itemAbovePlayerStorableObjectType != null) {
 			System.out.println("Showing item above: " + itemAbovePlayerStorableObjectType.name + ":" + itemAbovePlayerTimer);
 			graphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(itemAbovePlayerStorableObjectType.itemTileIndex), position.x - screenx - 8, position.y - screeny - itemAbovePlayerTimer - 30, null);
@@ -88,6 +102,25 @@ public class Player extends GameObject {
 				itemAbovePlayerStorableObjectType = null;
 			}
 		}
+	}
+	
+	@Override
+	public void getDamage(LevelState levelState, int damage) {
+		if(cooldown == 0) {
+			health -= damage;
+			if(health <= 0) {
+				setBeginPosition(levelState);
+				health = PLAYER_BEGIN_HEALTH; 
+				AudioSystemPlayer.playRandom(RandomSound.MALE_DEATH);
+			}else
+				AudioSystemPlayer.playRandom(RandomSound.MALE_GRUNT_PAIN);
+			cooldown  = 5;
+		}
+	}
+	
+	public void setBeginPosition(LevelState levelState) {
+		levelState.setLevelPos(new Int2d(500,500));
+		position = ObjectPosition.createFromTilePosition(new Int2d(13, 30));
 	}
 	
 }

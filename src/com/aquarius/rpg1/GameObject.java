@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 import com.aquarius.rpg1.behavior.ObjectAction;
+import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
 public class GameObject implements CharacterBehavior, Serializable
@@ -16,7 +17,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	protected ObjectPosition position;
 	private ObjectAction action;
 	protected Direction direction;
-	float health;
+	protected int health;
 	protected transient HashSet<InteractionPossibility> interactionPossibilities;
 	protected String name;
 	protected Weapon weapon = null;
@@ -30,8 +31,8 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.objectDrawer = objectDrawer;
 		this.position = position;
 		this.direction = direction;
-		this.action = null;
-		this.health = 3.5f;
+		action = null;
+		health = 20;
 		frameDivider = FRAME_DIVIDER_DEFAULT;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 		init();
@@ -133,17 +134,27 @@ public class GameObject implements CharacterBehavior, Serializable
 	@Override
 	public void think(Player player, WorldState worldState, LevelState levelState) {
 		
-	}	
+	}
+	
+	public void getDamage(LevelState levelState, int damage) {
+		AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);
+		health -= damage;
+		if(health<=0) {
+			AudioSystemPlayer.playRandom(RandomSound.CREATURE_EMOTE);
+		}
+	}
+
 	
 	public Int2d getCollisionBounce(GameObject gameObject) {
 		// Never collide with yourself
+		float multiplier = 2;
 		if(gameObject != this) {
 			int rx = gameObject.position.x - position.x, ry = gameObject.position.y - position.y;
 			int radius = DEFAULT_RADIUS;
 			if(rx *rx + ry *ry < radius*radius) {
 				System.out.println("Character " + gameObject.name + " in range");
 				double dist = Math.hypot(rx, ry); // dist < radius
-				return new Int2d((int)(-rx * (radius-dist) / dist), (int)(-ry * (radius-dist) / dist));
+				return new Int2d((int)(-rx * (radius-dist) / dist * multiplier) , (int)(-ry * (radius-dist) / dist * multiplier));
 			}
 		}
 		return null;

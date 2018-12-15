@@ -39,8 +39,8 @@ public class LockedDoorwayObject extends DoorwayObject {
 		{
 			player.inventory.remove(storableObjectType.name, storableObjectType.amount);
 			levelState.allGameObjects.add(new DoorwayObject(name, new TileDrawer(((TileObjectDrawer)objectDrawer).tileIndex), position, direction, levelToLoad, entryPoint));
-			// TODO: This can be slightly dangerous
-			levelState.allGameObjects.remove(this);
+			// Kill this lockeddoorway
+			health = 0;
 			AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\jingle_chime_04_positive.wav", false);
 			player.startItemAbovePlayerAnimation(storableObjectType);
 			return true;

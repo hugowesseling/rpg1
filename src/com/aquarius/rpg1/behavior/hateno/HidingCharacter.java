@@ -21,6 +21,7 @@ public class HidingCharacter extends GameObject
 		super("HidingCharacter", objectDrawer, position, direction);
 		waitUntil = 0;
 		counter = 0;
+		health = 100;
 	}
 
 	@Override

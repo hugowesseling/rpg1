@@ -24,7 +24,10 @@ public class AudioSystemPlayer {
 		CHICKEN("Animal_Impersonations\\chicken_2_bwak_",10),
 		SWISH("Whooshes\\whoosh_weapon_knife_swing_", 4),
 		FLESH_IMPACT("Guns_Weapons\\Bullets\\bullet_impact_body_flesh_", 7),
-		DOOR_LOCK_FAIL("Doors\\door_lock_fail_", 5);
+		DOOR_LOCK_FAIL("Doors\\door_lock_fail_", 5), 
+		MALE_GRUNT_PAIN("Voice\\Human Male A\\voice_male_grunt_pain_", 13),
+		CREATURE_EMOTE("Voice\\Fun Creatures\\voice_fun_creature_small_mutant_voice_emotes_",10),
+		MALE_DEATH("Voice\\Human Male A\\voice_male_grunt_pain_death_",10);
 		
 		public String path;
 		public int count;
