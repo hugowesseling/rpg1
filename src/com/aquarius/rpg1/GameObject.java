@@ -31,7 +31,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.position = position;
 		this.direction = direction;
 		this.action = null;
-		this.health = 0;
+		this.health = 3.5f;
 		frameDivider = FRAME_DIVIDER_DEFAULT;
 		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
 		init();

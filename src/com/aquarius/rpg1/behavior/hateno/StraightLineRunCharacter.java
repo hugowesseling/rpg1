@@ -41,7 +41,7 @@ public class StraightLineRunCharacter extends GameObject
 				if(!blocked) {
 					setFrameDivider(FRAME_DIVIDER_DEFAULT / 4);
 					setDirection(directionToPlayer );
-					setAction(new RunUntilWallAction(this, 4));
+					setAction(new RunUntilWallAction(this, 3));
 					System.out.println("StraightLineRunCharacter.think: Run!");
 					return;
 				}

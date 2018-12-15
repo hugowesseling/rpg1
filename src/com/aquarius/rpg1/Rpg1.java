@@ -34,7 +34,8 @@ Minimal additions:
 	- you get the ring and bring it back to person in village,that gives you soup in his house (his mother's recipe)
 
 	*Needed additions:
-	TODO: hiding, following behavior
+	TODO: following behavior
+	DONE straightline, hiding
 	DONE: Entering house
 	DONE: Object storage, behavior and pickup
 	DONE: Dialogue based on stored object
@@ -104,11 +105,13 @@ Music:
 
  */
 
+// TODO: health & dying
+// TODO: particles: bouncing & flying
 // DONE: Add house interiors: Walking into another level and out into previous level again
 // DONE: Multi tileset tile patterns
-// TODO: Dual material tile patterns
+// DONE: Dual material tile patterns
 // TODO: Level generator using fancy tile patterns
-// TODO: Level stack
+// DONE: Level stack
 // TODO: Optimize graphics2 (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
 // TODO: Add shield and enemy behavior
 // TODO: Add clipboard window (to copy paste level parts on and off) 
@@ -190,7 +193,6 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	private static final int MENUBAR_HEIGHT = 45;
 	private boolean running = false;
 	private boolean simulating = false;;
-	private CharacterTileSet addCharacterTileSet = null;	//!null means that a character currently is being added
 	private Input input;
 	private int screenx;
 	private int screeny;
@@ -690,13 +692,22 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 						200, 200, player.inventory);
 			}
 		}
-		if(addCharacterTileSet != null) {
-			addCharacterTileSet.draw(imageGraphics, mouseX/2, mouseY/2, Direction.SOUTH, frameCounter / 10);
-		}
-
+		drawHUD(imageGraphics, player);
+		
 		imageGraphics.dispose();
 
 		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
+	}
+	
+	private void drawHUD(Graphics2D graphics, Player player) {
+		int currentHeartPos = 20;
+		for(int i=1;i<player.health;i++) {
+			graphics.drawImage(Resources.heartTileSet.tiles[0][10], currentHeartPos , 20 ,null);
+			currentHeartPos+=14;
+		}
+		int lastHeart = (int)((player.health -(int)player.health) *4); // = 0..3
+		graphics.drawImage(Resources.heartTileSet.tiles[0][14 - lastHeart], currentHeartPos , 20 ,null);
+			
 	}
 	private void inputPlayerMovement() {
 		boolean playerMoved = false;
@@ -734,6 +745,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				bouncedx += bounce.x;
 				bouncedy += bounce.y;
 				bouncecount ++;
+				player.health-=0.25;
 			}
 		}
 		if(bouncecount != 0)

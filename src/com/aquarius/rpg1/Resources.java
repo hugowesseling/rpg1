@@ -36,6 +36,7 @@ public class Resources {
 	};
 	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public static TileSet itemTileSet = new TileSet(-2, "/_sheet.png", 16, 16, 0, 0, false);
+	public static TileSet heartTileSet = new TileSet(-2, "/_hearts_sheet.png", 10, 10, 0, 0, false);
 	public static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public static HashMap<String, CharacterCreatorFunction> characterSubClasses = new HashMap<>();
