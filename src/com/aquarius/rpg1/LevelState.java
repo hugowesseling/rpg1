@@ -24,6 +24,7 @@ public class LevelState {
 	private Int2d levelPos= new Int2d(0,0);
 	private String latestLoadedFileName = null;
 	private ObjectPosition playerPositionInSuperLevel;
+	public Vector<GameObject> gameObjectsToAdd;
 
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
@@ -31,6 +32,7 @@ public class LevelState {
 		this.top_layer = top_layer;
 		levelKeyValues = new HashMap<>();
 		allGameObjects = new Vector<>();
+		gameObjectsToAdd = new Vector<>();
 		levelStack = new LevelStack(bottom_layer, top_layer);
 		playerPositionInSuperLevel = null;
 	}
@@ -113,6 +115,10 @@ public class LevelState {
 				newGameObjects.add(gameCharacter);
 		}
 		player.think(player, worldState, this);
+		if(gameObjectsToAdd.size()>0) {
+			newGameObjects.addAll(gameObjectsToAdd);
+			gameObjectsToAdd.clear();
+		}
 		allGameObjects = newGameObjects;
 	}
 

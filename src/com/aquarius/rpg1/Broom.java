@@ -51,7 +51,7 @@ public class Broom extends Weapon {
 				//Remove it and put coins or something there
 				levelState.top_layer.setTileIndexForCheckedXY(tileX, tileY, 1280);
 				StorableObjectType sot = Resources.allStorableObjectTypesHashMap.get("diamond");
-				levelState.allGameObjects.add(new StorableObject(
+				levelState.gameObjectsToAdd.add(new StorableObject(
 						Resources.allStorableObjectTypesHashMap.get("diamond"), 
 						new ItemTileDrawer(sot.itemTileIndex), 
 						ObjectPosition.createFromTilePosition(new Int2d(tileX,tileY))));

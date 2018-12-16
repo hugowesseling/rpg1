@@ -50,7 +50,8 @@ public class StorableObject extends GameObject {
 			if(go != this)
 				newAllGameObjects.add(go);
 		levelState.allGameObjects = newAllGameObjects;
-		
+		player.startItemAbovePlayerAnimation(storableObjectType);
+		AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\collect_item_03.wav", false);
 		player.inventory.add(storableObjectType.name);
 		System.out.println("New player inventory:");
 		player.inventory.println();
