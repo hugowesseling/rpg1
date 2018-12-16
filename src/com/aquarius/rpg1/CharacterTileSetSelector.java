@@ -22,15 +22,17 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 		@Override
 		public void paint(Graphics g)
 		{
-			Direction direction = Direction.SOUTH;
 			int frame = 0;
 			
 			int x=0;
 			int y=0;
+			int screenWidth = (int) this.getSize().getWidth();
+			System.out.println("CharacterTileSetSelector: screenWidth: "+screenWidth);
+
 			for(CharacterTileSet characterTileSet:Resources.characterTileSets) {
-				characterTileSet.drawTopLeft((Graphics2D) g, x*TILE_WIDTH,  y*TILE_HEIGHT, direction, frame);
+				characterTileSet.drawTopLeft((Graphics2D) g, x*TILE_WIDTH,  y*TILE_HEIGHT, Direction.SOUTH, frame);
 				x++;
-				if(x>=this.getSize().getWidth() / TILE_WIDTH) {
+				if(x*TILE_WIDTH+TILE_WIDTH >= screenWidth) {
 					x=0;
 					y++;
 				}
@@ -40,38 +42,30 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 	private static final int TILE_WIDTH = 64;
 	private static final int TILE_HEIGHT = 64;
 	private static final long serialVersionUID = -7539539217604009302L;
-	private CharacterTileSetSelector self;
 	private int characterTileSetIndex;
 	private ComponentExtension drawingComponent;
 
 	public CharacterTileSetSelector(Frame owner) {
 		super(owner, "CharacterTileSet Selector", true);
-		self = this;
 		setCharacterTileSetIndex(0);
 
 		drawingComponent = new ComponentExtension();
 		this.add(drawingComponent);
-		drawingComponent.setPreferredSize(new Dimension(500,500));
+		drawingComponent.setPreferredSize(new Dimension(710,710));
 		this.pack();
 		drawingComponent.addMouseListener(this);
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 	private Int2d getMousePixelLocation(MouseEvent mouseEvent)
 	{
@@ -81,10 +75,13 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
+		int screenWidth = (int) drawingComponent.getSize().getWidth();
+		System.out.println("CharacterTileSetSelector: screenWidth: "+screenWidth);
+
 		Int2d mouseStart = getMousePixelLocation(mouseEvent);
 		int tileX = mouseStart.x / TILE_WIDTH;
 		int tileY = mouseStart.y / TILE_HEIGHT;
-		int index = tileY * ((int)(this.getSize().getWidth()) / TILE_WIDTH + 1) + tileX;
+		int index = tileY * (screenWidth / TILE_WIDTH ) + tileX;
 		System.out.println("CharacterTileSetSelector: tile:" + tileX + "," + tileY + ", index:" + index);
 		setCharacterTileSetIndex(index);
 		setVisible(false);
@@ -110,7 +107,5 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 }

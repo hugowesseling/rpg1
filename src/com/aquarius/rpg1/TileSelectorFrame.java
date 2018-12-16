@@ -220,7 +220,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 							imageG.drawRect(x * Constant.TILE_WIDTH, y * Constant.TILE_HEIGHT, Constant.TILE_WIDTH - 1, Constant.TILE_HEIGHT - 1);
 							break;
 						case TILE_COVER_EDIT:
-							int coverage = currentTileSet.getCoverageForUncheckedXY(x,y);
+							int coverage = currentTileSet.getCoverageForXYUnsafe(x,y);
 							if(coverage<0)coverage = 0;
 							if(coverage>255)coverage = 255;
 							imageG.setColor(new Color(coverage, 255-coverage,0));

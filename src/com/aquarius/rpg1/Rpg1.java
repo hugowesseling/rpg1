@@ -105,7 +105,7 @@ Music:
 
  */
 
-// TODO: health & dying
+// DONE: health & dying
 // TODO: particles: bouncing & flying
 // DONE: Add house interiors: Walking into another level and out into previous level again
 // DONE: Multi tileset tile patterns
@@ -113,7 +113,7 @@ Music:
 // TODO: Level generator using fancy tile patterns
 // DONE: Level stack
 // TODO: Optimize graphics2 (See https://stackoverflow.com/questions/658059/graphics-drawimage-in-java-is-extremely-slow-on-some-computers-yet-much-faster)
-// TODO: Add shield and enemy behavior
+// TODO: Add shield
 // TODO: Add clipboard window (to copy paste level parts on and off) 
 
 

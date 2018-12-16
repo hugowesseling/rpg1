@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 import com.aquarius.common2dgraphics.Art;
+import com.aquarius.rpg1.Resources.ItemTileLocation;
 
 public class TileSet
 {
@@ -134,57 +135,57 @@ public class TileSet
 		return new Int2d(index % 256, (index / 256) % 256);
 	}
 
-	public Image getTileImageFromIndex(int i)
+	public Image getTileImageFromIndexSafe(int i)
 	{
 		int y = (i / 256) % 256;
 		int x = i % 256;
-		return getTileImageFromXY(x,y);
+		return getTileImageFromXYSafe(x,y);
 	}
 	
-	public boolean getTileCollisionFromIndex(int i)
+	public boolean getTileCollisionFromIndexSafe(int i)
 	{
 		int y = (i / 256) % 256;
 		int x = i % 256;
-		return getTileCollisionFromXY(x, y);
+		return getTileCollisionFromXYSafe(x, y);
 	}
 	
-	public boolean getTileCollisionFromXY(int x, int y) {
+	public boolean getTileCollisionFromXYSafe(int x, int y) {
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return tileCollision[x][y];
 		return false;
 	}
 
-	public boolean getLayerHeightFromIndex(int i) {
+	public boolean getLayerHeightFromIndexSafe(int i) {
 		int y = (i / 256) % 256;
 		int x = i % 256;
-		return getLayerHeightFromXY(x, y);
+		return getLayerHeightFromXYSafe(x, y);
 	}
-	public boolean getLayerHeightFromXY(int x, int y) {
+	public boolean getLayerHeightFromXYSafe(int x, int y) {
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return layerHeight[x][y];
 		return false;
 	}
 
-	public Image getTileImageFromXY(int x, int y)
+	public Image getTileImageFromXYSafe(int x, int y)
 	{
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return tiles[x][y];
 		return tiles[0][0];
 	}
 
-	public int getCoverageFromIndex(int i) {
+	public int getCoverageFromIndexSafe(int i) {
 		int y = (i / 256) % 256;
 		int x = i % 256;
-		return getCoverageForCheckedXY(x, y);
+		return getCoverageForXYSafe(x, y);
 	}
 
-	private int getCoverageForCheckedXY(int x, int y) {
+	private int getCoverageForXYSafe(int x, int y) {
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return coverage[x][y];
 		return 0;
 	}
 
-	public int getCoverageForUncheckedXY(int x, int y) {
+	public int getCoverageForXYUnsafe(int x, int y) {
 		return coverage[x][y];
 	}
 
@@ -206,6 +207,7 @@ public class TileSet
 		}
 	}
 
-
-
+	public Image getTileImageFromPositionUnsafe(Position pos) {
+		return tiles[pos.getX()][pos.getY()];
+	}
 }

@@ -27,7 +27,7 @@ public class Sword extends Weapon {
 		// TODO Auto-generated method stub
 		if(swordSlashCounter < 3) {
 			int[] SWORD_DIRECTION_ORDER = {0,1,3,2};
-			Image swordimage = Resources.swordAttack.getTileImageFromXY(
+			Image swordimage = Resources.swordAttack.getTileImageFromXYSafe(
 					swordSlashCounter, 
 					SWORD_DIRECTION_ORDER[user.getDirection().tileOffset % SWORD_DIRECTION_ORDER.length]);
 			graphics.drawImage(swordimage, user.position.x - screenx - 19, user.position.y - screeny - 15, null);

@@ -14,7 +14,7 @@ public class LockedDoorwayObject extends DoorwayObject {
 	public StorableObjectType storableObjectType;
 	public LockedDoorwayObject(TileDrawer tileDrawer, ObjectPosition position, Int2d levelpos) {
 		super(tileDrawer, position, levelpos);
-		JComboBox<StorableObjectType> objectTypeComboBox = new JComboBox<StorableObjectType>(StorableObjectType.all);
+		JComboBox<StorableObjectType> objectTypeComboBox = new JComboBox<StorableObjectType>(Resources.allStorableObjectTypes);
 
 		Object objectSettings[] = {"Specify lock item", objectTypeComboBox};
 		

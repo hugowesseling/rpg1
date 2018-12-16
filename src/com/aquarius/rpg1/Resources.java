@@ -14,14 +14,54 @@ import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
 
 
 public class Resources {
+	public enum ItemTileLocation implements Position{
+		BROOM(12,14),
+		SWORD(7,107),
+		HAMMER(2,101),
+		PIE(14,19),
+		SOUP(12,19),
+		DIAMOND(1,28),
+		BROCCOLI_RING(14,69),
+		STONE(4,28);
+		public int x,y,index;
+		ItemTileLocation(int index){
+			this.index=index;
+			x = index%256;
+			y = index/256;
+		}
+		ItemTileLocation(int x, int y){
+			this.x=x;
+			this.y=y;
+			index = x+y*256;
+		}
+		@Override
+		public int getX() {
+			return x;
+		}
+		@Override
+		public int getY() {
+			return y;
+		}
+	}
 	public interface CharacterCreatorFunction {
 		public GameObject create(CharacterDrawer characterDrawer, ObjectPosition position, Direction direction);
 	}
 	public interface ObjectCreatorFunction {
 		public GameObject create(TileDrawer tileDrawer, ObjectPosition position, LevelState levelState);
 	}
-	public static final String PARAM_BACKGROUND_SOUND = "background_sound";
-	public static TileSet[] levelTileSets = {
+	
+	public final static StorableObjectType allStorableObjectTypes[] = {
+			new FoodObjectType("cookie", ItemTileLocation.PIE.index, 100),
+			new FoodObjectType("soup", ItemTileLocation.SOUP.index, 60),
+			new ValueObjectType("diamond", ItemTileLocation.DIAMOND.index, 100),
+			new RingObjectType("broccoli ring", ItemTileLocation.BROCCOLI_RING.index, ObjectColor.GREEN),
+			new UsableObjectType("Hammer", ItemTileLocation.HAMMER.index),
+			new StorableObjectType("Stone", ItemTileLocation.STONE.index)
+		};
+	public final static HashMap<String, StorableObjectType> allStorableObjectTypesHashMap;
+	
+	public final static String PARAM_BACKGROUND_SOUND = "background_sound";
+	public final static TileSet[] levelTileSets = {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1, true),
 			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true),
 			new TileSet(2, "/tileB_inside.png", 16, 16, 0, 0, true),
@@ -34,19 +74,18 @@ public class Resources {
 			new TileSet(9, "/tileC_town1.png", 16,16,0,0, true),
 			new TileSet(10, "/tileB_dungeon.png", 16,16,0,0, true)
 	};
-	public static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
-	public static TileSet itemTileSet = new TileSet(-2, "/_sheet.png", 16, 16, 0, 0, false);
-	public static TileSet heartTileSet = new TileSet(-2, "/_hearts_sheet.png", 10, 10, 0, 0, false);
-	public static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
+	public final static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
+	public final static TileSet itemTileSet = new TileSet(-2, "/_sheet.png", 16, 16, 0, 0, false);
+	public final static TileSet heartTileSet = new TileSet(-2, "/_hearts_sheet.png", 10, 10, 0, 0, false);
+	public final static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
-    public static HashMap<String, CharacterCreatorFunction> characterSubClasses = new HashMap<>();
-    public static HashMap<String, ObjectCreatorFunction> objectSubClasses = new HashMap<>();
-	protected static String defaultLevelParameters[] = {PARAM_BACKGROUND_SOUND};
+    public final static HashMap<String, CharacterCreatorFunction> characterSubClasses = new HashMap<>();
+    public final static HashMap<String, ObjectCreatorFunction> objectSubClasses = new HashMap<>();
+	protected final static String defaultLevelParameters[] = {PARAM_BACKGROUND_SOUND};
     
 
     static {
     	System.out.println("Resources.static");
-		dialogStyles = new ArrayList<>();
 		dialogStyles.add(new DialogStyle(levelTileSets[0].tilePatterns.get(0), true));
 		dialogStyles.add(new DialogStyle(levelTileSets[3].tilePatterns.get(0), true));
 		
@@ -74,7 +113,13 @@ public class Resources {
 		addCharacterTileSets(1,"/horse1.png", 60, 64, 0, 0);
 		addCharacterTileSets(1,"/monster1.png", 60, 64, 0, 0);
 		addCharacterTileSets(1,"/monster2.png", 60, 64, 0, 0);
-    }
+		addCharacterTileSets(1,"/chara5.png", 26, 36, 0, 0);
+
+		allStorableObjectTypesHashMap = new HashMap<>();
+		for(StorableObjectType sot: allStorableObjectTypes){
+			allStorableObjectTypesHashMap.put(sot.name, sot);
+		}
+	}
 
 	public static void addCharacterSubClass(String string, CharacterCreatorFunction func) {
 		System.out.println("addCharacterSubClass: Adding " + string);
@@ -95,17 +140,17 @@ public class Resources {
 
 	
 	public static Image getTileImageFromIndex(int i) {
-		return levelTileSets[i / 65536].getTileImageFromIndex(i % 65536);
+		return levelTileSets[i / 65536].getTileImageFromIndexSafe(i % 65536);
 	}
 	public static boolean getTileCollisionFromIndex(int i) {
-		return levelTileSets[i / 65536].getTileCollisionFromIndex(i % 65536);
+		return levelTileSets[i / 65536].getTileCollisionFromIndexSafe(i % 65536);
 	}
 	public static boolean getLayerHeightFromIndex(int i) {
-		return levelTileSets[i / 65536].getLayerHeightFromIndex(i % 65536);
+		return levelTileSets[i / 65536].getLayerHeightFromIndexSafe(i % 65536);
 	}
 
 	public static int getCoverageFromIndex(int i) {
-		return levelTileSets[i / 65536].getCoverageFromIndex(i % 65536);
+		return levelTileSets[i / 65536].getCoverageFromIndexSafe(i % 65536);
 
 	}
 
@@ -129,7 +174,4 @@ public class Resources {
 		LevelState levelState = new LevelState(new Layer(width, height), new Layer(width, height));
 		levelState.saveToFile(fileName);
 	}
-
-
-
 }

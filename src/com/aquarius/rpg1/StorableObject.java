@@ -26,7 +26,7 @@ public class StorableObject extends GameObject {
 	}
 
 	public static GameObject createStorableObject(ObjectPosition position) {
-		String[] storableObjectTypeStrings = StorableObjectType.allHashMap.keySet().toArray(new String[StorableObjectType.allHashMap.size()]);
+		String[] storableObjectTypeStrings = Resources.allStorableObjectTypesHashMap.keySet().toArray(new String[Resources.allStorableObjectTypesHashMap.size()]);
 		JComboBox<String> storableObjectTypeComboBox = new JComboBox<String>(storableObjectTypeStrings);
 		Object objectSettings[] = {"Specify object settings", storableObjectTypeComboBox};
 		
@@ -37,7 +37,7 @@ public class StorableObject extends GameObject {
 	    dialog.setVisible(true);
 	    
 	    String storableObjectTypeString = (String) storableObjectTypeComboBox.getSelectedItem();
-	    StorableObjectType sot = StorableObjectType.allHashMap.get(storableObjectTypeString);
+	    StorableObjectType sot = Resources.allStorableObjectTypesHashMap.get(storableObjectTypeString);
 	    return new StorableObject(sot, new ItemTileDrawer(sot.itemTileIndex), position);
 	}
 

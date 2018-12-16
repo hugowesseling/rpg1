@@ -2,6 +2,8 @@ package com.aquarius.common2dgraphics;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
@@ -24,16 +26,23 @@ public class Art {
     	return res;
     }
     public static BufferedImage load(String name) {
-        try {
-            BufferedImage org = ImageIO.read(Art.class.getResource(name));
+        	URL resourceUrl = Art.class.getResource(name);
+        	if(resourceUrl == null) {
+        		System.err.println("Cannot find resource " + name);
+        		return null;
+        	}
+            BufferedImage org;
+			try {
+				org = ImageIO.read(resourceUrl);
+			} catch (IOException e) {
+        		System.err.println("Cannot load resource " + resourceUrl);
+        		return null;
+			}
             BufferedImage res = new BufferedImage(org.getWidth(), org.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics g = res.getGraphics();
             g.drawImage(org, 0, 0, null, null);
             g.dispose();
             return res;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static void speckle(BufferedImage img)

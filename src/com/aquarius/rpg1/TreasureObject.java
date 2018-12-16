@@ -14,7 +14,7 @@ public class TreasureObject extends GameObject{
 	public TreasureObject(TileDrawer tileDrawer, ObjectPosition position){
 		super("treasureObject", tileDrawer, position, Direction.NORTH);
 		init();
-		String[] storableObjectTypeStrings = StorableObjectType.allHashMap.keySet().toArray(new String[StorableObjectType.allHashMap.size()]);
+		String[] storableObjectTypeStrings = Resources.allStorableObjectTypesHashMap.keySet().toArray(new String[Resources.allStorableObjectTypesHashMap.size()]);
 		JComboBox<String> storableObjectTypeComboBox = new JComboBox<String>(storableObjectTypeStrings);
 		Object objectSettings[] = {"Specify object settings", storableObjectTypeComboBox};
 		
@@ -25,7 +25,7 @@ public class TreasureObject extends GameObject{
 	    dialog.setVisible(true);
 	    
 	    String storableObjectTypeString = (String) storableObjectTypeComboBox.getSelectedItem();
-	    storableObjectType = StorableObjectType.allHashMap.get(storableObjectTypeString);
+	    storableObjectType = Resources.allStorableObjectTypesHashMap.get(storableObjectTypeString);
 	}
 	
 	protected void init() {

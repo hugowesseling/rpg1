@@ -27,7 +27,7 @@ public class Hammer extends Weapon {
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny) {
 		// TODO Auto-generated method stub
 		if(slashCounter < 16) {
-			Image hammerimage = Resources.itemTileSet.tiles[2][101];
+			Image hammerimage = Resources.itemTileSet.getTileImageFromPositionUnsafe(Resources.ItemTileLocation.HAMMER);
 			AffineTransform oldTransform = graphics.getTransform();
 			graphics.translate(user.position.x - screenx + user.getDirection().movement.x*2, user.position.y - screeny - 7 + user.getDirection().movement.y*4);
 			graphics.rotate(Math.toRadians(slashCounter * 10 + user.getDirection().degrees));

@@ -16,7 +16,7 @@ public class ItemTileDrawer extends ObjectDrawer {
 
 	@Override
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame) {
-		Image image = Resources.itemTileSet.getTileImageFromIndex(itemTileIndex);
+		Image image = Resources.itemTileSet.getTileImageFromIndexSafe(itemTileIndex);
 		graphics.drawImage(image, x - image.getWidth(null)/2, y - image.getHeight(null)/2, null);
 	}
 }

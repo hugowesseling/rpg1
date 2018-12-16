@@ -96,7 +96,7 @@ public class Player extends GameObject {
 		}
 		if(itemAbovePlayerStorableObjectType != null) {
 			System.out.println("Showing item above: " + itemAbovePlayerStorableObjectType.name + ":" + itemAbovePlayerTimer);
-			graphics.drawImage(Resources.itemTileSet.getTileImageFromIndex(itemAbovePlayerStorableObjectType.itemTileIndex), position.x - screenx - 8, position.y - screeny - itemAbovePlayerTimer - 30, null);
+			graphics.drawImage(Resources.itemTileSet.getTileImageFromIndexSafe(itemAbovePlayerStorableObjectType.itemTileIndex), position.x - screenx - 8, position.y - screeny - itemAbovePlayerTimer - 30, null);
 			itemAbovePlayerTimer ++;
 			if(itemAbovePlayerTimer > 40) {
 				itemAbovePlayerStorableObjectType = null;

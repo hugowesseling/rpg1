@@ -19,14 +19,14 @@ public class CharacterTileSet  {
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame)
 	{
 		int drawFrame = FRAME_ORDER[frame%4];
-		Image image = tileSet.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
+		Image image = tileSet.getTileImageFromXYSafe(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
 		graphics.drawImage(image, x - image.getWidth(null)/2, y - image.getHeight(null)*3/4, null);		
 	}
 
 	public void drawTopLeft(Graphics2D graphics, int x, int y, Direction direction, int frame)
 	{
 		int drawFrame = FRAME_ORDER[frame%4];
-		Image image = tileSet.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
+		Image image = tileSet.getTileImageFromXYSafe(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
 		graphics.drawImage(image, x , y , null);		
 	}
 
@@ -34,7 +34,7 @@ public class CharacterTileSet  {
 		int frame = 0;
 		int drawFrame = FRAME_ORDER[frame%4];
 		Direction direction = Direction.SOUTH;
-		return tileSet.getTileImageFromXY(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
+		return tileSet.getTileImageFromXYSafe(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
 	}
 	
 }
