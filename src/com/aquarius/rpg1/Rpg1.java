@@ -639,7 +639,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		{
 			e.printStackTrace();
 		}
-		if(simulating) {
+		if(simulating && dialogue==null) {
 			frameCounter++;
 			if(frameCounter % 10 == 0) {
 				levelState.think(player, worldState);
