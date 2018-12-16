@@ -34,13 +34,30 @@ public class Broom extends Weapon {
 		graphics.drawImage(broomImage, 0, 0, null);
 		graphics.setTransform(oldTransform);
 
-		if(swishCounter < 20) {
-			swishCounter += 1;
-		}
+
 	}
 	
 	@Override
 	public void think(WorldState worldState, LevelState levelState) {
+		if(swishCounter < 20) {
+			swishCounter += 1;
+		}
+		if(swishCounter == 10) {
+			int tileX = ObjectPosition.getXTileFromX(user.position.x + user.direction.movement.x*16);
+			int tileY = ObjectPosition.getYTileFromY(user.position.y + user.direction.movement.y*16);
+			int tileIndex = levelState.top_layer.getTile(tileX, tileY);
+			System.out.println("Broom: Sweeping: " + tileIndex);
+			if(tileIndex == 526084) {
+				//Remove it and put coins or something there
+				levelState.top_layer.setTileIndexForCheckedXY(tileX, tileY, 1280);
+				StorableObjectType sot = Resources.allStorableObjectTypesHashMap.get("diamond");
+				levelState.allGameObjects.add(new StorableObject(
+						Resources.allStorableObjectTypesHashMap.get("diamond"), 
+						new ItemTileDrawer(sot.itemTileIndex), 
+						ObjectPosition.createFromTilePosition(new Int2d(tileX,tileY))));
+			}
+		}
+			
 		//System.out.println("Broom.think()");
 		// Check for dust on top_layer, if found, remove and get coins or something
 		/*if(slashCounter < 3) {
