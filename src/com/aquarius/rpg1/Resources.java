@@ -11,11 +11,12 @@ import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
+import com.aquarius.rpg1.behavior.hateno.SweepingCharacter;
 
 
 public class Resources {
 	public enum ItemTileLocation implements Position{
-		BROOM(12,14),
+		BROOM(14,12),
 		SWORD(7,107),
 		HAMMER(2,101),
 		PIE(14,19),
@@ -95,7 +96,9 @@ public class Resources {
 		addCharacterSubClass("RunningCharacter", (drawer, pos, dir) -> {return new RunningCharacter(drawer, pos, dir);});
 		addCharacterSubClass("ProximityRunCharacter", (drawer, pos, dir) -> {return new ProximityRunCharacter(drawer, pos, dir);});
 		addCharacterSubClass("StraightLineRunCharacter", (drawer, pos, dir) -> {return new StraightLineRunCharacter(drawer, pos, dir);});
-		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});		
+		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});
+		addCharacterSubClass("SweepingCharacter", (drawer, pos, dir) -> {return new SweepingCharacter(drawer, pos, dir);});
+		
 
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});
 		addObjectSubClass("DoorwayObject", (drawer, pos, state) -> {return new DoorwayObject(drawer, pos, state.getLevelPos());});
