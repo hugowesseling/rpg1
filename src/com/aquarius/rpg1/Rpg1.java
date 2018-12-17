@@ -265,7 +265,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
 				System.out.println("Save clicked");
-				String fileName = levelState.getLevelFileName();
+				String fileName = levelState.getLatestLevelFileName();
 			    int retVal = JOptionPane.showConfirmDialog (null, "Would you like to overwrite " + fileName,"Warning", JOptionPane.YES_NO_OPTION);
 			    if (retVal == JOptionPane.YES_OPTION) {
 			    	levelState.saveToFile(fileName);

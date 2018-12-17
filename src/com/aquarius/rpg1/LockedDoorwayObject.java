@@ -12,8 +12,8 @@ import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 public class LockedDoorwayObject extends DoorwayObject {
 	private static final long serialVersionUID = -2825870237300156872L;
 	public StorableObjectType storableObjectType;
-	public LockedDoorwayObject(TileDrawer tileDrawer, ObjectPosition position, Int2d levelpos) {
-		super(tileDrawer, position, levelpos);
+	public LockedDoorwayObject(TileDrawer tileDrawer, ObjectPosition position) {
+		super(tileDrawer, position);
 		JComboBox<StorableObjectType> objectTypeComboBox = new JComboBox<StorableObjectType>(Resources.allStorableObjectTypes);
 
 		Object objectSettings[] = {"Specify lock item", objectTypeComboBox};
@@ -38,7 +38,7 @@ public class LockedDoorwayObject extends DoorwayObject {
 		if(possibleRing >= storableObjectType.amount)
 		{
 			player.inventory.remove(storableObjectType.name, storableObjectType.amount);
-			levelState.allGameObjects.add(new DoorwayObject(name, new TileDrawer(((TileObjectDrawer)objectDrawer).tileIndex), position, direction, levelToLoad, entryPoint));
+			levelState.allGameObjects.add(new DoorwayObject(name, new TileDrawer(((TileObjectDrawer)objectDrawer).tileIndex), position, direction, levelBasename, levelPos, entryPoint));
 			// Kill this lockeddoorway
 			health = 0;
 			AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + "Collectibles_Items_Powerup\\jingle_chime_04_positive.wav", false);

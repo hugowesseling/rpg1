@@ -101,8 +101,8 @@ public class Resources {
 		
 
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});
-		addObjectSubClass("DoorwayObject", (drawer, pos, state) -> {return new DoorwayObject(drawer, pos, state.getLevelPos());});
-		addObjectSubClass("LockedDoorwayObject", (drawer, pos, state) -> {return new LockedDoorwayObject(drawer, pos, state.getLevelPos());});
+		addObjectSubClass("DoorwayObject", (drawer, pos, state) -> {return new DoorwayObject(drawer, pos);});
+		addObjectSubClass("LockedDoorwayObject", (drawer, pos, state) -> {return new LockedDoorwayObject(drawer, pos);});
 		addObjectSubClass("StorableObject", (drawer, pos, state) -> {return StorableObject.createStorableObject(pos);});
 		
 		addCharacterTileSets(0,"/characters1.png", 26, 36, 0, 0);

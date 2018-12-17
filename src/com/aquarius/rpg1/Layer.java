@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 public class Layer {
 
@@ -24,6 +25,10 @@ public class Layer {
 	public Layer(int width, int height)
 	{
 		tiles = new int[width][height];
+		for(int[] column:tiles) {
+			Arrays.fill(column, 1280);
+		}
+		
 		initAndUpdateImagesCollisionsLayerHeights(); 
 	}
 

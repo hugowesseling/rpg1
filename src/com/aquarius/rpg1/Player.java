@@ -119,7 +119,7 @@ public class Player extends GameObject {
 	}
 	
 	public void setBeginPosition(LevelState levelState) {
-		levelState.setLevelPos(new Int2d(500,500));
+		levelState.setLevelPos("level", new Int2d(500,500));
 		position = ObjectPosition.createFromTilePosition(new Int2d(13, 30));
 	}
 	

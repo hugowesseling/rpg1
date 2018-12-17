@@ -17,13 +17,13 @@ import com.aquarius.rpg1.behavior.GameObjectType;
 
 public class LevelState {
 	static final String USER_SAVE_FOLDER = "saves/";
+	public String levelBasename = "level";
 	public Layer bottom_layer, top_layer;
 	public HashMap<String, String> levelKeyValues;	// Any definable level values
 	public Vector<GameObject> allGameObjects;	// All characters in this level
 	public LevelStack levelStack;
-	private Int2d levelPos= new Int2d(0,0);
+	public Int2d levelPos= new Int2d(0,0);
 	private String latestLoadedFileName = null;
-	private ObjectPosition playerPositionInSuperLevel;
 	public Vector<GameObject> gameObjectsToAdd;
 
 	
@@ -34,7 +34,6 @@ public class LevelState {
 		allGameObjects = new Vector<>();
 		gameObjectsToAdd = new Vector<>();
 		levelStack = new LevelStack(bottom_layer, top_layer);
-		playerPositionInSuperLevel = null;
 	}
 
 	public GameObject findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
@@ -164,7 +163,7 @@ public class LevelState {
 
 	public void loadLevelByPosition()
 	{
-		String fileName = levelPos2FileName(levelPos);
+		String fileName = levelPos2FileName(levelBasename, levelPos);
 		System.out.println("Reading layer from " + fileName);
 		loadLevel(fileName);
 		
@@ -212,52 +211,41 @@ public class LevelState {
 		}
 	}	
 	
-	private static String levelPos2FileName(Int2d levelpos) {
-		return String.format("level_%03d_%03d.rpg1", levelpos.x, levelpos.y);
+	public static String levelPos2FileName(String levelBasename, Int2d levelpos) {
+		return String.format(levelBasename  + "_%03d_%03d.rpg1", levelpos.x, levelpos.y);
 	}
 
-	public void setLevelPos(Int2d levelPos) {
-		if(!this.levelPos.is(levelPos)) {
+	public void setLevelPos(String levelBasename, Int2d levelPos) {
+		if(!this.levelPos.is(levelPos) || this.levelBasename != levelBasename) {
 			this.levelPos = levelPos;
+			this.levelBasename = levelBasename;
 			// Load level at beginning location
 			loadLevelByPosition();
 		}
 	}
 
-	public String getLevelFileName() {
+	public String getLatestLevelFileName() {
 		if(latestLoadedFileName != null)
 			return latestLoadedFileName;
 		return "";
 	}
 
 	public void loadLevelByExit(int dx, int dy, Player player) {
-		if(playerPositionInSuperLevel != null) {
-			player.position = playerPositionInSuperLevel;
-			player.position.x += dx*2;
-			player.position.y += dy*2;
-			playerPositionInSuperLevel = null;
-		}else {
-			levelPos.x += dx;
-			levelPos.y += dy;
-			if(dx<0)
-				player.position.x = (getWidth()-2) * Constant.TILE_WIDTH;
-			if(dx>0)
-				player.position.x = Constant.TILE_WIDTH * 2;
-			if(dy<0)
-				player.position.y = (getHeight()-2) * Constant.TILE_HEIGHT;
-			if(dy>0)
-				player.position.y = Constant.TILE_HEIGHT * 2;
-		}
+		levelPos.x += dx;
+		levelPos.y += dy;
+		if(dx<0)
+			player.position.x = (getWidth()-2) * Constant.TILE_WIDTH;
+		if(dx>0)
+			player.position.x = Constant.TILE_WIDTH * 2;
+		if(dy<0)
+			player.position.y = (getHeight()-2) * Constant.TILE_HEIGHT;
+		if(dy>0)
+			player.position.y = Constant.TILE_HEIGHT * 2;
 		loadLevelByPosition();
 	}
 
 	public Int2d getLevelPos() {
 		return levelPos;
-	}
-
-	public void loadSubLevel(String levelToLoad, Player player) {
-		loadLevel(levelToLoad);
-		playerPositionInSuperLevel = player.position.clone();
 	}
 
 	public void resizeLevel(int newWidth, int newHeight) {
