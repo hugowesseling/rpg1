@@ -108,5 +108,9 @@ public class ObjectPosition implements Position, Serializable {
 				return Direction.WEST;
 		}
 	}
+
+	public ObjectPosition createForward(Direction direction, int dist) {
+		return new ObjectPosition(x+direction.movement.x*dist, y+direction.movement.y*dist);
+	}
 	
 }

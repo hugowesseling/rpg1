@@ -13,7 +13,7 @@ import com.aquarius.rpg1.behavior.CharacterBehavior;
 public class GameObject implements CharacterBehavior, Serializable
 {
 	private static final long serialVersionUID = 4512007766793306312L;
-	private static final int DEFAULT_RADIUS = 20; //18;
+	protected static final int DEFAULT_RADIUS = 20; //18;
 	protected ObjectPosition position;
 	private ObjectAction action;
 	protected Direction direction;
@@ -34,13 +34,18 @@ public class GameObject implements CharacterBehavior, Serializable
 		action = null;
 		health = 20;
 		frameDivider = FRAME_DIVIDER_DEFAULT;
-		System.out.println("GameCharacter: Constructor position: "  +position + ", for name " + name);
+		System.out.println("new GameObject: position: "  +position + ", name " + name);
 		init();
 	}
 
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
 		ois.defaultReadObject();
-		System.out.println("Read position: "  +position + ", for name " + name);
+		System.out.println("GameObject.readObject: position: "  +position + ", name " + name);
+		if(this instanceof PositionLabel) {
+			System.out.println("Is positionLabel");
+		}else {
+			System.out.println("Is NOT positionLabel");
+		}
 		frameDivider = FRAME_DIVIDER_DEFAULT;
 		init();
 	}

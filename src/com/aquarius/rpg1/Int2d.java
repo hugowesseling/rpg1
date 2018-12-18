@@ -37,4 +37,8 @@ public class Int2d implements Position, Serializable
 	public boolean is(Int2d pos) {
 		return pos.x == x && pos.y == y;
 	}
+
+	public Int2d copy() {
+		return new Int2d(x,y);
+	}
 }

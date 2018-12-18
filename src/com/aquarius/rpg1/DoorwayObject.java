@@ -8,28 +8,29 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class DoorwayObject extends GameObject {
+public class DoorwayObject extends GameObject implements PositionLabel{
 	private static final long serialVersionUID = 8928597995294293843L;
-	protected Int2d entryPoint;
-	protected Int2d levelPos;
+	protected String entryLabel;
 	protected String levelBasename;
+	protected Int2d levelPos;
 
 	public DoorwayObject(String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction,
-			String levelBasename, Int2d levelPos, Int2d entryPoint) {
+			String levelBasename, Int2d levelPos, String entryLabel) {
 		super(name, objectDrawer, position, direction);
 		this.levelBasename = levelBasename;
-		this.entryPoint = entryPoint;
+		this.entryLabel = entryLabel;
 		this.levelPos = levelPos;
 	}
 
 	public DoorwayObject(TileDrawer tileDrawer, ObjectPosition position){
 		// Open a dialog with settings
-		super("doorway", tileDrawer, position, Direction.NORTH);
+		super("door"+position.x+"_"+position.y, tileDrawer, position, Direction.NORTH);
 		init();
 
 		// Search for all levels with the name sub_xxx_yyy
@@ -45,13 +46,13 @@ public class DoorwayObject extends GameObject {
 			System.out.println(fileNameStrings[index]);
 			index++;
 		}
-		
-		JTextField entryXTextField = new JTextField("0"); 
-		JTextField entryYTextField = new JTextField("0");
+
+		JTextField nameTextField = new JTextField(name);
 		JComboBox<String> levelNameComboBox = new JComboBox<String>(fileNameStrings);
 		JTextField levelBaseNameTextField = new JTextField("level");
 		JTextField levelPosXTextField = new JTextField("500"); 
 		JTextField levelPosYTextField = new JTextField("500");		
+		JTextField entryLabelTextField = new JTextField("default"); 
 		levelNameComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -61,7 +62,7 @@ public class DoorwayObject extends GameObject {
 				System.out.println("Selected: " + fileName);
 				Matcher m = getLevelPosFromFileName(fileName);
 				if(m != null) {
-					System.out.println("Found match!");
+					System.out.println("Extracted level and position");
 					levelPosXTextField.setText(m.group(2));
 					levelPosXTextField.setText(m.group(3));
 					levelBaseNameTextField.setText(m.group(1));
@@ -77,7 +78,8 @@ public class DoorwayObject extends GameObject {
 				return null;
 			}
 		});
-		Object objectSettings[] = {"Specify doorway settings", levelNameComboBox, levelBaseNameTextField, "level pos:", levelPosXTextField, levelPosYTextField, "entrypoint:", "x:",entryXTextField, entryYTextField};
+		Object objectSettings[] = {"Specify doorway settings", "From name/label:", nameTextField, levelNameComboBox, levelBaseNameTextField,
+				"level pos:", levelPosXTextField, levelPosYTextField, "To entry label:",entryLabelTextField};
 		
 		JOptionPane optionPane = new JOptionPane();
 	    optionPane.setMessage(objectSettings);
@@ -85,7 +87,8 @@ public class DoorwayObject extends GameObject {
 	    JDialog dialog = optionPane.createDialog(null, "Doorway Settings");
 	    dialog.setVisible(true);
 
-	    entryPoint = new Int2d(Integer.parseInt(entryXTextField.getText()), Integer.parseInt(entryYTextField.getText()));
+	    name = nameTextField.getText();
+	    entryLabel = entryLabelTextField.getText();
 	    levelPos = new Int2d(Integer.parseInt(levelPosXTextField.getText()), Integer.parseInt(levelPosYTextField.getText()));
 	    levelBasename = levelBaseNameTextField.getText();
 	    String levelToLoad = LevelState.levelPos2FileName(levelBasename, levelPos);
@@ -118,18 +121,45 @@ public class DoorwayObject extends GameObject {
 	@Override
 	public void doTouchAction(LevelState levelState, Player player) {
 		// Create a doorway back to the level you're coming from, just behind the entry point.
-		ObjectPosition positionBehindEntryPoint = ObjectPosition.createFromTilePosition(entryPoint);
-		positionBehindEntryPoint.x -= player.direction.movement.x * Constant.TILE_WIDTH * 3/2;
-		positionBehindEntryPoint.y -= player.direction.movement.y * Constant.TILE_HEIGHT * 3/2;
-		DoorwayObject backDoorway = 
-				new DoorwayObject(levelBasename, new TileDrawer(0), positionBehindEntryPoint,
-						Direction.NORTH, levelState.levelBasename, levelState.levelPos, 
-						new Int2d((position.x-player.direction.movement.x*2)/Constant.TILE_WIDTH, 
-								  (position.y-player.direction.movement.y*2)/Constant.TILE_HEIGHT));
-		System.out.println("Loading level:" + levelBasename + "_" + levelPos.x + "_" + levelPos.y + ", at entry point: " + entryPoint);
+		Int2d fromLevelPos = levelState.levelPos.copy();
+		String fromLevelbasename = levelState.levelBasename;
+		
+		System.out.println("Loading level:" + levelBasename + "_" + levelPos.x + "_" + levelPos.y + ", at entry label: " + entryLabel);
+		//Set location and load level
 		levelState.setLevelPos(levelBasename, levelPos);
-		player.position = ObjectPosition.createFromTilePosition(entryPoint);
-		// Create doorway object behind player back to previous location
-		levelState.gameObjectsToAdd.add(backDoorway);
+		//Find doorway
+		PositionLabel foundObject = null;
+		//System.out.println("Searching for entry label:"+ entryLabel);
+		for(GameObject gameObject:levelState.allGameObjects) {
+			//System.out.println("Checking: "+gameObject.name);
+			if(PositionLabel.class.isInstance(gameObject)) {
+				//System.out.println("Checking positionLabel: \""+gameObject.name+"\" == \"" + ((PositionLabel)gameObject).getLabel()+ "\"");
+				if(((PositionLabel)gameObject).getLabel().equals(entryLabel)) {
+					System.out.println("Found entry label");
+					foundObject= (PositionLabel) gameObject;
+					break;
+				}
+			}
+		}
+		if(foundObject == null) {
+			//Create a new doorway in the middle of the level jumping back to this location
+			ObjectPosition midLevelPos = new ObjectPosition(levelState.getWidth() * Constant.TILE_WIDTH/2, 
+				levelState.getHeight() * Constant.TILE_HEIGHT/2);
+			DoorwayObject backDoorway = 
+					//String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction,
+					//String levelBasename, Int2d levelPos, String entryLabel)
+					new DoorwayObject(entryLabel, new TileDrawer(0), midLevelPos,Direction.NORTH, 
+							fromLevelbasename, fromLevelPos, name);
+			levelState.gameObjectsToAdd.add(backDoorway);
+			foundObject = backDoorway;
+			System.out.println("Created doorway at "+ backDoorway.position);
+		}
+		player.position = foundObject.getPosition().createForward(player.direction, GameObject.DEFAULT_RADIUS + 1);
+		System.out.println("Player position after moving through doorway:" + player.position);
+	}
+
+	@Override
+	public String getLabel() {
+		return name;
 	}
 }
