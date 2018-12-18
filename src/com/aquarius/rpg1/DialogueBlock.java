@@ -1,6 +1,7 @@
 package com.aquarius.rpg1;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,16 @@ public class DialogueBlock implements Serializable
 	DialogueBlock nextNode = null;
 	DialogueAction action = null;
 	String jumpTo = null;
-	private HashMap<String, DialogueBlock> answers = new HashMap<String, DialogueBlock>();
-	private HashMap<String, DialogueBlock> jumpPoints = new HashMap<String, DialogueBlock>();
+	public class AnswerPair { 
+		  public final String answer;
+		  public final DialogueBlock db;
+		  public AnswerPair(String answer, DialogueBlock db) {
+		    this.answer = answer;
+		    this.db = db;
+		  }
+	}
+	public ArrayList<AnswerPair> answers = new ArrayList<>();
+	public HashMap<String, DialogueBlock> jumpPoints = new HashMap<String, DialogueBlock>();
 	
 	public DialogueBlock(String text)
 	{
@@ -33,7 +42,7 @@ public class DialogueBlock implements Serializable
 
 	public DialogueBlock addAnswer(String answer, DialogueBlock dialogueBlock)
 	{
-		answers.put(answer, dialogueBlock);
+		answers.add(new AnswerPair(answer, dialogueBlock));
 		return this;
 	}
 	
@@ -62,13 +71,11 @@ public class DialogueBlock implements Serializable
 		
 		if(answers.size() > 0)
 		{
-			for(Map.Entry<String, DialogueBlock> entry : answers.entrySet())
+			for(AnswerPair answerPair : answers)
 			{
-				String answer = entry.getKey();
-				DialogueBlock dialogueBlock = entry.getValue();
-				System.out.println("If answering " + answer + ":");
-				dialogueBlock.run(jumpPoints);
-				System.out.println("End of answering " + answer);
+				System.out.println("If answering " + answerPair.answer + ":");
+				answerPair.db.run(jumpPoints);
+				System.out.println("End of answering " + answerPair.answer);
 			}
 		}
 		

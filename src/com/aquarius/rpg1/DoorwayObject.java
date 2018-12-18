@@ -148,7 +148,7 @@ public class DoorwayObject extends GameObject implements PositionLabel{
 			DoorwayObject backDoorway = 
 					//String name, ObjectDrawer objectDrawer, ObjectPosition position, Direction direction,
 					//String levelBasename, Int2d levelPos, String entryLabel)
-					new DoorwayObject(entryLabel, new TileDrawer(0), midLevelPos,Direction.NORTH, 
+					new DoorwayObject(entryLabel, new TileDrawer(1280), midLevelPos,Direction.NORTH, 
 							fromLevelbasename, fromLevelPos, name);
 			levelState.gameObjectsToAdd.add(backDoorway);
 			foundObject = backDoorway;

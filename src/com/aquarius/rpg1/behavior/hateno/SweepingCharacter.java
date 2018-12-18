@@ -31,8 +31,10 @@ public class SweepingCharacter extends GameObject {
 	protected void init() {
 		interactionPossibilities = new HashSet<>(Arrays.asList(InteractionPossibility.TALK));
 		
-		DialogueBlock dialogueBlock = new DialogueBlock("Don't mind me..");
-		dialogueBlock.add(new DialogueBlock("Just doing some sweeping"));
+		DialogueBlock dialogueBlock = new DialogueBlock("Hello there!");
+		dialogueBlock.add(new DialogueBlock("Would you like to do some sweeping?"))
+			.addAnswer("Yes!", new DialogueBlock("That's amazing!"))
+			.addAnswer("No thank you.", new DialogueBlock("Maybe another time then"));
 		sweepingDialogue = new Dialogue(dialogueBlock, null);
 		
 	}

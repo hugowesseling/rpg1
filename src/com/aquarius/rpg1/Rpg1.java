@@ -566,18 +566,18 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		if(keyCode == KeyEvent.VK_S) {
 			simulating = !simulating;
 		}
-		if(keyCode == KeyEvent.VK_UP)
+		if(keyCode == KeyEvent.VK_LEFT)
 		{
 			if(dialogue != null)
 			{
-				dialogue.up();
+				dialogue.left();
 			}
 		}
-		if(keyCode == KeyEvent.VK_DOWN)
+		if(keyCode == KeyEvent.VK_RIGHT)
 		{
 			if(dialogue != null)
 			{
-				dialogue.down();
+				dialogue.right();
 			}
 		}
 		if(keyCode == KeyEvent.VK_I) {
@@ -626,9 +626,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				addObject.position.x = mouseX / 2 + screenx;
 				addObject.position.y = mouseY / 2 + screeny;
 			}
-
 		}
-		inputPlayerMovement();
+		if(simulating && dialogue==null)
+			inputPlayerMovement();
 		
 		drawEverything(g);
 		
