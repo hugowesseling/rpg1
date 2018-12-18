@@ -33,8 +33,9 @@ public class SweepingCharacter extends GameObject {
 		
 		DialogueBlock dialogueBlock = new DialogueBlock("Hello there!");
 		dialogueBlock.add(new DialogueBlock("Would you like to do some sweeping?"))
-			.addAnswer("Yes!", new DialogueBlock("That's amazing!"))
-			.addAnswer("No thank you.", new DialogueBlock("Maybe another time then"));
+				.addAnswer("Yes!", new DialogueBlock("That's amazing!").jumpTo("end"))
+				.addAnswer("No thank you.", new DialogueBlock("Maybe another time then").jumpTo("end"))
+			.addJumpPoint("end", new DialogueBlock("See you later!"));
 		sweepingDialogue = new Dialogue(dialogueBlock, null);
 		
 	}

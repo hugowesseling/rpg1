@@ -2,6 +2,7 @@ package com.aquarius.rpg1;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.util.HashMap;
 
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 
@@ -9,10 +10,13 @@ public class Dialogue {
 	DialogueBlock startDialogueBlock, currentDialogueBlock;
 	DialogStyle dialogStyle;
 	int currentAnswerIndex = 0;
+	public HashMap<String, DialogueBlock> jumpPoints;
 	
 	public Dialogue(DialogueBlock startDialogueBlock, DialogStyle dialogStyle) {
+		jumpPoints = new HashMap<String, DialogueBlock>();
 		this.startDialogueBlock = startDialogueBlock;
 		this.currentDialogueBlock = startDialogueBlock;
+		jumpPoints.putAll(currentDialogueBlock.jumpPoints);
 		if(dialogStyle == null) {
 			dialogStyle = Resources.dialogStyles.get(0);
 			System.out.println("Setting dialogstyle to:" + dialogStyle);
@@ -29,14 +33,22 @@ public class Dialogue {
 
 	public boolean confirm(LevelState levelState, Player player) {
 		System.out.println("Dialog.confirm");
-		if(currentDialogueBlock.answers.size()>0)
+		if(currentDialogueBlock.jumpTo != null) {
+			String jumpTo = currentDialogueBlock.jumpTo;
+			currentDialogueBlock = jumpPoints.get(currentDialogueBlock.jumpTo);
+			if(currentDialogueBlock == null) {
+				System.out.println("Could not find dialogue jump point: "+ jumpTo);
+			}
+		}else if(currentDialogueBlock.answers.size()>0){
 			currentDialogueBlock = currentDialogueBlock.answers.get(currentAnswerIndex).db;
-		else
+		}else {
 			currentDialogueBlock = currentDialogueBlock.nextNode;
+		}
 		if(currentDialogueBlock == null) {
 			currentDialogueBlock = startDialogueBlock;
 			return false;
 		}else {
+			jumpPoints.putAll(currentDialogueBlock.jumpPoints);			
 			currentDialogueBlock.doAction(levelState, player);
 			AudioSystemPlayer.playRandom(RandomSound.EXPRESSION);
 			checkChoice();
