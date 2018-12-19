@@ -70,7 +70,7 @@ public class Resources {
 			new TileSet(4, "/castle.png", 16,16,0,0, true),
 			new TileSet(5, "/tileA1_outside.png", 16,16,0,0, true),
 			new TileSet(6, "/tileA2_world.png", 16,16,0,0, true),
-			new TileSet(7, "/tileA5_dungeon1.png", 16,16,0,0, true),
+			new TileSet(7, "/dungeon.png", 16,16,0,0, true), //tileA5_dungeon1.png
 			new TileSet(8, "/tileB_outside.png", 16,16,0,0, true),
 			new TileSet(9, "/tileC_town1.png", 16,16,0,0, true),
 			new TileSet(10, "/tileB_dungeon.png", 16,16,0,0, true)

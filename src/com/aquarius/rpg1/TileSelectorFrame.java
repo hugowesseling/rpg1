@@ -175,7 +175,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		jFrame.setJMenuBar(menuBar);
 
 		jFrame.add(this);
-		setCurrentTileSet(0);
+		setCurrentTileSet(1);
 		jFrame.setVisible(true);
 		addMouseListener(this);
 		addMouseMotionListener(this);
