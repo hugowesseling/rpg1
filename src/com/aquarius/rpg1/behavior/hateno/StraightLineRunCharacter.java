@@ -54,4 +54,11 @@ public class StraightLineRunCharacter extends GameObject
 			//System.out.println("StraightLineRunCharacter.think: RunRandomlyAction");
 		}
 	}
+
+	@Override
+	protected void init() {
+		super.init();
+		damage = 2;
+	}
+	
 }

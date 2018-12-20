@@ -743,7 +743,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				bouncedx += bounce.x;
 				bouncedy += bounce.y;
 				bouncecount ++;
-				player.getDamage(levelState,1);
+				player.getDamage(levelState,gameObject.damage);
 			}
 		}
 		if(bouncecount != 0)

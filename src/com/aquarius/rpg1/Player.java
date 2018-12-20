@@ -106,7 +106,7 @@ public class Player extends GameObject {
 	
 	@Override
 	public void getDamage(LevelState levelState, int damage) {
-		if(cooldown == 0) {
+		if(cooldown == 0 && damage>0) {
 			health -= damage;
 			if(health <= 0) {
 				setBeginPosition(levelState);

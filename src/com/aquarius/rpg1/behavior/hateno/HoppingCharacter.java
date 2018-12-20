@@ -20,5 +20,10 @@ public class HoppingCharacter extends GameObject {
 			setAction(new HopRandomlyAction(this, worldState, 0));
 		}
 	}
+	@Override
+	protected void init() {
+		super.init();
+		damage = 1;
+	}
 
 }

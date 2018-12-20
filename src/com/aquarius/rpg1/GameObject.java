@@ -22,6 +22,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	protected String name;
 	protected Weapon weapon = null;
 	protected ObjectDrawer objectDrawer;
+	protected int damage;
 	protected transient int frameDivider;
 	public final static int FRAME_DIVIDER_DEFAULT = 10;
 
@@ -31,6 +32,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.objectDrawer = objectDrawer;
 		this.position = position;
 		this.direction = direction;
+		damage = 0;
 		action = null;
 		health = 20;
 		frameDivider = FRAME_DIVIDER_DEFAULT;
