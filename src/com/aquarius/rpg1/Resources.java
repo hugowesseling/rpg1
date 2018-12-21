@@ -78,6 +78,7 @@ public class Resources {
 	public final static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public final static TileSet itemTileSet = new TileSet(-2, "/_sheet.png", 16, 16, 0, 0, false);
 	public final static TileSet heartTileSet = new TileSet(-2, "/_hearts_sheet.png", 10, 10, 0, 0, false);
+	public final static ImageSet crystalBallTileSet = new ImageSet("/crystalballV002effect-loop/crystalballV002effect-loop%03d.png",0,15);
 	public final static ArrayList<CharacterTileSet> characterTileSets = new ArrayList<CharacterTileSet>();
 	public static ArrayList<DialogStyle> dialogStyles = new ArrayList<DialogStyle>();
     public final static HashMap<String, CharacterCreatorFunction> characterSubClasses = new HashMap<>();

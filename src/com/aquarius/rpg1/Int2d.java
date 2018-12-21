@@ -41,4 +41,8 @@ public class Int2d implements Position, Serializable
 	public Int2d copy() {
 		return new Int2d(x,y);
 	}
+
+	public Int2d multiply(int scalar) {
+		return new Int2d(x*scalar, y*scalar);
+	}
 }

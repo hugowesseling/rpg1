@@ -69,9 +69,10 @@ public class ObjectPosition implements Position, Serializable {
 		
 	}
 
-	public void add(Int2d movement) {
+	public ObjectPosition add(Int2d movement) {
 		x += movement.x;
 		y += movement.y;
+		return this;
 	}
 
 	public boolean inRect(Int2d topleft, Int2d bottomright) {
