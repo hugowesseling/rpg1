@@ -1,25 +1,21 @@
-package com.aquarius.rpg1.behavior.hateno;
+package com.aquarius.rpg1.behavior;
 
-import java.awt.Graphics2D;
-
-import com.aquarius.rpg1.AnimationDrawer;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.Resources;
 import com.aquarius.rpg1.WorldState;
-import com.aquarius.rpg1.behavior.FlyAction;
+import com.aquarius.rpg1.drawers.RotatingDrawer;
+import com.aquarius.rpg1.objects.GameObject;
 
-public class FireBall extends GameObject {
-	public FireBall(ObjectPosition position, Int2d movement) {
-		super("fireball", new AnimationDrawer(Resources.crystalBallTileSet), position, Direction.NORTH);
-		setAction(new FlyAction(this, movement));
+public class BouncingRock extends GameObject {
+	private static final long serialVersionUID = 8935352169165901619L;
+	public BouncingRock(ObjectPosition position, Int2d movement) {
+		super("BouncingRock", new RotatingDrawer(Resources.itemTileSet.getTileImageFromPositionUnsafe(Resources.ItemTileLocation.ROCK)), position, Direction.NORTH);
+		setAction(new BounceAction(this, movement));
 	}
-
-	private static final long serialVersionUID = -8813248849940680183L;
 
 	@Override
 	public void think(Player player, WorldState worldState, LevelState levelState) {

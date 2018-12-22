@@ -3,16 +3,16 @@ package com.aquarius.rpg1.behavior.hateno;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import com.aquarius.rpg1.CharacterDrawer;
 import com.aquarius.rpg1.Dialogue;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.drawers.CharacterDrawer;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class SoupCharacter extends GameObject {
 

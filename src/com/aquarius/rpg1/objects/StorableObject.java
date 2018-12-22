@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,6 +7,15 @@ import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.InteractionPossibility;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.Resources;
+import com.aquarius.rpg1.drawers.ItemTileDrawer;
 
 public class StorableObject extends GameObject {
 

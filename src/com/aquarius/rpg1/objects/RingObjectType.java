@@ -1,4 +1,6 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
+
+import com.aquarius.rpg1.ObjectColor;
 
 public class RingObjectType extends StorableObjectType {
 	// Rings are used to open doors with specific colors

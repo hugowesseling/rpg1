@@ -3,7 +3,6 @@ package com.aquarius.rpg1.behavior.hateno;
 import com.aquarius.rpg1.AudioSystemPlayer;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
@@ -11,6 +10,7 @@ import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.RunRandomlyAction;
 import com.aquarius.rpg1.behavior.WaitAction;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class ProximityRunCharacter extends GameObject
 {

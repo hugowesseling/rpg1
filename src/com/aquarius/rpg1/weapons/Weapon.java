@@ -1,7 +1,10 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.weapons;
 
 import java.awt.Graphics2D;
 import java.io.Serializable;
+
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.WorldState;
 
 public abstract class Weapon implements Serializable{
 	private static final long serialVersionUID = -3685739245093632795L;

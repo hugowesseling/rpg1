@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,7 +7,15 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.InteractionPossibility;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.Resources;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+import com.aquarius.rpg1.drawers.TileDrawer;
+import com.aquarius.rpg1.drawers.TileObjectDrawer;
 
 public class LockedDoorwayObject extends DoorwayObject {
 	private static final long serialVersionUID = -2825870237300156872L;

@@ -8,10 +8,23 @@ import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HidingCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
+import com.aquarius.rpg1.behavior.hateno.RockThrower;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.SweepingCharacter;
+import com.aquarius.rpg1.drawers.CharacterDrawer;
+import com.aquarius.rpg1.drawers.TileDrawer;
+import com.aquarius.rpg1.objects.DoorwayObject;
+import com.aquarius.rpg1.objects.FoodObjectType;
+import com.aquarius.rpg1.objects.GameObject;
+import com.aquarius.rpg1.objects.LockedDoorwayObject;
+import com.aquarius.rpg1.objects.RingObjectType;
+import com.aquarius.rpg1.objects.StorableObject;
+import com.aquarius.rpg1.objects.StorableObjectType;
+import com.aquarius.rpg1.objects.TreasureObject;
+import com.aquarius.rpg1.objects.UsableObjectType;
+import com.aquarius.rpg1.objects.ValueObjectType;
 
 
 public class Resources {
@@ -23,7 +36,8 @@ public class Resources {
 		SOUP(12,19),
 		DIAMOND(1,28),
 		BROCCOLI_RING(14,69),
-		STONE(4,28);
+		STONE(4,28),
+		ROCK(2,13);
 		public int x,y,index;
 		ItemTileLocation(int index){
 			this.index=index;
@@ -99,6 +113,8 @@ public class Resources {
 		addCharacterSubClass("StraightLineRunCharacter", (drawer, pos, dir) -> {return new StraightLineRunCharacter(drawer, pos, dir);});
 		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});
 		addCharacterSubClass("SweepingCharacter", (drawer, pos, dir) -> {return new SweepingCharacter(drawer, pos, dir);});
+		addCharacterSubClass("RockThrower", (drawer, pos, dir) -> {return new RockThrower(drawer, pos, dir);});
+		
 		
 
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});

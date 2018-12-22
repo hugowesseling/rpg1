@@ -1,7 +1,11 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.drawers;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.Resources;
 
 public class ItemTileDrawer extends ObjectDrawer {
 	private static final long serialVersionUID = 7326576083880078418L;

@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +13,18 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import com.aquarius.rpg1.Constant;
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.InteractionPossibility;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.PositionLabel;
+import com.aquarius.rpg1.Resources;
+import com.aquarius.rpg1.drawers.TileDrawer;
 
 public class DoorwayObject extends GameObject implements PositionLabel{
 	private static final long serialVersionUID = 8928597995294293843L;
@@ -154,8 +166,8 @@ public class DoorwayObject extends GameObject implements PositionLabel{
 			foundObject = backDoorway;
 			System.out.println("Created doorway at "+ backDoorway.position);
 		}
-		player.position = foundObject.getPosition().createForward(player.direction, GameObject.DEFAULT_RADIUS + 1);
-		System.out.println("Player position after moving through doorway:" + player.position);
+		player.setPosition(foundObject.getPosition().createForward(player.getDirection(), GameObject.DEFAULT_RADIUS + 1));
+		System.out.println("Player position after moving through doorway:" + player.getPosition());
 	}
 
 	@Override

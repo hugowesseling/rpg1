@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Vector;
 import com.aquarius.rpg1.behavior.GameObjectType;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class LevelState {
 	static final String USER_SAVE_FOLDER = "saves/";
@@ -40,7 +41,7 @@ public class LevelState {
 		ArrayList<GameObject> eligibles = new ArrayList<>();
 		for(GameObject character : allGameObjects)
 		{
-			if(character.position.tileAsInt2d().nearby(position, distance))
+			if(character.getPosition().tileAsInt2d().nearby(position, distance))
 			{
 				eligibles.add(character);
 			}
@@ -110,7 +111,7 @@ public class LevelState {
 		for(GameObject gameCharacter: allGameObjects) {
 			gameCharacter.think(player, worldState, this);
 			//Remove everything with zero or less health
-			if(gameCharacter.health > 0)
+			if(gameCharacter.getHealth() > 0)
 				newGameObjects.add(gameCharacter);
 		}
 		player.think(player, worldState, this);
@@ -143,7 +144,7 @@ public class LevelState {
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(fileInputStream);
-			//allCharacters = new Vector<>();
+						
 			allGameObjects = (Vector<GameObject>) ois.readObject();
 			for(GameObject character:allGameObjects) {
 				System.out.println("Read GameCharacter: " + character);
@@ -233,14 +234,16 @@ public class LevelState {
 	public void loadLevelByExit(int dx, int dy, Player player) {
 		levelPos.x += dx;
 		levelPos.y += dy;
+		ObjectPosition newPosition = player.getPosition();
 		if(dx<0)
-			player.position.x = (getWidth()-2) * Constant.TILE_WIDTH;
+			newPosition.x = (getWidth()-2) * Constant.TILE_WIDTH;
 		if(dx>0)
-			player.position.x = Constant.TILE_WIDTH * 2;
+			newPosition.x = Constant.TILE_WIDTH * 2;
 		if(dy<0)
-			player.position.y = (getHeight()-2) * Constant.TILE_HEIGHT;
+			newPosition.y = (getHeight()-2) * Constant.TILE_HEIGHT;
 		if(dy>0)
-			player.position.y = Constant.TILE_HEIGHT * 2;
+			newPosition.y = Constant.TILE_HEIGHT * 2;
+		player.setPosition(newPosition);
 		loadLevelByPosition();
 	}
 

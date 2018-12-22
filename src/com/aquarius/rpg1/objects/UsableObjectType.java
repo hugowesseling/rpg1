@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 
 public class UsableObjectType extends StorableObjectType {
 	private static final long serialVersionUID = -5355491187950257073L;

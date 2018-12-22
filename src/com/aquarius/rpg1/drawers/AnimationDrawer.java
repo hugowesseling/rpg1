@@ -1,7 +1,11 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.drawers;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.ImageSet;
+import com.aquarius.rpg1.ObjectDrawer;
 
 public class AnimationDrawer extends ObjectDrawer {
 	private static final long serialVersionUID = 6722376226466974917L;

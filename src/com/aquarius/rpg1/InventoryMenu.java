@@ -3,6 +3,8 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.util.Map;
 
+import com.aquarius.rpg1.objects.StorableObjectType;
+
 public class InventoryMenu {
 
 	private DialogStyle dialogStyle;

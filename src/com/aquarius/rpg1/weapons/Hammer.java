@@ -1,10 +1,18 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.weapons;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Resources;
+import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+import com.aquarius.rpg1.Resources.ItemTileLocation;
+import com.aquarius.rpg1.objects.DoorwayObject;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class Hammer extends Weapon {
 
@@ -29,7 +37,7 @@ public class Hammer extends Weapon {
 		if(slashCounter < 16) {
 			Image hammerimage = Resources.itemTileSet.getTileImageFromPositionUnsafe(Resources.ItemTileLocation.HAMMER);
 			AffineTransform oldTransform = graphics.getTransform();
-			graphics.translate(user.position.x - screenx + user.getDirection().movement.x*2, user.position.y - screeny - 7 + user.getDirection().movement.y*4);
+			graphics.translate(user.getPosition().x - screenx + user.getDirection().movement.x*2, user.getPosition().y - screeny - 7 + user.getDirection().movement.y*4);
 			graphics.rotate(Math.toRadians(slashCounter * 10 + user.getDirection().degrees));
 			graphics.drawImage(hammerimage, -15, -15, null);
 			graphics.setTransform(oldTransform);
@@ -42,8 +50,8 @@ public class Hammer extends Weapon {
 			slashCounter += 1;
 		if(slashCounter == 6) {
 			
-			int tileX = ObjectPosition.getXTileFromX(user.position.x + user.direction.movement.x*16);
-			int tileY = ObjectPosition.getYTileFromY(user.position.y + user.direction.movement.y*16);
+			int tileX = ObjectPosition.getXTileFromX(user.getPosition().x + user.getDirection().movement.x*16);
+			int tileY = ObjectPosition.getYTileFromY(user.getPosition().y + user.getDirection().movement.y*16);
 			int tileIndex = levelState.getTopCollidingTileForXYChecked(tileX, tileY);
 			System.out.println("Hammer hits " + tileIndex);
 			if(tileIndex != -1){
@@ -51,7 +59,7 @@ public class Hammer extends Weapon {
 				boolean foundDoorway = false;
 				for(GameObject gameObject: levelState.allGameObjects) {
 					if(gameObject instanceof DoorwayObject) {
-						if(gameObject.position.getXTile() == tileX && gameObject.position.getYTile() == tileY - 1) {
+						if(gameObject.getPosition().getXTile() == tileX && gameObject.getPosition().getYTile() == tileY - 1) {
 							levelState.replaceTopCollidingTileForXYChecked(tileX, tileY, 68867);
 							levelState.replaceTopCollidingTileForXYChecked(tileX, tileY - 1, 68611);
 							AudioSystemPlayer.playRandom(RandomSound.ROCK_HEAVY_SLAM);

@@ -69,7 +69,7 @@ public class ObjectPosition implements Position, Serializable {
 		
 	}
 
-	public ObjectPosition add(Int2d movement) {
+	public ObjectPosition addToThis(Int2d movement) {
 		x += movement.x;
 		y += movement.y;
 		return this;

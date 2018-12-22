@@ -1,10 +1,21 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.weapons;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Resources;
+import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+import com.aquarius.rpg1.Resources.ItemTileLocation;
+import com.aquarius.rpg1.drawers.ItemTileDrawer;
+import com.aquarius.rpg1.objects.GameObject;
+import com.aquarius.rpg1.objects.StorableObject;
+import com.aquarius.rpg1.objects.StorableObjectType;
 
 public class Broom extends Weapon {
 
@@ -29,7 +40,7 @@ public class Broom extends Weapon {
 	public void draw(Graphics2D graphics, int frameCounter, int screenx, int screeny) {
 		Image broomImage = Resources.itemTileSet.getTileImageFromPositionUnsafe(Resources.ItemTileLocation.BROOM);
 		AffineTransform oldTransform = graphics.getTransform();
-		graphics.translate(user.position.x - screenx + user.getDirection().movement.x*2, user.position.y - screeny - 7 + user.getDirection().movement.y*4);
+		graphics.translate(user.getPosition().x - screenx + user.getDirection().movement.x*2, user.getPosition().y - screeny - 7 + user.getDirection().movement.y*4);
 		graphics.rotate(Math.toRadians(Math.cos(swishCounter*Math.PI*0.1)*22.5f + user.getDirection().degrees + 212.5f));
 		graphics.drawImage(broomImage, 0, 0, null);
 		graphics.setTransform(oldTransform);
@@ -43,8 +54,8 @@ public class Broom extends Weapon {
 			swishCounter += 1;
 		}
 		if(swishCounter == 10) {
-			int tileX = ObjectPosition.getXTileFromX(user.position.x + user.direction.movement.x*16);
-			int tileY = ObjectPosition.getYTileFromY(user.position.y + user.direction.movement.y*16);
+			int tileX = ObjectPosition.getXTileFromX(user.getPosition().x + user.getDirection().movement.x*16);
+			int tileY = ObjectPosition.getYTileFromY(user.getPosition().y + user.getDirection().movement.y*16);
 			int tileIndex = levelState.top_layer.getTile(tileX, tileY);
 			System.out.println("Broom: Sweeping: " + tileIndex);
 			if(tileIndex == 526084) {

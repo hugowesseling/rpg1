@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -7,6 +7,18 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 import com.aquarius.rpg1.behavior.ObjectAction;
+import com.aquarius.rpg1.weapons.Weapon;
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.Dialogue;
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.InteractionPossibility;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.ObjectPosition;
+import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.PositionLabel;
+import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
@@ -144,7 +156,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		
 	}
 	
-	public void getDamage(LevelState levelState, int damage) {
+	public void doDamage(LevelState levelState, int damage) {
 		AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);
 		health -= damage;
 		if(health<=0) {
@@ -185,37 +197,38 @@ public class GameObject implements CharacterBehavior, Serializable
 		return levelState.collidesObjectPositionHitbox(x, y, -8, -5, 6, 8);
 	}
 
+	public void move(int x, int y) {
+		position.x+=x;
+		position.y+=y;
+	}	
 	public boolean moveAndLevelCollide(LevelState levelState, int dx, int dy) {
-		// Returns true if movement was done
-		if(dx != 0 || dy != 0)
+		// Returns true if movement could be done
+		if(dx == 0 && dy == 0)
+			return true;
+		if(dx != 0 && dy != 0 && !collided(position.x + dx, position.y + dy, levelState)){
+			position.x+=dx;
+			position.y+=dy;
+			return true;
+		}
+		//try only x movement
+		if(dx != 0 && !collided(position.x + dx, position.y, levelState))
 		{
-			if(dx != 0 && dy != 0 && !collided(position.x + dx, position.y + dy, levelState)){
-				position.x+=dx;
-				position.y+=dy;
-				return true;
-			}
-			//try only x movement
-			if(dx != 0 && !collided(position.x + dx, position.y, levelState))
-			{
-				position.x+=dx;
-				return true;
-			}
-			//try only y movement
-			if(dy != 0 && !collided(position.x, position.y + dy, levelState))
-			{
-				position.y+=dy;
-				return true;
-			}
-
-			//check player's current location
-			if(collided(position.x, position.y, levelState))
-			{
-				//player is collided on the place where he's standing, allow all movements.
-				position.x+=dx;
-				position.y+=dy;
-				return true;
-			}
-			return false;
+			position.x+=dx;
+			return true;
+		}
+		//try only y movement
+		if(dy != 0 && !collided(position.x, position.y + dy, levelState))
+		{
+			position.y+=dy;
+			return true;
+		}
+		//check player's current location
+		if(collided(position.x, position.y, levelState))
+		{
+			//player is collided on the place where he's standing, allow all movements.
+			position.x+=dx;
+			position.y+=dy;
+			return true;
 		}
 		return false;
 	}
@@ -228,4 +241,20 @@ public class GameObject implements CharacterBehavior, Serializable
 	public String getName() {
 		return name;
 	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setPosition(ObjectPosition newPosition) {
+		position = newPosition;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+
+	
 }
+

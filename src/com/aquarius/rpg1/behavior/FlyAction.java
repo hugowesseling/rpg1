@@ -2,11 +2,10 @@ package com.aquarius.rpg1.behavior;
 
 import java.io.Serializable;
 
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
-import com.aquarius.rpg1.behavior.hateno.FireBall;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class FlyAction implements ObjectAction, Serializable {
 

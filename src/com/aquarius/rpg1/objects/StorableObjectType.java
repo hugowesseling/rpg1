@@ -1,4 +1,4 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.objects;
 import java.io.Serializable;
 import java.util.HashMap;
 

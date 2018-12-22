@@ -185,6 +185,12 @@ import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
+import com.aquarius.rpg1.drawers.CharacterDrawer;
+import com.aquarius.rpg1.drawers.TileDrawer;
+import com.aquarius.rpg1.objects.GameObject;
+import com.aquarius.rpg1.objects.StorableObjectType;
+import com.aquarius.rpg1.weapons.BeamWeapon;
+import com.aquarius.rpg1.weapons.Hammer;
 
 public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	volatile private boolean mouseDownLeft = false;
@@ -511,8 +517,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				ObjectPosition mousePosition = new ObjectPosition(mouseX/2 +screenx, mouseY/2 +screeny);
 				for(GameObject gameObject:levelState.allGameObjects) {
 					//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
-					if(gameObject.position.distanceTo(mousePosition) < mindistance) {
-						mindistance = gameObject.position.distanceTo(mousePosition);
+					if(gameObject.getPosition().distanceTo(mousePosition) < mindistance) {
+						mindistance = gameObject.getPosition().distanceTo(mousePosition);
 						closestObject = gameObject;
 					}
 				}
@@ -556,11 +562,11 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			}
 		}
 		if(keyCode == KeyEvent.VK_X) {
-			player.weapon = new BeamWeapon(player);
+			player.setWeapon(new BeamWeapon(player));
 			player.useWeapon();
 		}
 		if(keyCode == KeyEvent.VK_H) {
-			player.weapon = new Hammer(player);
+			player.setWeapon(new Hammer(player));
 			player.useWeapon();
 		}
 		if(keyCode == KeyEvent.VK_S) {
@@ -623,8 +629,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 			if(!simulating)
 				mouseCornerActions(size);
 			if(addObject != null) {
-				addObject.position.x = mouseX / 2 + screenx;
-				addObject.position.y = mouseY / 2 + screeny;
+				addObject.setPosition(new ObjectPosition(
+						mouseX / 2 + screenx, mouseY / 2 + screeny));
 			}
 		}
 		if(simulating && dialogue==null)
@@ -698,41 +704,36 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 	
 	private void drawHUD(Graphics2D graphics, Player player) {
 		int currentHeartPos = 20;
-		for(int i=3;i<player.health;i+=4) {
+		for(int i=3;i<player.getHealth();i+=4) {
 			graphics.drawImage(Resources.heartTileSet.tiles[0][10], currentHeartPos , 20 ,null);
 			currentHeartPos+=14;
 		}
-		int lastHeart = player.health % 4; // = 0..3
+		int lastHeart = player.getHealth() % 4; // = 0..3
 		if(lastHeart>0)
 			graphics.drawImage(Resources.heartTileSet.tiles[0][14 - lastHeart], currentHeartPos , 20 ,null);
 			
 	}
 	private void inputPlayerMovement() {
-		boolean playerMoved = false;
 		int dx = 0, dy = 0;
 		if(input.buttons[Input.LEFT])
 		{
 			dx = -2;
 			player.setDirection(Direction.WEST);
-			playerMoved = true;
 		}
 		if(input.buttons[Input.RIGHT])
 		{
 			dx = 2;
 			player.setDirection(Direction.EAST);
-			playerMoved = true;
 		}
 		if(input.buttons[Input.UP])
 		{
 			dy = -2;
 			player.setDirection(Direction.NORTH);
-			playerMoved = true;
 		}
 		if(input.buttons[Input.DOWN])
 		{
 			dy = 2;
 			player.setDirection(Direction.SOUTH);
-			playerMoved = true;
 		}
 		//Add dx,dy from colliding with other characters
 		int bouncedx = 0, bouncedy = 0, bouncecount =0;
@@ -743,7 +744,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				bouncedx += bounce.x;
 				bouncedy += bounce.y;
 				bouncecount ++;
-				player.getDamage(levelState,gameObject.damage);
+				player.doDamage(levelState, gameObject.getDamage());
 			}
 		}
 		if(bouncecount != 0)
@@ -753,9 +754,9 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		}
 
 		
-		playerMoved = player.moveAndLevelCollide(levelState, dx, dy);
+		boolean playerCouldMove = player.moveAndLevelCollide(levelState, dx, dy);
 		
-		if(playerMoved){
+		if(playerCouldMove && (dx!=0 || dy!=0)){
 			
 			if(frameCounter % 15 == 0) {
 				
@@ -764,8 +765,8 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 						walkSoundIndex);
 				AudioSystemPlayer.playSound(audioFileName, false);
 			}
-			screenx = player.position.x - 150;
-			screeny = player.position.y - 150;
+			screenx = player.getPosition().x - 150;
+			screeny = player.getPosition().y - 150;
 			Dimension size = this.getSize();
 			int imageWidth = size.width / 2;
 			int imageHeight = size.height / 2;
@@ -779,19 +780,19 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				screeny = levelState.getHeight() * Constant.TILE_HEIGHT - imageHeight;
 			}				
 		}
-		if(player.position.x < Constant.TILE_WIDTH * 1)
+		if(player.getPosition().x < Constant.TILE_WIDTH * 1)
 		{
 			levelState.loadLevelByExit(-1, 0, player);
 		}
-		if(player.position.x > (levelState.getWidth()-1) * Constant.TILE_WIDTH)
+		if(player.getPosition().x > (levelState.getWidth()-1) * Constant.TILE_WIDTH)
 		{
 			levelState.loadLevelByExit(1, 0, player);
 		}
-		if(player.position.y < Constant.TILE_HEIGHT * 1)
+		if(player.getPosition().y < Constant.TILE_HEIGHT * 1)
 		{
 			levelState.loadLevelByExit(0, -1, player);
 		}
-		if(player.position.y > (levelState.getHeight()-1) * Constant.TILE_HEIGHT)
+		if(player.getPosition().y > (levelState.getHeight()-1) * Constant.TILE_HEIGHT)
 		{
 			levelState.loadLevelByExit(0, 1, player);
 		}

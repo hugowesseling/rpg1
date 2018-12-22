@@ -4,11 +4,14 @@ import java.awt.Graphics2D;
 import java.util.Vector;
 
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+import com.aquarius.rpg1.objects.GameObject;
+import com.aquarius.rpg1.objects.StorableObjectType;
+import com.aquarius.rpg1.weapons.BeamWeapon;
+import com.aquarius.rpg1.weapons.Weapon;
 
 public class Player extends GameObject {
 	private static final long serialVersionUID = 1752542798493227606L;
 	private static final int PLAYER_BEGIN_HEALTH = 12;
-	Vector<CarryableItem> itemsCarried;
 	private GameObject interactionGameObject = null;
 	public Bag<String> inventory;
 	private InteractionPossibility interactionPossibilty;
@@ -68,9 +71,9 @@ public class Player extends GameObject {
 	public void checkIfTouching(LevelState levelState) {
 		for(GameObject gameObject: levelState.allGameObjects) {
 			if(colliding(gameObject)) {
-				System.out.println(gameObject.name + " is colliding");
+				System.out.println(gameObject.getName() + " is colliding");
 				if(gameObject.getInteractionPossibilities().contains(InteractionPossibility.TOUCH)) {
-					System.out.println("Touching " + gameObject.name);
+					System.out.println("Touching " + gameObject.getName());
 					gameObject.doTouchAction(levelState, this);
 				}
 			}
@@ -105,7 +108,7 @@ public class Player extends GameObject {
 	}
 	
 	@Override
-	public void getDamage(LevelState levelState, int damage) {
+	public void doDamage(LevelState levelState, int damage) {
 		if(cooldown == 0 && damage>0) {
 			health -= damage;
 			if(health <= 0) {
@@ -121,6 +124,9 @@ public class Player extends GameObject {
 	public void setBeginPosition(LevelState levelState) {
 		levelState.setLevelPos("level", new Int2d(500,500));
 		position = ObjectPosition.createFromTilePosition(new Int2d(13, 30));
+	}
+	public void setWeapon(Weapon newWeapon) {
+		weapon = newWeapon;
 	}
 	
 }

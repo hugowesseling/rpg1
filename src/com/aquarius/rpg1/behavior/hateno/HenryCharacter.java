@@ -6,7 +6,6 @@ import java.util.HashSet;
 import com.aquarius.rpg1.Dialogue;
 import com.aquarius.rpg1.DialogueBlock;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
@@ -18,6 +17,7 @@ import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
 import com.aquarius.rpg1.behavior.WalkToPositionAction;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class HenryCharacter extends GameObject
 {

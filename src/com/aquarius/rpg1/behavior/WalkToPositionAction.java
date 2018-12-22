@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class WalkToPositionAction implements ObjectAction, Serializable {
 

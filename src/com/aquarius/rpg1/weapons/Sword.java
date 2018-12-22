@@ -1,9 +1,15 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.weapons;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.aquarius.rpg1.AudioSystemPlayer;
+import com.aquarius.rpg1.Int2d;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.Resources;
+import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class Sword extends Weapon {
 
@@ -30,7 +36,7 @@ public class Sword extends Weapon {
 			Image swordimage = Resources.swordAttack.getTileImageFromXYSafe(
 					swordSlashCounter, 
 					SWORD_DIRECTION_ORDER[user.getDirection().tileOffset % SWORD_DIRECTION_ORDER.length]);
-			graphics.drawImage(swordimage, user.position.x - screenx - 19, user.position.y - screeny - 15, null);
+			graphics.drawImage(swordimage, user.getPosition().x - screenx - 19, user.getPosition().y - screeny - 15, null);
 			if(frameCounter % 3 == 0) {
 				swordSlashCounter += 1;
 			}
@@ -48,13 +54,13 @@ public class Sword extends Weapon {
 			//just front: inprod(vf, rp) > 0
 			for(GameObject character: levelState.allGameObjects) {
 				if(character != user) {
-					int rx = character.position.x - user.position.x, ry = character.position.y - user.position.y;
+					int rx = character.getPosition().x - user.getPosition().x, ry = character.getPosition().y - user.getPosition().y;
 					Int2d vf = user.getDirection().movement;
 					//Int2d vs = vf.rotate90();
 					if(rx *rx + ry *ry < radius*radius) {
-						System.out.println("Character " + character.name + " in range");
+						System.out.println("Character " + character.getName() + " in range");
 						if( vf.x  * rx + vf.y *ry > 0) {
-							System.out.println("Hitting character " + character.name);
+							System.out.println("Hitting character " + character.getName());
 							for(int i=0;i<10;i++)
 								character.moveAndLevelCollide(levelState, vf.x * 2, vf.y * 2);
 							AudioSystemPlayer.playRandom(RandomSound.FLESH_IMPACT);

@@ -1,8 +1,10 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.behavior;
 
 import java.io.Serializable;
 
-import com.aquarius.rpg1.behavior.CharacterBehavior;
+import com.aquarius.rpg1.LevelState;
+import com.aquarius.rpg1.Player;
+import com.aquarius.rpg1.WorldState;
 
 public class NothingBehavior implements CharacterBehavior, Serializable {
 

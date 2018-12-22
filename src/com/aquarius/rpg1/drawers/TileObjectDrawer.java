@@ -1,11 +1,15 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.drawers;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
 
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.Resources;
+
 public class TileObjectDrawer extends ObjectDrawer {
 	private static final long serialVersionUID = -1806149907921854224L;
-	int tileIndex = 0;
+	public int tileIndex = 0;
 	private int itemTileIndex = 0;
 	
 	

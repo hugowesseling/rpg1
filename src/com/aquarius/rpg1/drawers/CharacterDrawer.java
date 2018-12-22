@@ -1,6 +1,11 @@
-package com.aquarius.rpg1;
+package com.aquarius.rpg1.drawers;
 
 import java.awt.Graphics2D;
+
+import com.aquarius.rpg1.CharacterTileSet;
+import com.aquarius.rpg1.Direction;
+import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.Resources;
 
 public class CharacterDrawer extends ObjectDrawer {
 

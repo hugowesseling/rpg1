@@ -3,12 +3,11 @@ package com.aquarius.rpg1.behavior;
 import java.io.Serializable;
 
 import com.aquarius.rpg1.Direction;
-import com.aquarius.rpg1.GameObject;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.WorldState;
-import com.aquarius.rpg1.behavior.hateno.FireBall;
+import com.aquarius.rpg1.objects.GameObject;
 
 public class HopRandomlyAction implements ObjectAction, Serializable {
 
@@ -40,7 +39,7 @@ public class HopRandomlyAction implements ObjectAction, Serializable {
 		dz -= 0.3;
 		if(z < 0) {
 			doNewHop = true;
-			levelState.gameObjectsToAdd.add(new FireBall(gameObject.getPosition().clone().add(gameObject.getDirection().movement.multiply(10)), gameObject.getDirection().movement.multiply(3)));
+			levelState.gameObjectsToAdd.add(new FireBall(gameObject.getPosition().clone().addToThis(gameObject.getDirection().movement.multiply(10)), gameObject.getDirection().movement.multiply(3)));
 		}
 		if(hopTimeMs > 0)
 			return worldState.getTimeMs() > startTime + hopTimeMs;
