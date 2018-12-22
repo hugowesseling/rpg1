@@ -13,6 +13,7 @@ import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
 import com.aquarius.rpg1.behavior.hateno.SweepingCharacter;
+import com.aquarius.rpg1.behavior.hateno.WalkRandomlyCharacter;
 import com.aquarius.rpg1.drawers.CharacterDrawer;
 import com.aquarius.rpg1.drawers.TileDrawer;
 import com.aquarius.rpg1.objects.DoorwayObject;
@@ -114,8 +115,7 @@ public class Resources {
 		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});
 		addCharacterSubClass("SweepingCharacter", (drawer, pos, dir) -> {return new SweepingCharacter(drawer, pos, dir);});
 		addCharacterSubClass("RockThrower", (drawer, pos, dir) -> {return new RockThrower(drawer, pos, dir);});
-		
-		
+		addCharacterSubClass("WalkRandomlyCharacter", (drawer, pos, dir) -> {return new WalkRandomlyCharacter(drawer, pos);});
 
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});
 		addObjectSubClass("DoorwayObject", (drawer, pos, state) -> {return new DoorwayObject(drawer, pos);});

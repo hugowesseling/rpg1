@@ -332,6 +332,7 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
 				String[] characterSubClassesStrings = Resources.characterSubClasses.keySet().toArray(new String[Resources.characterSubClasses.size()]);
 				JComboBox<String> characterSubClassComboBox = new JComboBox<String>(characterSubClassesStrings);
+				characterSubClassComboBox.setMaximumRowCount(50);
 				JComboBox<Direction> directionComboBox = new JComboBox<Direction>(Direction.values());
 				CharacterTileSetChoosingLabel characterTileSetChoosingLabel = new CharacterTileSetChoosingLabel("character", frame, null);
 				Object characterSettings[] = {"Specify character settings", characterSubClassComboBox, directionComboBox, characterTileSetChoosingLabel};
