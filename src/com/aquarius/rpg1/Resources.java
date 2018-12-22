@@ -4,11 +4,13 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.aquarius.rpg1.behavior.FiresFireBallRandomlyAction;
+import com.aquarius.rpg1.behavior.ThrowRocksRandomlyAction;
 import com.aquarius.rpg1.behavior.hateno.HenryCharacter;
 import com.aquarius.rpg1.behavior.hateno.HidingCharacter;
 import com.aquarius.rpg1.behavior.hateno.HoppingCharacter;
 import com.aquarius.rpg1.behavior.hateno.ProximityRunCharacter;
-import com.aquarius.rpg1.behavior.hateno.RockThrower;
+import com.aquarius.rpg1.behavior.hateno.SingleActionDoer;
 import com.aquarius.rpg1.behavior.hateno.RunningCharacter;
 import com.aquarius.rpg1.behavior.hateno.SoupCharacter;
 import com.aquarius.rpg1.behavior.hateno.StraightLineRunCharacter;
@@ -114,7 +116,8 @@ public class Resources {
 		addCharacterSubClass("StraightLineRunCharacter", (drawer, pos, dir) -> {return new StraightLineRunCharacter(drawer, pos, dir);});
 		addCharacterSubClass("HidingCharacter", (drawer, pos, dir) -> {return new HidingCharacter(drawer, pos, dir);});
 		addCharacterSubClass("SweepingCharacter", (drawer, pos, dir) -> {return new SweepingCharacter(drawer, pos, dir);});
-		addCharacterSubClass("RockThrower", (drawer, pos, dir) -> {return new RockThrower(drawer, pos, dir);});
+		addCharacterSubClass("RockThrower", (drawer, pos, dir) -> {return new SingleActionDoer(drawer, pos, dir, (go)->{return new ThrowRocksRandomlyAction(go);});});
+		addCharacterSubClass("FireBallThrower", (drawer, pos, dir) -> {return new SingleActionDoer(drawer, pos, dir, (go)->{return new FiresFireBallRandomlyAction(go);});});
 		addCharacterSubClass("WalkRandomlyCharacter", (drawer, pos, dir) -> {return new WalkRandomlyCharacter(drawer, pos);});
 
 		addObjectSubClass("TreasureObject", (drawer, pos, state) -> {return new TreasureObject(drawer, pos);});
@@ -122,18 +125,19 @@ public class Resources {
 		addObjectSubClass("LockedDoorwayObject", (drawer, pos, state) -> {return new LockedDoorwayObject(drawer, pos);});
 		addObjectSubClass("StorableObject", (drawer, pos, state) -> {return StorableObject.createStorableObject(pos);});
 		
-		addCharacterTileSets(0,"/characters1.png", 26, 36, 0, 0);
-		addCharacterTileSets(1,"/animals1.png", 26, 36, 0, 0);
-		addCharacterTileSets(1,"/animals2.png", 42, 36, 0, 0);
-		addCharacterTileSets(1,"/animals3.png", 42, 36, 0, 0);
-		addCharacterTileSets(1,"/animals4.png", 42, 36, 0, 0);
-		addCharacterTileSets(1,"/animals5.png", 50, 46, 0, 0);
-		addCharacterTileSets(1,"/birds1.png", 42, 36, 0, 0);
-		addCharacterTileSets(1,"/birds2.png", 42, 36, 0, 0);
-		addCharacterTileSets(1,"/horse1.png", 60, 64, 0, 0);
-		addCharacterTileSets(1,"/monster1.png", 60, 64, 0, 0);
-		addCharacterTileSets(1,"/monster2.png", 60, 64, 0, 0);
-		addCharacterTileSets(1,"/chara5.png", 26, 36, 0, 0);
+		addCharacterTileSets("/characters1.png", 26, 36, 0, 0);
+		addCharacterTileSets("/animals1.png", 26, 36, 0, 0);
+		addCharacterTileSets("/animals2.png", 42, 36, 0, 0);
+		addCharacterTileSets("/animals3.png", 42, 36, 0, 0);
+		addCharacterTileSets("/animals4.png", 42, 36, 0, 0);
+		addCharacterTileSets("/animals5.png", 50, 46, 0, 0);
+		addCharacterTileSets("/birds1.png", 42, 36, 0, 0);
+		addCharacterTileSets("/birds2.png", 42, 36, 0, 0);
+		addCharacterTileSets("/horse1.png", 60, 64, 0, 0);
+		addCharacterTileSets("/monster1.png", 60, 64, 0, 0);
+		addCharacterTileSets("/monster2.png", 60, 64, 0, 0);
+		addCharacterTileSets("/chara5.png", 26, 36, 0, 0);
+		addCharacterTileSets("/military1.png", 26, 36, 0, 0);
 
 		allStorableObjectTypesHashMap = new HashMap<>();
 		for(StorableObjectType sot: allStorableObjectTypes){
@@ -151,8 +155,8 @@ public class Resources {
 		objectSubClasses.put(string, func);
 	}
 
-	private static void addCharacterTileSets(int index, String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight) {
-		TileSet tileSet = new TileSet(index, fileName, tileWidth, tileHeight, marginWidth, marginHeight, false);
+	private static void addCharacterTileSets(String fileName, int tileWidth, int tileHeight, int marginWidth, int marginHeight) {
+		TileSet tileSet = new TileSet(0, fileName, tileWidth, tileHeight, marginWidth, marginHeight, false);
 		for(int x = 0; x < tileSet.tiles.length; x+=3)
 			for(int y = 0; y < tileSet.tiles[0].length; y+=4)
 				characterTileSets.add(new CharacterTileSet(tileSet, new Int2d(x, y)));

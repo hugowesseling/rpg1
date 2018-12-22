@@ -39,7 +39,6 @@ public class HopRandomlyAction implements ObjectAction, Serializable {
 		dz -= 0.3;
 		if(z < 0) {
 			doNewHop = true;
-			levelState.gameObjectsToAdd.add(new FireBall(gameObject.getPosition().clone().addToThis(gameObject.getDirection().movement.multiply(10)), gameObject.getDirection().movement.multiply(3)));
 		}
 		if(hopTimeMs > 0)
 			return worldState.getTimeMs() > startTime + hopTimeMs;
