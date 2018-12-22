@@ -5,14 +5,10 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JMenuBar;
 
 public class CharacterTileSetSelector extends JDialog implements MouseListener {
 
@@ -22,6 +18,7 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 		@Override
 		public void paint(Graphics g)
 		{
+			Graphics2D g2d = (Graphics2D) g;
 			int frame = 0;
 			
 			int x=0;
@@ -30,7 +27,9 @@ public class CharacterTileSetSelector extends JDialog implements MouseListener {
 			System.out.println("CharacterTileSetSelector: screenWidth: "+screenWidth);
 
 			for(CharacterTileSet characterTileSet:Resources.characterTileSets) {
-				characterTileSet.drawTopLeft((Graphics2D) g, x*TILE_WIDTH,  y*TILE_HEIGHT, Direction.SOUTH, frame);
+				characterTileSet.drawTopLeft(g2d, x*TILE_WIDTH,  y*TILE_HEIGHT, Direction.SOUTH, frame);
+				Image image = characterTileSet.getImage(Direction.SOUTH, frame);
+				g2d.drawRect(x*TILE_WIDTH,  y*TILE_HEIGHT, image.getWidth(null),  image.getHeight(null));
 				x++;
 				if(x*TILE_WIDTH+TILE_WIDTH >= screenWidth) {
 					x=0;

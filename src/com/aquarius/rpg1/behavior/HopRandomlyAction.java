@@ -9,7 +9,7 @@ import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class HopRandomlyAction implements ObjectAction, Serializable {
+public class HopRandomlyAction implements ObjectAction {
 
 	private static final long serialVersionUID = 6863101672701913439L;
 	private GameObject gameObject;

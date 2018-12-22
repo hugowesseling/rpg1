@@ -1,19 +1,17 @@
 package com.aquarius.rpg1.behavior;
 
-import java.io.Serializable;
-
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class ThrowRocksRandomlyAction implements ObjectAction, Serializable {
+public class ThrowRocksRandomlyAction implements ObjectAction {
 	private static final long serialVersionUID = -6274782855599805370L;
 	private int timer;
 	private GameObject gameObject;
 	public ThrowRocksRandomlyAction(GameObject gameObject) {
 		this.gameObject = gameObject;
-		timer = 20;
+		timer = 50;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import com.aquarius.rpg1.objects.GameObject;
 public class BouncingRock extends GameObject {
 	private static final long serialVersionUID = 8935352169165901619L;
 	public BouncingRock(ObjectPosition position, Int2d movement) {
-		super("BouncingRock", new RotatingDrawer(Resources.itemTileSet.getTileImageFromPositionUnsafe(Resources.ItemTileLocation.ROCK)), position, Direction.NORTH);
+		super("BouncingRock", new RotatingDrawer(Resources.ItemTileLocation.ROCK.index), position, Direction.NORTH);
 		setAction(new BounceAction(this, movement));
 	}
 

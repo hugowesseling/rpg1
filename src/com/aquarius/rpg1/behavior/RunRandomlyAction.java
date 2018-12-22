@@ -1,12 +1,11 @@
 package com.aquarius.rpg1.behavior;
 
-import java.io.Serializable;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class RunRandomlyAction implements ObjectAction, Serializable {
+public class RunRandomlyAction implements ObjectAction {
 	private static final long serialVersionUID = -7105141081754497848L;
 	private GameObject gameObject;
 	private int runTimeMs;

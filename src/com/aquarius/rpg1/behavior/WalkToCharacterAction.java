@@ -8,7 +8,7 @@ import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class WalkToCharacterAction implements ObjectAction, Serializable{
+public class WalkToCharacterAction implements ObjectAction{
 
 	private static final long serialVersionUID = -4328959808077331996L;
 	private GameObject character;

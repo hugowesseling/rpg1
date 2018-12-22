@@ -1,12 +1,14 @@
 package com.aquarius.rpg1.behavior;
 
+import java.io.Serializable;
+
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class BounceAction implements ObjectAction {
-
+	private static final long serialVersionUID = 8012860963215535300L;
 	private GameObject gameObject;
 	private Int2d movement;
 	private float z,dz;

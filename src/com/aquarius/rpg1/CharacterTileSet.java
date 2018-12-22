@@ -36,5 +36,10 @@ public class CharacterTileSet  {
 		Direction direction = Direction.SOUTH;
 		return tileSet.getTileImageFromXYSafe(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);
 	}
+
+	public Image getImage(Direction direction, int frame) {
+		int drawFrame = FRAME_ORDER[frame%4];
+		return tileSet.getTileImageFromXYSafe(drawFrame + tilesetPosition.x, direction.tileOffset + tilesetPosition.y);		
+	}
 	
 }

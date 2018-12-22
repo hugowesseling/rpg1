@@ -95,8 +95,10 @@ public class Art {
     }
 	
     public static BufferedImage[][] split(BufferedImage src, int tileWidth, int tileHeight, int marginWidth, int marginHeight) {
-        int xSlices = ((src.getWidth()-1) / (tileWidth + marginWidth))+1;
-        int ySlices = ((src.getHeight()-1) / (tileHeight + marginHeight))+1;
+        //int xSlices = ((src.getWidth()-1) / (tileWidth + marginWidth))+1;
+        //int ySlices = ((src.getHeight()-1) / (tileHeight + marginHeight))+1;
+        int xSlices = ((src.getWidth()) / (tileWidth + marginWidth));
+        int ySlices = ((src.getHeight()) / (tileHeight + marginHeight));
         BufferedImage[][] res = new BufferedImage[xSlices][ySlices];
         for (int x = 0; x < xSlices; x++) {
             for (int y = 0; y < ySlices; y++) {

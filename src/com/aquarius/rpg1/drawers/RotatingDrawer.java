@@ -6,22 +6,26 @@ import java.awt.geom.AffineTransform;
 
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.ObjectDrawer;
+import com.aquarius.rpg1.Resources;
 
 public class RotatingDrawer extends ObjectDrawer {
 	private static final long serialVersionUID = -1142086611280754815L;
 	private double radians;
-	private Image image;
+	private int itemTileIndex;
+	private transient Image image = null;
 	
 	
-	public RotatingDrawer(Image image) {
+	public RotatingDrawer(int itemTileIndex) {
 		super();
 		radians = 0;
-		this.image = image;
+		this.itemTileIndex = itemTileIndex;
 	}
 
 
 	@Override
 	public void draw(Graphics2D graphics, int x, int y, Direction direction, int frame) {
+		if(image == null)
+			image = Resources.itemTileSet.getTileImageFromIndexSafe(itemTileIndex);
 		radians += 0.2;
 		AffineTransform oldTransform = graphics.getTransform();
 		graphics.translate(x, y);

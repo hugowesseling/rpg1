@@ -135,7 +135,7 @@ public class Resources {
 		addCharacterTileSets("/birds2.png", 42, 36, 0, 0);
 		addCharacterTileSets("/horse1.png", 60, 64, 0, 0);
 		addCharacterTileSets("/monster1.png", 60, 64, 0, 0);
-		addCharacterTileSets("/monster2.png", 60, 64, 0, 0);
+		addCharacterTileSets("/monster2.png", 59, 64, 0, 0);
 		addCharacterTileSets("/chara5.png", 26, 36, 0, 0);
 		addCharacterTileSets("/military1.png", 26, 36, 0, 0);
 

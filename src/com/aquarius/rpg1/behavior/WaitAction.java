@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 
-public class WaitAction implements ObjectAction, Serializable {
+public class WaitAction implements ObjectAction {
 	private static final long serialVersionUID = -5127950924665960036L;
 	private long startTime;
 	private long standingaroundDuration;

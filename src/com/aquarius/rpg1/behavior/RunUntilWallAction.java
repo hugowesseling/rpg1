@@ -7,7 +7,7 @@ import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class RunUntilWallAction implements ObjectAction, Serializable {
+public class RunUntilWallAction implements ObjectAction {
 	private static final long serialVersionUID = -8814784237530471167L;
 	private GameObject gameObject;
 	private int speed;

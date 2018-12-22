@@ -9,8 +9,7 @@ import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.behavior.RunRandomlyAction;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class WalkRandomlyCharacter extends GameObject
-{
+public class WalkRandomlyCharacter extends GameObject{
 	private static final long serialVersionUID = 4325930941936458411L;
 
 	public WalkRandomlyCharacter(ObjectDrawer objectDrawer, ObjectPosition position) {

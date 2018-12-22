@@ -7,7 +7,7 @@ import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class FiresFireBallRandomlyAction implements ObjectAction, Serializable {
+public class FiresFireBallRandomlyAction implements ObjectAction {
 	private static final long serialVersionUID = -628399314221672794L;
 	private int timer;
 	private GameObject gameObject;

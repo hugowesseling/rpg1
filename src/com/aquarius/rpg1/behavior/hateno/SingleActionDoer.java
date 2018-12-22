@@ -6,9 +6,7 @@ import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.WorldState;
-import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.behavior.ObjectActionCreator;
-import com.aquarius.rpg1.behavior.ThrowRocksRandomlyAction;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class SingleActionDoer extends GameObject {

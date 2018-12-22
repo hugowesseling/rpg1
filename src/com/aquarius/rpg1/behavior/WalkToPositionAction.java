@@ -9,7 +9,7 @@ import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.WorldState;
 import com.aquarius.rpg1.objects.GameObject;
 
-public class WalkToPositionAction implements ObjectAction, Serializable {
+public class WalkToPositionAction implements ObjectAction {
 
 	private static final long serialVersionUID = 5956310423103168473L;
 	private ObjectPosition toPosition;
