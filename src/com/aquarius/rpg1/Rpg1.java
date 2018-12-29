@@ -156,6 +156,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -434,9 +435,24 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					JComboBox<String> jComboBox = new JComboBox<String>(Resources.defaultLevelParameters);
 					jComboBox.setEditable(true);
 					jComboBox.getEditor().setItem(entry.getKey());
+					JButton jOpenFileButton = new JButton("Choose");
+					jOpenFileButton.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							final JFileChooser fc = new JFileChooser();
+							fc.setCurrentDirectory(new File(AudioSystemPlayer.AUDIO_FOLDER));
+							int returnVal = fc.showOpenDialog(Rpg1.this);
+							if(returnVal == JFileChooser.APPROVE_OPTION) {
+								String path = fc.getSelectedFile().toString();
+								path = path.replaceFirst("^"+Pattern.quote(AudioSystemPlayer.AUDIO_FOLDER), "");
+								jTextField.setText(path);
+							}
+						}
+					});
 					parameterTextFields.put(jComboBox, jTextField);
 					paneContents.add(jComboBox);
 					paneContents.add(jTextField);
+					paneContents.add(jOpenFileButton);
 				}
 				JOptionPane optionPane = new JOptionPane();
 			    optionPane.setMessage(paneContents.toArray());
@@ -448,10 +464,25 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 					JComboBox<String> jComboBox = new JComboBox<String>(Resources.defaultLevelParameters);
 					jComboBox.setEditable(true);
 					jComboBox.getEditor().setItem("key");
+					JButton jOpenFileButton = new JButton("Choose");
+					jOpenFileButton.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							final JFileChooser fc = new JFileChooser();
+							fc.setCurrentDirectory(new File(AudioSystemPlayer.AUDIO_FOLDER));
+							int returnVal = fc.showOpenDialog(Rpg1.this);
+							if(returnVal == JFileChooser.APPROVE_OPTION) {
+								String path = fc.getSelectedFile().toString();
+								path = path.replaceFirst("^"+Pattern.quote(AudioSystemPlayer.AUDIO_FOLDER), "");
+								jTextField.setText(path);
+							}
+						}
+					});
 					parameterTextFields.put(jComboBox, jTextField);
 					paneContents.add(jComboBox);
 					paneContents.add(jTextField);
-					
+					paneContents.add(jOpenFileButton);
+
 					optionPane.setMessage(paneContents.toArray());
 					dialog.pack();
 					dialog.repaint();
