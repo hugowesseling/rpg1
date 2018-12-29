@@ -151,6 +151,10 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -556,6 +560,27 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 				}
 				if(closestObject != null)
 					addObject = closestObject;
+			}
+		}
+		if(keyCode == KeyEvent.VK_C) {
+			PipedOutputStream pipedOutputStream = new PipedOutputStream();
+			PipedInputStream pipedInputStream = new PipedInputStream();
+			try {
+				pipedInputStream.connect(pipedOutputStream);
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(pipedOutputStream);
+				ObjectInputStream objectInputStream = new ObjectInputStream(pipedInputStream);
+				objectOutputStream.writeObject(addObject);
+				addObject = (GameObject) objectInputStream.readObject();
+				System.out.println("Created copy: " + addObject);
+				levelState.allGameObjects.add(addObject);
+				objectInputStream.close();
+				objectOutputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		if(keyCode == KeyEvent.VK_A)

@@ -3,6 +3,7 @@ package com.aquarius.rpg1.objects;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashSet;
 
@@ -136,7 +137,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		return false;
 	}
 
-	private void writeObject(java.io.ObjectOutputStream oos) throws IOException {
+	private void writeObject(ObjectOutputStream oos) throws IOException {
 		System.out.println("Writing position: "  + position + ", for name " + name);
 		oos.defaultWriteObject();
 	}
