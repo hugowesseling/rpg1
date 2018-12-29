@@ -97,14 +97,14 @@ public class TilePattern implements Serializable
 	}
 
 
-	public void changeColor(int tileIndex, int tileThirdX, int tileThirdY)
+	public void changeColor(int tileIndex, int tileThirdX, int tileThirdY, int newColor)
 	{
 		TilePatternTile tilePatternTile = findTileInTilePattern(tileIndex);
 		if(tilePatternTile == null)
 		{
 			return;
 		}
-		tilePatternTile.changeColor(tileThirdX, tileThirdY);
+		tilePatternTile.changeColor(tileThirdX, tileThirdY, newColor);
 	}
 
 

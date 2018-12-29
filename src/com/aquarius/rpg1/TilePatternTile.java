@@ -2,14 +2,15 @@ package com.aquarius.rpg1;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.io.Serializable;
 
 public class TilePatternTile implements Serializable
 {
 	private static final long serialVersionUID = 848967961623009901L;
-	final static int EMPTY = 0;
-	final static int OCCUPIED = 1;
-	final static int EITHER = 2;
+	public final static int EMPTY = 0;
+	public final static int OCCUPIED = 1;
+	public final static int EITHER = 2;
 	//int tileX, tileY;
 	int tileIndex;
 	int[][] tileConnections;	// [0-2][0-2] array of connections to other tiles
@@ -74,11 +75,10 @@ public class TilePatternTile implements Serializable
 		}
 	}
 
-	public void changeColor(int tileThirdX, int tileThirdY)
+	public void changeColor(int tileThirdX, int tileThirdY, int newColor)
 	{
-		if(tileThirdX >= 0 && tileThirdX <= 2 && tileThirdY >= 0 && tileThirdY <= 2)
-		{
-			tileConnections[tileThirdX][tileThirdY] = (tileConnections[tileThirdX][tileThirdY] + 1) % 3; 
+		if(tileThirdX >= 0 && tileThirdX <= 2 && tileThirdY >= 0 && tileThirdY <= 2) {
+			tileConnections[tileThirdX][tileThirdY] = newColor;
 		}
 	}
 

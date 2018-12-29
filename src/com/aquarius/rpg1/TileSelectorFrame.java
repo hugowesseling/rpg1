@@ -41,7 +41,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private int imageWidth;
 	private int imageHeight;
 	private EditorState editorState;
-	private boolean mouseDownLeft = false, mouseDownRight = false;
+	private boolean mouseDownLeft = false, mouseDownRight = false, mouseDownMid = false;
 	private Int2d mouseStart = null;
     private EditMode editMode;
 	public TilePattern selectedTilePattern = null;
@@ -297,6 +297,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	{
 		if(mouseEvent.getButton() == MouseEvent.BUTTON1)
 			mouseDownLeft = true;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON2)
+			mouseDownMid = true;
 		if(mouseEvent.getButton() == MouseEvent.BUTTON3)
 			mouseDownRight = true;
 		mouseStart  = getMousePixelLocation(mouseEvent);
@@ -338,13 +340,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					selectedTilePattern.removeTileFromPattern(tileIndex);
 				else
 					selectedTilePattern.addTile(new TilePatternTile(tileIndex));
-			}else
-			if(editMode == EditMode.TILE_PATTERN_COLORING)
-			{
-				int tileThirdX = (mouseStart.x % Constant.TILE_WIDTH) * 3 / Constant.TILE_WIDTH;
-				int tileThirdY = (mouseStart.y % Constant.TILE_HEIGHT) * 3 / Constant.TILE_HEIGHT;
-				System.out.println("Third position: " + tileThirdX + "," + tileThirdY);
-				selectedTilePattern.changeColor(tileIndex, tileThirdX, tileThirdY);
 			}
 			mouseDragged(mouseEvent);
 		}
@@ -356,6 +351,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	{
 		if(mouseEvent.getButton() == MouseEvent.BUTTON1)
 			mouseDownLeft = false;
+		if(mouseEvent.getButton() == MouseEvent.BUTTON2)
+			mouseDownMid = false;
 		if(mouseEvent.getButton() == MouseEvent.BUTTON3)
 			mouseDownRight = false;
 	}
@@ -369,14 +366,15 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	public void mouseDragged(MouseEvent mouseEvent)
 	{
 		//System.out.println("Mouse dragged");
-		if(mouseDownLeft || mouseDownRight)
+		if(mouseDownLeft || mouseDownRight || mouseDownMid)
 		{
-			boolean newState = mouseDownLeft ? true : false;
 			Int2d mouseLocation = getMousePixelLocation(mouseEvent);
 			int tileX = mouseLocation.x / Constant.TILE_WIDTH;
 			int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
+			int tileIndex = currentTileSet.index*65536 + tileY*256 + tileX;
 			if(editMode == EditMode.TILE_COLLISION_EDIT)
 			{
+				boolean newState = mouseDownLeft ? true : false;
 				if(tileX >= 0 &&
 				   tileX < currentTileSet.tileCollision.length &&
 				   tileY >= 0 &&
@@ -385,6 +383,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			}else
 			if(editMode == EditMode.LAYER_HEIGHT_EDIT)
 			{
+				boolean newState = mouseDownLeft ? true : false;
 				if(tileX >= 0 &&
 				   tileX < currentTileSet.layerHeight.length &&
 				   tileY >= 0 &&
@@ -398,6 +397,15 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				
 				editorState.setTileSelection(tileX, tileY, tileX1, tileY1);
 				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
+			}else
+			if(editMode == EditMode.TILE_PATTERN_COLORING)
+			{
+				int newState = mouseDownLeft ?  TilePatternTile.OCCUPIED : mouseDownMid ? TilePatternTile.EITHER : TilePatternTile.EMPTY;
+				int tileThirdX = (mouseLocation.x % Constant.TILE_WIDTH) * 3 / Constant.TILE_WIDTH;
+				int tileThirdY = (mouseLocation.y % Constant.TILE_HEIGHT) * 3 / Constant.TILE_HEIGHT;
+				System.out.println("Third position: " + tileIndex + ":" + tileThirdX + "," + tileThirdY);
+				
+				selectedTilePattern.changeColor(tileIndex, tileThirdX, tileThirdY, newState);
 			}
 		}
   	  	redrawNeeded = true;
