@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -26,6 +27,7 @@ public class LevelState {
 	public Int2d levelPos= new Int2d(0,0);
 	private String latestLoadedFileName = null;
 	public Vector<GameObject> gameObjectsToAdd;
+	private String previousBackgroundMusic;
 
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
@@ -168,10 +170,16 @@ public class LevelState {
 		System.out.println("Reading layer from " + fileName);
 		loadLevel(fileName);
 		
-		AudioSystemPlayer.stopAll();
 		String backgroundFileNameToPlay = levelKeyValues.get(Resources.PARAM_BACKGROUND_SOUND);
 		if(backgroundFileNameToPlay != null) {
+			if(backgroundFileNameToPlay.equals(previousBackgroundMusic))
+				AudioSystemPlayer.stopAllExcept(new ArrayList<String>(Arrays.asList(new String[]{AudioSystemPlayer.AUDIO_FOLDER + previousBackgroundMusic})));
+			else
+				AudioSystemPlayer.stopAll();
 			AudioSystemPlayer.playSound(AudioSystemPlayer.AUDIO_FOLDER + backgroundFileNameToPlay, true);
+			previousBackgroundMusic = backgroundFileNameToPlay; 
+		}else {
+			AudioSystemPlayer.stopAllExcept(new ArrayList<String>(Arrays.asList(new String[]{AudioSystemPlayer.AUDIO_FOLDER + previousBackgroundMusic})));			
 		}
 	}
 	

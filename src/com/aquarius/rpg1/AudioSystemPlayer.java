@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -41,12 +42,13 @@ public class AudioSystemPlayer {
 		if(clips.get(fileName) != null) {
 			System.out.println("Replaying " + fileName);
 			Clip clip = clips.get(fileName); 
-			clip.stop();
-			clip.setMicrosecondPosition(0);
 			if(looping)
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			else
+			else {
+				clip.stop();
+				clip.setMicrosecondPosition(0);
 				clip.start();
+			}
 		}else {
 			System.out.println("Playing " + fileName);
 			try {
@@ -71,10 +73,22 @@ public class AudioSystemPlayer {
 		}
 	}
 	public static void stopAll() {
+		System.out.println("Stopping all music");
 		for(Clip clip:clips.values()) {
 			clip.stop();
 			clip.setMicrosecondPosition(0);
 		}
+	}
+
+	public static void stopAllExcept(ArrayList<String> fileNames) {
+		System.out.println("Stopping all music except " + fileNames);
+		for(Entry<String, Clip> clip:clips.entrySet()) {
+			if(!fileNames.contains(clip.getKey())) {
+				clip.getValue().stop();
+				clip.getValue().setMicrosecondPosition(0);
+			}
+		}
+		
 	}
 	
 	private static int newRandomIndex(int max) {
@@ -93,34 +107,4 @@ public class AudioSystemPlayer {
 		playSound(audioFileName, false);		
 		
 	}
-	/*
-	public static void playRandomExpression() {
-		String audioFileName = String.format(AUDIO_FOLDER + "Voice\\Human Female A\\voice_female_a_expression_emote_%02d.wav",
-				newRandomIndex(9));
-		playSound(audioFileName, false);		
-	}
-	public static void playRandomChicken() {
-		String audioFileName = String.format(AUDIO_FOLDER + "Animal_Impersonations\\chicken_2_bwak_%02d.wav",
-				newRandomIndex(10));
-		playSound(audioFileName, false);		
-		
-	}
-	public static void playRandomSwish() {
-		String audioFileName = String.format(AUDIO_FOLDER +"Whooshes\\whoosh_weapon_knife_swing_%02d.wav",
-				newRandomIndex(4));
-		playSound(audioFileName, false);		
-				
-	}
-	public static void playRandomWhoosh() {
-		String audioFileName = String.format(AUDIO_FOLDER +"Whooshes\\whoosh_low_deep_soft_%02d.wav",
-				newRandomIndex(3));
-		playSound(audioFileName, false);		
-				
-	}
-	
-	public static void playRandomImpact() {
-		String audioFileName = String.format(AUDIO_FOLDER +"Guns_Weapons\\Bullets\\bullet_impact_body_flesh_%02d.wav",
-				newRandomIndex(7));
-		playSound(audioFileName, false);		
-	}*/
 }
