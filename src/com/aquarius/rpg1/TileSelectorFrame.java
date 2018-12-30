@@ -312,7 +312,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		{
 			if(selectedTilePattern != null)
 			{
-				System.out.println("Cloning current tilePattern");
 				// Copy selected tilepattern translated from top-left most to mouseStart
 				currentTileSet.tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
 			}

@@ -84,10 +84,9 @@ public class TilePatternTile implements Serializable
 
 	public int getMatchRate(boolean[][] neighborhoodTilePattern)
 	{
-		// Returns -1 number if an OCCUPIED is not occupied or an EMPTY is occupied
-		// Otherwise returns adds 1 for all OCCUPIED that are occupied and EMPTY that are empty
-		// Adds 0 for all EITHER which are occupied
 		int matchRate = 0;
+		if(tileConnections[1][1] == EMPTY)
+			return Integer.MIN_VALUE;
 		for(int yi=0; yi<3; yi++)
 		{
 			for(int xi=0; xi<3; xi++)
@@ -124,7 +123,7 @@ public class TilePatternTile implements Serializable
 	{
 		int tileSetIndex = tileIndex / 65536;
 		Int2d xy = TileSet.getTileXYFromIndex(tileIndex);
-		int newTileIndex= tileSetIndex * 65536 + xy.y * 256 + xy.x;		
+		int newTileIndex= tileSetIndex * 65536 + (xy.y + ytrans) * 256 + (xy.x + xtrans);		
 		TilePatternTile result = new TilePatternTile(newTileIndex);
 		for(int yi=0; yi<3; yi++)
 		{
