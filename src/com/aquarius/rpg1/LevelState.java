@@ -303,4 +303,17 @@ public class LevelState {
 		return tilePosition;
 	}
 
+	public void replaceTilesFromTileSet(TileSet tileSet) {
+		HashMap<Integer, Integer> replacementHashMap = new HashMap<>();
+		
+		ArrayList<TileSet> tileSetsToChooseFrom = new ArrayList<>();
+		for(TileSet tileSetToChooseFrom: Resources.levelTileSets) {
+			if(tileSetToChooseFrom != tileSet)
+				tileSetsToChooseFrom.add(tileSetToChooseFrom);
+		}
+		levelStack.pushLayers();
+		top_layer.replaceTileFromTileSet(tileSet, tileSetsToChooseFrom , replacementHashMap);
+		bottom_layer.replaceTileFromTileSet(tileSet, tileSetsToChooseFrom, replacementHashMap);
+		levelStack.popLayersIfNoChange();
+	}
 }

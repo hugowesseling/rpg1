@@ -81,16 +81,18 @@ public class Resources {
 	public final static String PARAM_BACKGROUND_SOUND = "background_sound";
 	public final static TileSet[] levelTileSets = {
 			new TileSet(0, "/roguelikeSheet_transparent.png", 16, 16, 1, 1, true),
-			new TileSet(1, "/tileA5_outside.png", 16, 16, 0, 0, true),
-			new TileSet(2, "/tileB_inside.png", 16, 16, 0, 0, true),
+			new TileSet(1, "/terrain.png", 16, 16, 0, 0, true),
+			new TileSet(2, "/tiles_dungeon_v1.1.png", 16, 16, 0, 0, true),
 			new TileSet(3, "/window2.png", 16,16,0,0, true),
 			new TileSet(4, "/castle.png", 16,16,0,0, true),
-			new TileSet(5, "/tileA1_outside.png", 16,16,0,0, true),
-			new TileSet(6, "/tileA2_world.png", 16,16,0,0, true),
+			new TileSet(5, "/inside.png", 16,16,0,0, true),
+			new TileSet(6, "/water.png", 16,16,0,0, true),
 			new TileSet(7, "/dungeon.png", 16,16,0,0, true), //tileA5_dungeon1.png
-			new TileSet(8, "/tileB_outside.png", 16,16,0,0, true),
-			new TileSet(9, "/tileC_town1.png", 16,16,0,0, true),
-			new TileSet(10, "/tileB_dungeon.png", 16,16,0,0, true)
+			new TileSet(8, "/desert.png", 16,16,0,0, true),
+			new TileSet(9, "/outside.png", 16,16,0,0, true),
+			new TileSet(10, "/trees.png", 16,16,0,0, true),
+			new TileSet(11, "/house.png", 16,16,0,0, true)
+			
 	};
 	public final static TileSet swordAttack = new TileSet(-3, "/swords.png", 63, 63, 1, 1, false);
 	public final static TileSet itemTileSet = new TileSet(-2, "/_sheet.png", 16, 16, 0, 0, false);
@@ -175,7 +177,10 @@ public class Resources {
 
 	public static int getCoverageFromIndex(int i) {
 		return levelTileSets[i / 65536].getCoverageFromIndexSafe(i % 65536);
-
+	}
+	
+	public static TileSet getTileSetFromIndex(int i) {
+		return levelTileSets[i / 65536];
 	}
 
 	public static String[] getTileSetNames() {

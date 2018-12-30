@@ -175,6 +175,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -264,13 +265,17 @@ public class Rpg1 extends JComponent implements Runnable, KeyListener, MouseList
 		
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
-		JMenuItem gameModeMenuItem = new JMenuItem("Game mode"); 
-		gameModeMenuItem.addMouseListener(new MouseAdapter() { 
-			public void mousePressed(MouseEvent me) {
-				System.out.println("Game mode clicked");
-	            } 
-	          });
-		fileMenu.add(gameModeMenuItem);
+		
+		JMenuItem prepareRemovalMenuItem= new JMenuItem("Replace tiles from current selected tileset");
+		prepareRemovalMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("Preparing removal by replacing all tiles from current frame with similar ones");
+				levelState.replaceTilesFromTileSet(tileSelectorFrame.currentTileSet);
+				
+			}
+		});
+		fileMenu.add(prepareRemovalMenuItem);
 		
 		JMenuItem saveMenuItem = new JMenuItem("Save"); 
 		saveMenuItem.addMouseListener(new MouseAdapter() { 

@@ -172,6 +172,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		menuBar.add(insideChoosingLabel);
 		outsideChoosingLabel = new TileIndexChoosingLabel("outside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.outsideTileIndex = ae.getID(); });
 		menuBar.add(outsideChoosingLabel);
+		
 		jFrame.setJMenuBar(menuBar);
 
 		jFrame.add(this);

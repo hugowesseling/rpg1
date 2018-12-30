@@ -135,7 +135,7 @@ public class TileSet
 		return new Int2d(index % 256, (index / 256) % 256);
 	}
 
-	public Image getTileImageFromIndexSafe(int i)
+	public BufferedImage getTileImageFromIndexSafe(int i)
 	{
 		int y = (i / 256) % 256;
 		int x = i % 256;
@@ -166,7 +166,7 @@ public class TileSet
 		return false;
 	}
 
-	public Image getTileImageFromXYSafe(int x, int y)
+	public BufferedImage getTileImageFromXYSafe(int x, int y)
 	{
 		if(x >= 0 && x < tiles.length && y >= 0 && y < tiles[0].length)
 			return tiles[x][y];
@@ -209,5 +209,30 @@ public class TileSet
 
 	public Image getTileImageFromPositionUnsafe(Position pos) {
 		return tiles[pos.getX()][pos.getY()];
+	}
+
+
+	public Int2d findMatchingTileXY(BufferedImage image) {
+		for(int x=0 ; x< tiles.length ; x++) {
+			for(int y =0; y<tiles[0].length; y++) {
+				if(imagesAreEqual(image, tiles[x][y])){
+					return new Int2d(x,y);
+				}
+			}
+		}
+		return null;
+	}
+
+
+	private boolean imagesAreEqual(BufferedImage image1, BufferedImage image2) {
+		final int[] pixels1 = ((DataBufferInt) image1.getRaster().getDataBuffer()).getData();
+		final int[] pixels2 = ((DataBufferInt) image2.getRaster().getDataBuffer()).getData();
+
+		if(pixels1.length != pixels2.length)return false;
+        for(int i=0;i<pixels1.length;i++) {
+        	if(pixels1[i] != pixels2[i] && ((pixels1[i] & 255) != (pixels2[i] & 255) || (pixels1[i] & 255) != 0))   
+        		return false;
+        }
+		return true;
 	}
 }

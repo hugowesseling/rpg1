@@ -3,12 +3,15 @@ package com.aquarius.rpg1;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Layer {
 
@@ -325,6 +328,43 @@ public class Layer {
 		if(found)
 			return maxCoveragePosition;
 		return null;
+	}
+
+	public void replaceTileFromTileSet(TileSet tileSetToReplace, ArrayList<TileSet> tileSetsToChooseFrom, HashMap<Integer, Integer> replacementHashMap) {
+		int index;
+		for(int x=0;x<tiles.length;x++)
+			for(int y=0;y<tiles[0].length;y++) {
+				index = tiles[x][y];
+				TileSet tileSet = Resources.getTileSetFromIndex(index);
+				if(tileSet == tileSetToReplace) {
+					Integer replacement =  replacementHashMap.get(index);
+					int replacementIndex;
+					if(replacement == null) {
+						System.out.println("Finding replacement for "+ index);
+						BufferedImage image = tileSet.getTileImageFromIndexSafe(index);
+						replacementIndex = findBestMatchingIndex(image, tileSetsToChooseFrom);
+						replacementHashMap.put(index, replacementIndex);
+					}else {
+						replacementIndex = replacement.intValue();
+					}
+					tiles[x][y] = replacementIndex;
+				}
+			}
+		updateImagesCollisionsLayerHeightsCoverage();
+	}
+
+	private int findBestMatchingIndex(BufferedImage image, ArrayList<TileSet> tileSetsToChooseFrom) {
+		
+		for(TileSet tileSet: tileSetsToChooseFrom) {
+			Int2d bestMatch = tileSet.findMatchingTileXY(image);
+			if(bestMatch != null) {
+				int index = tileSet.getTileIndexFromXY(bestMatch.x, bestMatch.y);
+				System.out.println("Found match in tileSet " + tileSet.fileName + " at index " + index);
+				return index;
+			}
+		}
+		System.out.println("No replacement found");
+		return 0;
 	}
 
 
