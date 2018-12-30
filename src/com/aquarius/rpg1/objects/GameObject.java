@@ -173,7 +173,7 @@ public class GameObject implements CharacterBehavior, Serializable
 			int rx = gameObject.position.x - position.x, ry = gameObject.position.y - position.y;
 			int radius = DEFAULT_RADIUS;
 			if(rx *rx + ry *ry < radius*radius) {
-				System.out.println("Character " + gameObject.name + " in range");
+				System.out.println("Bouncing off  " + gameObject.name);
 				double dist = Math.hypot(rx, ry); // dist < radius
 				return new Int2d((int)(-rx * (radius-dist) / dist * multiplier) , (int)(-ry * (radius-dist) / dist * multiplier));
 			}
