@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.io.Serializable;
 
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 
 public abstract class Weapon implements Serializable{
 	private static final long serialVersionUID = -3685739245093632795L;
@@ -13,5 +13,5 @@ public abstract class Weapon implements Serializable{
 
 	abstract public void startUse();
 
-	abstract public void think(WorldState worldState, LevelState levelState);
+	abstract public void think(WorldTime worldState, LevelState levelState);
 }

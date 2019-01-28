@@ -40,7 +40,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private static final long serialVersionUID = 1L;
 	private int imageWidth;
 	private int imageHeight;
-	private EditorState editorState;
 	private boolean mouseDownLeft = false, mouseDownRight = false, mouseDownMid = false;
 	private Int2d mouseStart = null;
     private EditMode editMode;
@@ -51,11 +50,12 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private boolean redrawNeeded = true;
 	private TileIndexChoosingLabel insideChoosingLabel;
 	private TileIndexChoosingLabel outsideChoosingLabel;
+	private Selection tileSelection;
 
-    public TileSelectorFrame(String name, EditorState editorState)
+    public TileSelectorFrame(String name)
 	{
-		this.editorState = editorState;
 		editMode = EditMode.SELECT_TILES;
+		tileSelection = null;
 		
 		jFrame=new JFrame(name);
 		
@@ -262,7 +262,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			selectedTilePattern.drawColorHash(imageG);
 			imageG.setComposite(backupComposite);
 		}
-		editorState.drawTileSelection(imageG, 0, 0);
+		if(tileSelection != null)
+			tileSelection.draw(imageG, 0, 0);
 		imageG.dispose();		
 		g.drawImage(image,0,0,imageWidth * 2,imageHeight * 2,0,0,imageWidth,imageHeight,null);
 	}
@@ -395,8 +396,8 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				int tileX1 = mouseStart.x / Constant.TILE_WIDTH;
 				int tileY1 = mouseStart.y / Constant.TILE_HEIGHT;
 				
-				editorState.setTileSelection(tileX, tileY, tileX1, tileY1);
-				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(editorState.tileSelection.topleft.x, editorState.tileSelection.topleft.y));
+				tileSelection = new Selection(tileX, tileY, tileX1, tileY1);
+				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(tileSelection.topleft.x, tileSelection.topleft.y));
 			}else
 			if(editMode == EditMode.TILE_PATTERN_COLORING)
 			{

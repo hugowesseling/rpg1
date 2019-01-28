@@ -19,7 +19,7 @@ import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.PositionLabel;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.behavior.CharacterBehavior;
 
@@ -105,7 +105,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		this.direction = direction;
 	}
 	
-	public void doActionAndWeapon(WorldState worldState, LevelState levelState) {
+	public void doActionAndWeapon(WorldTime worldState, LevelState levelState) {
 		if(action != null) {
 			if(action.doActionAndCheckIfDone(worldState, levelState)) {
 				action = null;
@@ -127,7 +127,7 @@ public class GameObject implements CharacterBehavior, Serializable
 		return pos2.inRect(topleft, bottomright);
 	}
 
-	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
+	public Dialogue startDialog(Player player, LevelState levelState) {
 		return null;
 	}
 	public StorableObjectType open() {
@@ -153,7 +153,7 @@ public class GameObject implements CharacterBehavior, Serializable
 	}
 
 	@Override
-	public void think(Player player, WorldState worldState, LevelState levelState) {
+	public void think(Player player, WorldTime worldState, LevelState levelState) {
 		
 	}
 	

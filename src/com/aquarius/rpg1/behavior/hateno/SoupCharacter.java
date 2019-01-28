@@ -10,7 +10,7 @@ import com.aquarius.rpg1.InteractionPossibility;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.drawers.CharacterDrawer;
 import com.aquarius.rpg1.objects.GameObject;
 
@@ -42,7 +42,7 @@ public class SoupCharacter extends GameObject {
 	}
 
 	@Override
-	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
+	public Dialogue startDialog(Player player, LevelState levelState) {
 		if(player.inventory.getCount("soup") > 0) {
 			return soupDialogue;
 		}else

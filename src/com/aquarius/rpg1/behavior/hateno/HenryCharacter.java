@@ -13,7 +13,7 @@ import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
 import com.aquarius.rpg1.TileObjectIndex;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.behavior.WaitAction;
 import com.aquarius.rpg1.behavior.WalkToCharacterAction;
 import com.aquarius.rpg1.behavior.WalkToPositionAction;
@@ -51,7 +51,7 @@ public class HenryCharacter extends GameObject
 	private final static int STANDINGAROUND_DURATION = 10000;
 	
 	@Override
-	public void think(Player player, WorldState worldState, LevelState levelState)
+	public void think(Player player, WorldTime worldState, LevelState levelState)
 	{
 		// Henry's behavior: walk from tree to tree, if player gets near, walk up to him and wait
 		// Player can then initiate dialog
@@ -76,7 +76,7 @@ public class HenryCharacter extends GameObject
 	}
 	
 	@Override
-	public Dialogue startDialog(Player player, WorldState worldState, LevelState levelState) {
+	public Dialogue startDialog(Player player, LevelState levelState) {
 		if(position.y<100)
 			return dialogue1;
 		else

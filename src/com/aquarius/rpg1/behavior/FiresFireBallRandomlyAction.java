@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class FiresFireBallRandomlyAction implements ObjectAction {
@@ -17,7 +17,7 @@ public class FiresFireBallRandomlyAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		timer--;
 		if(timer<0){
 			timer = 50;

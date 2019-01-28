@@ -2,7 +2,7 @@ package com.aquarius.rpg1.behavior;
 
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class RunRandomlyAction implements ObjectAction {
@@ -13,7 +13,7 @@ public class RunRandomlyAction implements ObjectAction {
 	private int counter;
 	private int speed;
 
-	public RunRandomlyAction(GameObject gameObject, WorldState worldState, int runTimeMs, int speed) {
+	public RunRandomlyAction(GameObject gameObject, WorldTime worldState, int runTimeMs, int speed) {
 		this.gameObject = gameObject;
 		this.runTimeMs = runTimeMs;
 		this.speed = speed;
@@ -22,7 +22,7 @@ public class RunRandomlyAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		counter--;
 		if(counter < 0) {
 			gameObject.setDirection(Direction.random());

@@ -1,11 +1,11 @@
 package com.aquarius.rpg1;
 
-public class WorldState {
+public class WorldTime {
 	public int timeOfDay;
 	public long timeMs;
 	
 
-	public WorldState() {
+	public WorldTime() {
 		timeMs = 0;
 		timeOfDay = 0;
 	}

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class BounceAction implements ObjectAction {
@@ -23,7 +23,7 @@ public class BounceAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		if(firstBounce) {
 			gameObject.move(movement.x, (int)(movement.y - dz));
 		}else {

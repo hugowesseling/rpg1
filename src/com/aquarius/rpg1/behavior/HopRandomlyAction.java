@@ -6,7 +6,7 @@ import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class HopRandomlyAction implements ObjectAction {
@@ -18,7 +18,7 @@ public class HopRandomlyAction implements ObjectAction {
 	private int hopTimeMs;
 	private long startTime;
 
-	public HopRandomlyAction(GameObject gameObject, WorldState worldState, int hopTimeMs) {
+	public HopRandomlyAction(GameObject gameObject, WorldTime worldState, int hopTimeMs) {
 		this.gameObject = gameObject;
 		this.hopTimeMs = hopTimeMs;
 		startTime = worldState.getTimeMs();
@@ -27,7 +27,7 @@ public class HopRandomlyAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		if(doNewHop) {
 			doNewHop = false;
 			gameObject.setDirection(Direction.random());

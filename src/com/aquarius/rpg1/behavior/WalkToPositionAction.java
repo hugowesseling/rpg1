@@ -6,7 +6,7 @@ import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class WalkToPositionAction implements ObjectAction {
@@ -18,11 +18,11 @@ public class WalkToPositionAction implements ObjectAction {
 	private long startTime;
 	private int speed;
 
-	public WalkToPositionAction(GameObject character, WorldState worldState, Int2d tilePosition, int runTimeMs, int speed) {
+	public WalkToPositionAction(GameObject character, WorldTime worldState, Int2d tilePosition, int runTimeMs, int speed) {
 		this(character, worldState, ObjectPosition.createFromTilePosition(tilePosition), runTimeMs, speed);
 		
 	}
-	public WalkToPositionAction(GameObject character, WorldState worldState, ObjectPosition position, int runTimeMs, int speed) {
+	public WalkToPositionAction(GameObject character, WorldTime worldState, ObjectPosition position, int runTimeMs, int speed) {
 		toPosition = position;
 		this.character = character;
 		this.runTimeMs = runTimeMs;
@@ -31,7 +31,7 @@ public class WalkToPositionAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toPosition);
 		character.setDirection(direction);
 		Int2d movement = Direction.getMovementFromTo(character.getPosition(), toPosition);

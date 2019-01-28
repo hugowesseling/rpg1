@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class WalkToCharacterAction implements ObjectAction{
@@ -24,7 +24,7 @@ public class WalkToCharacterAction implements ObjectAction{
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		Direction direction = Direction.getDirectionFromTo(character.getPosition(), toCharacter.getPosition());
 		character.setDirection(direction);
 		character.moveAndLevelCollide(levelState, direction.movement.x, direction.movement.y);

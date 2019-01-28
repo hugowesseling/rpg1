@@ -6,7 +6,7 @@ import com.aquarius.rpg1.Direction;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class RunAction implements ObjectAction {
@@ -21,7 +21,7 @@ public class RunAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		boolean moved = gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x * 4, gameObject.getDirection().movement.y *4);
 		gameObject.setFrameDivider(2);
 		if(!moved) {

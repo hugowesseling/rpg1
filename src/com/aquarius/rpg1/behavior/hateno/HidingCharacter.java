@@ -6,7 +6,7 @@ import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectDrawer;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Player;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.behavior.RunRandomlyAction;
 import com.aquarius.rpg1.behavior.WalkToPositionAction;
 import com.aquarius.rpg1.objects.GameObject;
@@ -25,7 +25,7 @@ public class HidingCharacter extends GameObject
 	}
 
 	@Override
-	public void think(Player player, WorldState worldState, LevelState levelState)
+	public void think(Player player, WorldTime worldState, LevelState levelState)
 	{
 		if(getAction() == null) {
 			//System.out.println("HidingCharacter: Choosing new action");

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class FlyAction implements ObjectAction {
@@ -19,7 +19,7 @@ public class FlyAction implements ObjectAction {
 	}
 
 	@Override
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		// TODO Auto-generated method stub
 		return !gameObject.moveAndLevelCollide(levelState, movement.x, movement.y);
 	}

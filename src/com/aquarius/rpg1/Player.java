@@ -3,6 +3,7 @@ package com.aquarius.rpg1;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
+import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.objects.GameObject;
 import com.aquarius.rpg1.objects.StorableObjectType;
@@ -18,6 +19,7 @@ public class Player extends GameObject {
 	private StorableObjectType itemAbovePlayerStorableObjectType = null;
 	private int itemAbovePlayerTimer = 0;
 	private int cooldown = 0;
+	private int walkSoundCounter = 0;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
 		health = PLAYER_BEGIN_HEALTH;
@@ -59,7 +61,7 @@ public class Player extends GameObject {
 	}
 	
 	@Override
-	public void think(Player player, WorldState worldState, LevelState levelState) {
+	public void think(Player player, WorldTime worldState, LevelState levelState) {
 		if(cooldown>0)
 			cooldown --;
 		
@@ -129,4 +131,64 @@ public class Player extends GameObject {
 		weapon = newWeapon;
 	}
 	
+	public void inputPlayerMovement(Input input, LevelState levelState) {
+		int dx = 0, dy = 0;
+		if(input.buttons[Input.LEFT])
+		{
+			dx = -2;
+			setDirection(Direction.WEST);
+		}
+		if(input.buttons[Input.RIGHT])
+		{
+			dx = 2;
+			setDirection(Direction.EAST);
+		}
+		if(input.buttons[Input.UP])
+		{
+			dy = -2;
+			setDirection(Direction.NORTH);
+		}
+		if(input.buttons[Input.DOWN])
+		{
+			dy = 2;
+			setDirection(Direction.SOUTH);
+		}
+		//Add dx,dy from colliding with other characters
+		int bouncedx = 0, bouncedy = 0, bouncecount =0;
+		for(GameObject gameObject: levelState.allGameObjects) {
+			Int2d bounce = getCollisionBounce(gameObject);
+			if(bounce != null)
+			{
+				bouncedx += bounce.x;
+				bouncedy += bounce.y;
+				bouncecount ++;
+				doDamage(levelState, gameObject.getDamage());
+			}
+		}
+		if(bouncecount != 0)
+		{
+			dx += bouncedx / bouncecount;
+			dy += bouncedy / bouncecount;
+		}
+
+		
+		boolean playerCouldMove = moveAndLevelCollide(levelState, dx, dy);
+		
+		if(playerCouldMove && (dx!=0 || dy!=0)){
+			
+			walkSoundCounter--;
+			if(walkSoundCounter <= 0) {
+				
+				int walkSoundIndex = (int )(Math.random() * 12) + 1;
+				String audioFileName = String.format(AudioSystemPlayer.AUDIO_FOLDER + "Footsteps\\footstep_dirt_walk_run_%02d.wav", 
+						walkSoundIndex);
+				AudioSystemPlayer.playSound(audioFileName, false);
+				walkSoundCounter = 15;
+			}
+		}else {
+			walkSoundCounter = 0;
+		}
+		levelState.loadLevelByPlayerPosition(this);
+	}
+
 }

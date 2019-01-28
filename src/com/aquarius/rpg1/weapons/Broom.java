@@ -9,7 +9,7 @@ import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Resources;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Resources.ItemTileLocation;
 import com.aquarius.rpg1.drawers.ItemTileDrawer;
@@ -49,7 +49,7 @@ public class Broom extends Weapon {
 	}
 	
 	@Override
-	public void think(WorldState worldState, LevelState levelState) {
+	public void think(WorldTime worldState, LevelState levelState) {
 		if(swishCounter < 20) {
 			swishCounter += 1;
 		}

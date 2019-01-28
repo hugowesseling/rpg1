@@ -3,7 +3,9 @@ package com.aquarius.common2dgraphics.util;
 import java.awt.event.KeyEvent;
 
 public class Input {
-    public static final int UP = 0;
+	public static Input instance;
+
+	public static final int UP = 0;
     public static final int DOWN = 1;
     public static final int LEFT = 2;
     public static final int RIGHT = 3;
@@ -81,5 +83,6 @@ public class Input {
     public Input()
     {
     	releaseAllKeys();
+    	instance = this;
     }
 }

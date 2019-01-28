@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Vector;
+
+import com.aquarius.common2dgraphics.util.Input;
 import com.aquarius.rpg1.behavior.GameObjectType;
+import com.aquarius.rpg1.drawers.CharacterDrawer;
 import com.aquarius.rpg1.objects.GameObject;
 
 public class LevelState {
@@ -29,6 +32,9 @@ public class LevelState {
 	public Vector<GameObject> gameObjectsToAdd;
 	private String previousBackgroundMusic;
 
+	Player player;
+	private WorldTime worldTime;
+	private int tickCounter;
 	
 	public LevelState(Layer bottom_layer, Layer top_layer) {
 		this.bottom_layer = bottom_layer;
@@ -37,8 +43,40 @@ public class LevelState {
 		allGameObjects = new Vector<>();
 		gameObjectsToAdd = new Vector<>();
 		levelStack = new LevelStack(bottom_layer, top_layer);
+
+		tickCounter = 0;
+		player = new Player(new CharacterDrawer(0), new ObjectPosition(0,0), Direction.SOUTH);
+		player.setBeginPosition(this);
+		worldTime = new WorldTime();
+	
 	}
 
+	public void worldTick() {
+		worldTime.setTimeMs(System.currentTimeMillis());
+
+		player.inputPlayerMovement(Input.instance, this);
+
+		tickCounter++;
+		if(tickCounter % 10 == 0) {
+			think(player, worldTime);
+		}
+
+		doActionsWeaponAndMovement(worldTime);
+		
+		player.doActionAndWeapon(worldTime, this);
+		player.determineInteractionGameObject(allGameObjects);
+		player.checkIfTouching(this);
+	}
+
+	public void deleteFilesInUserFolder() {
+		File dir= new File(LevelState.USER_SAVE_FOLDER);
+		for(File file: dir.listFiles()) 
+		    if (!file.isDirectory() && file.toString().endsWith(".rpg1")) {
+		    	System.out.println("Deleting "+ file);
+		        file.delete();
+		    }
+	}
+	
 	public GameObject findRandomCharacterInNeighborhood(GameObjectType objectType, Int2d position, int distance) {
 		ArrayList<GameObject> eligibles = new ArrayList<>();
 		for(GameObject character : allGameObjects)
@@ -100,14 +138,14 @@ public class LevelState {
 		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_HIGH);
 	}
 
-	public void doActionsWeaponAndMovement(WorldState worldState) {
+	public void doActionsWeaponAndMovement(WorldTime worldState) {
 		// Do actions and movement
 		for(GameObject gameCharacter: allGameObjects) {
 			gameCharacter.doActionAndWeapon(worldState, this);
 			//gameCharacter.doMovement(this);
 		}
 	}
-	public void think(Player player, WorldState worldState) {
+	public void think(Player player, WorldTime worldState) {
 		// Do actions and movement
 		Vector<GameObject> newGameObjects = new Vector<>();
 		for(GameObject gameCharacter: allGameObjects) {
@@ -156,10 +194,8 @@ public class LevelState {
 				System.out.println("Read key value: \"" + entry.getKey() + "\" = \"" + entry.getValue() + "\"");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -315,5 +351,25 @@ public class LevelState {
 		top_layer.replaceTileFromTileSet(tileSet, tileSetsToChooseFrom , replacementHashMap);
 		bottom_layer.replaceTileFromTileSet(tileSet, tileSetsToChooseFrom, replacementHashMap);
 		levelStack.popLayersIfNoChange();
+	}
+
+	public void loadLevelByPlayerPosition(Player player)
+	{
+		if(player.getPosition().x < Constant.TILE_WIDTH * 1)
+		{
+			loadLevelByExit(-1, 0, player);
+		}
+		if(player.getPosition().x > (getWidth()-1) * Constant.TILE_WIDTH)
+		{
+			loadLevelByExit(1, 0, player);
+		}
+		if(player.getPosition().y < Constant.TILE_HEIGHT * 1)
+		{
+			loadLevelByExit(0, -1, player);
+		}
+		if(player.getPosition().y > (getHeight()-1) * Constant.TILE_HEIGHT)
+		{
+			loadLevelByExit(0, 1, player);
+		}
 	}
 }

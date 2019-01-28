@@ -35,6 +35,11 @@ public class Layer {
 		initAndUpdateImagesCollisionsLayerHeights(); 
 	}
 
+	public Layer(int[][] tiles) {
+		this.tiles = tiles;
+		initAndUpdateImagesCollisionsLayerHeights(); 
+	}
+
 	private void initAndUpdateImagesCollisionsLayerHeights() {
 		int width = tiles.length, height = tiles[0].length;
 		images = new Image[width][height];

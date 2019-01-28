@@ -8,7 +8,7 @@ import com.aquarius.rpg1.AudioSystemPlayer;
 import com.aquarius.rpg1.Int2d;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.Resources;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Resources.ItemTileLocation;
 import com.aquarius.rpg1.objects.GameObject;
@@ -47,7 +47,7 @@ public class BeamWeapon extends Weapon {
 	}
 	
 	@Override
-	public void think(WorldState worldState, LevelState levelState) {
+	public void think(WorldTime worldState, LevelState levelState) {
 		//System.out.println("Sword.think()");
 		if(slashCounter < 3) {
 			//Check for collisions in 90 degrees forward quarter circle:

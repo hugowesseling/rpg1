@@ -8,7 +8,7 @@ import com.aquarius.rpg1.AudioSystemPlayer;
 import com.aquarius.rpg1.LevelState;
 import com.aquarius.rpg1.ObjectPosition;
 import com.aquarius.rpg1.Resources;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Resources.ItemTileLocation;
 import com.aquarius.rpg1.objects.DoorwayObject;
@@ -45,7 +45,7 @@ public class Hammer extends Weapon {
 	}
 	
 	@Override
-	public void think(WorldState worldState, LevelState levelState) {
+	public void think(WorldTime worldState, LevelState levelState) {
 		if(slashCounter <16)
 			slashCounter += 1;
 		if(slashCounter == 6) {

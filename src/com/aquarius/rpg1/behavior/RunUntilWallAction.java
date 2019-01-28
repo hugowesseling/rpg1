@@ -3,7 +3,7 @@ package com.aquarius.rpg1.behavior;
 import java.io.Serializable;
 
 import com.aquarius.rpg1.LevelState;
-import com.aquarius.rpg1.WorldState;
+import com.aquarius.rpg1.WorldTime;
 import com.aquarius.rpg1.behavior.ObjectAction;
 import com.aquarius.rpg1.objects.GameObject;
 
@@ -17,7 +17,7 @@ public class RunUntilWallAction implements ObjectAction {
 		this.speed = speed;
 	}
 
-	public boolean doActionAndCheckIfDone(WorldState worldState, LevelState levelState) {
+	public boolean doActionAndCheckIfDone(WorldTime worldState, LevelState levelState) {
 		return !gameObject.moveAndLevelCollide(levelState, gameObject.getDirection().movement.x*speed, (int)(gameObject.getDirection().movement.y*speed));
 	}
 
