@@ -1,6 +1,9 @@
 package com.aquarius.rpg1;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,6 +16,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -24,9 +28,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -39,22 +41,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.aquarius.common2dgraphics.util.Input;
-import com.aquarius.rpg1.AudioSystemPlayer.RandomSound;
 import com.aquarius.rpg1.Resources.CharacterCreatorFunction;
 import com.aquarius.rpg1.Resources.ObjectCreatorFunction;
 import com.aquarius.rpg1.drawers.CharacterDrawer;
 import com.aquarius.rpg1.drawers.TileDrawer;
 import com.aquarius.rpg1.objects.GameObject;
-import com.aquarius.rpg1.objects.StorableObjectType;
-import com.aquarius.rpg1.weapons.BeamWeapon;
-import com.aquarius.rpg1.weapons.Hammer;
 
 public class LevelView extends JComponent implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
 	private static final long serialVersionUID = 910926183968392643L;
 
 
 	private static final int MENUBAR_HEIGHT = 45;
-
 	
 	protected LevelState levelState;
 	protected TileSelectorFrame tileSelectorFrame;
@@ -508,7 +505,7 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 			if(ClipBoard.instance != null)
 			{
 				levelState.levelStack.pushLayers();
-				ClipBoard.instance.copyToLayer(levelState.top_layer, levelState.bottom_layer, tileX, tileY);
+				ClipBoard.instance.copyToLayer(levelState.bottom_layer, levelState.top_layer, tileX, tileY);
 				levelState.levelStack.popLayersIfNoChange();
 			}
 		}else
@@ -561,6 +558,31 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		Dimension size2 = this.getSize();
+		int imageWidth = size2.width / 2;
+		int imageHeight = size2.height / 2;
+		BufferedImage image = new BufferedImage(imageWidth, imageHeight,
+	            BufferedImage.TYPE_INT_ARGB);
+		Graphics2D imageGraphics=image.createGraphics();
+		imageGraphics.setColor(Color.WHITE);
+		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
+
+		drawLevel(imageGraphics, imageWidth, imageHeight);
+		
+		imageGraphics.dispose();
+
+		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
+		
+	}
+
+	protected void drawLevel(Graphics2D imageGraphics, int imageWidth, int imageHeight) {
+		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, 0, false);
+		if(mapSelection != null)
+			mapSelection.draw(imageGraphics, screenx, screeny);
 	}
 
 }

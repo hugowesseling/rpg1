@@ -137,36 +137,15 @@ public class PlayerView extends LevelView{
 		}
 	}
 
+
 	@Override
-	public void paint(Graphics g)
-	{
+	protected void drawLevel(Graphics2D imageGraphics, int imageWidth, int imageHeight) {
 		if(simulating && dialogue==null) {
 			levelState.worldTick();
 		}
 		setScreenPositionFromTrackingPosition(levelState.player.getPosition());
-		
-		drawEverything(g);
-		
-		try
-		{
-			Thread.sleep(10);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
-	private void drawEverything(Graphics g) {
-		Dimension size2 = this.getSize();
-		int imageWidth = size2.width / 2;
-		int imageHeight = size2.height / 2;
-		BufferedImage image = new BufferedImage(imageWidth, imageHeight,
-	            BufferedImage.TYPE_INT_ARGB);
-		Graphics2D imageGraphics=image.createGraphics();
-		imageGraphics.setColor(Color.WHITE);
-		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
-		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter, simulating, player);
+		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, frameCounter, simulating);
 
 		if(mapSelection != null)
 			mapSelection.draw(imageGraphics, screenx, screeny);
@@ -195,11 +174,9 @@ public class PlayerView extends LevelView{
 			}
 			drawHUD(imageGraphics);
 		}
-		
-		imageGraphics.dispose();
-
-		g.drawImage(image, 0, 0, imageWidth * 2, imageHeight * 2, 0, 0,imageWidth,imageHeight,null);
+		frameCounter++;
 	}
+	
 	private void drawHUD(Graphics2D graphics) {
 		int currentHeartPos = 20;
 		for(int i=3;i<player.getHealth();i+=4) {

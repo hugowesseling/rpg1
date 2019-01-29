@@ -46,9 +46,10 @@ public class LevelState {
 
 		tickCounter = 0;
 		player = new Player(new CharacterDrawer(0), new ObjectPosition(0,0), Direction.SOUTH);
-		player.setBeginPosition(this);
 		worldTime = new WorldTime();
-	
+	}
+	public  LevelState() {
+		this(new Layer(1,1), new Layer(1,1));
 	}
 
 	public void worldTick() {
@@ -126,7 +127,7 @@ public class LevelState {
 		return bottom_layer.getHeight();
 	}
 
-	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter, boolean simulating, Player player) {
+	public void draw(Graphics2D imageGraphics, int imageWidth, int imageHeight, int screenx, int screeny, int frameCounter, boolean simulating) {
 		bottom_layer.drawLayer(imageGraphics, imageWidth, imageHeight, screenx, screeny, false, Layer.DRAW_LOW_AND_HIGH);
 		top_layer.drawLayer(imageGraphics,imageWidth, imageHeight, screenx, screeny, !simulating, Layer.DRAW_LOW);
 		//imageGraphics.drawImage(characterTileSet.getTileImageFromXY((frameCounter/10) % 3, charDirection), 100, 100, null);
@@ -371,5 +372,10 @@ public class LevelState {
 		{
 			loadLevelByExit(0, 1, player);
 		}
+	}
+
+	public void resetToBeginOfGame() {
+		setLevelPos("level", new Int2d(500,500));
+		player.setBeginOfGamePosition();
 	}
 }

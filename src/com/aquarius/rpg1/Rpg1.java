@@ -224,9 +224,14 @@ public class Rpg1 implements Runnable {
 
 	private TileSelectorFrame tileSelectorFrame;
 	private PlayerView playerView;
-	private LevelState levelState;	
+	private LevelState levelState;
+	private ArrayList<LevelView> allViews;
+
+	private LevelState exampleLevelState;
+	private LevelView exampleLevelView;
 	public Rpg1()
 	{
+		allViews = new ArrayList<>();
 		tileSelectorFrame = new TileSelectorFrame("TileSet");
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses.keySet()));
@@ -234,9 +239,16 @@ public class Rpg1 implements Runnable {
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(10, 15)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 		//levelState.allCharacters.add(new HenryCharacter(CharacterPosition.createFromTilePosition(new Int2d(15, 10)), new CharacterTileSet(new Int2d(3,0)), Direction.SOUTH));
 
-		levelState = new LevelState(new Layer(1,1), new Layer(1,1));
+		levelState = new LevelState();
 		levelState.deleteFilesInUserFolder();
+		levelState.resetToBeginOfGame();
 		playerView = new PlayerView(levelState, tileSelectorFrame);
+		allViews.add(playerView);
+		
+		exampleLevelState = new LevelState();
+		exampleLevelState.loadLevel("house1_500_500.rpg1");
+		exampleLevelView = new LevelView(exampleLevelState, tileSelectorFrame);
+		allViews.add(exampleLevelView);
 	}
 	public void start()
 	{
@@ -253,8 +265,18 @@ public class Rpg1 implements Runnable {
 	{
 		while(running)
 		{
-			playerView.repaint();
+			for(LevelView levelView:allViews) {
+				levelView.repaint();
+			}
+			//playerView.repaint();
 			tileSelectorFrame.updateFrame();
+			try
+			{
+				Thread.sleep(10);
+			} catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 

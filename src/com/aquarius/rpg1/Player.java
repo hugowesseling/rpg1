@@ -114,7 +114,7 @@ public class Player extends GameObject {
 		if(cooldown == 0 && damage>0) {
 			health -= damage;
 			if(health <= 0) {
-				setBeginPosition(levelState);
+				levelState.resetToBeginOfGame();
 				health = PLAYER_BEGIN_HEALTH; 
 				AudioSystemPlayer.playRandom(RandomSound.MALE_DEATH);
 			}else
@@ -123,8 +123,7 @@ public class Player extends GameObject {
 		}
 	}
 	
-	public void setBeginPosition(LevelState levelState) {
-		levelState.setLevelPos("level", new Int2d(500,500));
+	public void setBeginOfGamePosition() {
 		position = ObjectPosition.createFromTilePosition(new Int2d(13, 30));
 	}
 	public void setWeapon(Weapon newWeapon) {

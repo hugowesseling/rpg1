@@ -13,9 +13,9 @@ public class ClipBoard
 	}
 
 	public void copyToLayer(Layer bottom_layer, Layer top_layer, int tileX, int tileY) {
-		for(int x = 0; x <= this.bottom_layer.getWidth(); x++)
+		for(int x = 0; x < this.bottom_layer.getWidth(); x++)
 		{
-			for(int y = 0; y <= this.bottom_layer.getHeight(); y++)
+			for(int y = 0; y < this.bottom_layer.getHeight(); y++)
 			{
 				top_layer.setTileIndexForCheckedXY(x + tileX, y + tileY, this.top_layer.getTile(x, y));
 				bottom_layer.setTileIndexForCheckedXY(x + tileX, y + tileY, this.bottom_layer.getTile(x, y));

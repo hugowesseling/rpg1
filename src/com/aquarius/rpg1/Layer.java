@@ -41,7 +41,7 @@ public class Layer {
 	}
 
 	private void initAndUpdateImagesCollisionsLayerHeights() {
-		int width = tiles.length, height = tiles[0].length;
+		int width = getWidth(), height = getHeight();
 		images = new Image[width][height];
 		collisions = new boolean[width][height];
 		layerHeights = new boolean[width][height];
@@ -126,8 +126,8 @@ public class Layer {
 
 	public int getTile(int tileX, int tileY)
 	{
-		if(tileX >= 0 && tileX < tiles[0].length)
-			if(tileY >= 0 && tileY < tiles.length)
+		if(tileX >= 0 && tileX < getWidth())
+			if(tileY >= 0 && tileY < getHeight())
 			{
 				//System.out.println("Getting tile " + tileX + "," + tileY + " to " + tiles[tileX][tileY]);
 				return tiles[tileX][tileY];
@@ -138,8 +138,8 @@ public class Layer {
 	
 	public void setTileIndexForCheckedXY(int tileX, int tileY, int tileIndex)
 	{
-		if(tileX >= 0 && tileX < tiles[0].length)
-			if(tileY >= 0 && tileY < tiles.length)
+		if(tileX >= 0 && tileX < getWidth())
+			if(tileY >= 0 && tileY < getHeight())
 			{
 				//System.out.println("Setting tile " + tileX + "," + tileY + " to " + tile);
 				tiles[tileX][tileY] = tileIndex;
@@ -161,8 +161,8 @@ public class Layer {
 	
 	public void setAllLayer(int tileIndex)
 	{
-		for(int x=0;x<tiles.length;x++)
-			for(int y=0;y<tiles[0].length;y++)
+		for(int x=0;x<getWidth();x++)
+			for(int y=0;y<getHeight();y++)
 				tiles[x][y] = tileIndex;
 		updateImagesCollisionsLayerHeightsCoverage();
 	}
@@ -222,8 +222,8 @@ public class Layer {
 			System.out.println("No tileSet found for index " + tileIndex);
 			return false;
 		}*/
-		if(tileX >= 0 && tileX < tiles[0].length)
-			if(tileY >= 0 && tileY < tiles.length)
+		if(tileX >= 0 && tileX < getWidth())
+			if(tileY >= 0 && tileY < getHeight())
 				return collisions[tileX][tileY];
 		return true;
 	}
@@ -231,8 +231,8 @@ public class Layer {
 	public void resize(int newWidth, int newHeight) {
 		int[][] newTiles = new int[newWidth][newHeight];
 		int index;
-		for(int x=0;x<newTiles.length;x++)
-			for(int y=0;y<newTiles[0].length;y++) {
+		for(int x=0;x<newWidth;x++)
+			for(int y=0;y<newHeight;y++) {
 				index = getTile(x,y);
 				newTiles[x][y] = index !=-1 ? index : 0;
 			}
@@ -264,8 +264,8 @@ public class Layer {
 		// returns true if all tiles are equal
 		if(tiles1.length != tiles2.length || tiles1[0].length != tiles2[0].length)
 			return false;
-		for(int x=0;x<tiles1.length;x++)
-			for(int y=0;y<tiles1[0].length;y++)
+		for(int x=0;x<getWidth();x++)
+			for(int y=0;y<getHeight();y++)
 				if(tiles1[x][y] != tiles2[x][y])return false;
 		/*System.out.println("equal layers: ");
 		printLayer(tiles1);
@@ -284,8 +284,8 @@ public class Layer {
 		int distance;
 		boolean found = false;
 		Int2d closestPosition = new Int2d(0,0); 
-		for(int x=0;x<tiles.length;x++)
-			for(int y=0;y<tiles[0].length;y++) {
+		for(int x=0;x<getWidth();x++)
+			for(int y=0;y<getHeight();y++) {
 				if(collisions[x][y] == colliding && layerHeights[x][y] == layerHeight) {
 					distance = Math.abs(tileX - x) + Math.abs(tileY - y); 
 					if(distance < closestDistance) {
@@ -309,8 +309,8 @@ public class Layer {
 		if(doubleHeight)
 			if(ymin<1)ymin=1;
 
-		if(xmax>tiles.length)xmax=tiles.length;
-		if(ymax>tiles[0].length)ymax=tiles.length;
+		if(xmax>getWidth())xmax=getWidth();
+		if(ymax>getHeight())ymax=getHeight();
 
 		int maxCoverage = 0;
 		int coverage;
@@ -337,8 +337,8 @@ public class Layer {
 
 	public void replaceTileFromTileSet(TileSet tileSetToReplace, ArrayList<TileSet> tileSetsToChooseFrom, HashMap<Integer, Integer> replacementHashMap) {
 		int index;
-		for(int x=0;x<tiles.length;x++)
-			for(int y=0;y<tiles[0].length;y++) {
+		for(int x=0;x<getWidth();x++)
+			for(int y=0;y<getHeight();y++) {
 				index = tiles[x][y];
 				TileSet tileSet = Resources.getTileSetFromIndex(index);
 				if(tileSet == tileSetToReplace) {
