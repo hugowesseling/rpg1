@@ -63,12 +63,15 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 	protected GameObject addObject = null;
 	protected Selection mapSelection = null;
 	protected JFrame frame;
-
-	public LevelView(LevelState levelState, TileSelectorFrame tileSelectorFrame) {
+	private boolean editClusters;
+	protected EditConfiguration editConfiguration;
+	
+	public LevelView(LevelState levelState, EditConfiguration editConfiguration) {
 		this.levelState = levelState;
-		this.tileSelectorFrame = tileSelectorFrame;
+		this.editConfiguration = editConfiguration;
+		editClusters = false;
 
-		frame = new JFrame("Player view");
+		frame = new JFrame("Level view");
 		//frame.setLayout(new BorderLayout());
 		frame.add(this);
 		//setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
@@ -323,17 +326,37 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 			}
 		});
 		editMenu.add(editMapParametersMenuItem);
+		menuBar.add(editMenu);
 		
-		JMenuItem editExampleTilesMenuItem = new JMenuItem("Edit example tiles"); 
-		editExampleTilesMenuItem.addMouseListener(new MouseAdapter() {
+		JMenu editExampleTilesMenu  = new JMenu("Cluster"); 
+		editExampleTilesMenu.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+				editConfiguration.clearSelectedTileCluster();
+				editClusters = !editClusters;
+				JMenu menu = (JMenu)e.getSource();
+				if(editClusters) {
+					menu.setText("*Cluster*");
+				} else {
+					menu.setText("Cluster");
+				}
 			}
 		});
-		editMenu.add(editExampleTilesMenuItem);
-
-		menuBar.add(editMenu);
+		menuBar.add(editExampleTilesMenu);
+		
+		JMenu analyzeMenu  = new JMenu("Analyze");
+		JMenuItem analyzeMenuItem = new JMenuItem("Analyze tiles");
+		analyzeMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("Analyzing..");
+				// Create possible connection graph:
+				editConfiguration.connectionGraph.addLayerConnections(levelState.bottom_layer);
+			}
+		});
+		analyzeMenu.add(analyzeMenuItem);
+		menuBar.add(analyzeMenu);
 		
 		frame.setJMenuBar(menuBar);
 		frame.setVisible(true);
@@ -419,25 +442,33 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 		if(mouseEvent.getButton() == MouseEvent.BUTTON1)
 		{
 			System.out.println("Mouse button 1 pressed: " + mouseEvent.getX() + ", " + mouseEvent.getY());
-			mouseDownLeft = true;
 			mouseStart = getMousePixelLocation(mouseEvent);
-			if(addObject != null) {
-				addObject = null;
-			}else {
-				float mindistance = 20;
-				GameObject closestObject = null;
-				ObjectPosition mousePosition = new ObjectPosition(mouseStart.x, mouseStart.y);
-				for(GameObject gameObject:levelState.allGameObjects) {
-					//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
-					if(gameObject.getPosition().distanceTo(mousePosition) < mindistance) {
-						mindistance = gameObject.getPosition().distanceTo(mousePosition);
-						closestObject = gameObject;
+			if(editClusters) {
+				Int2d mouseLocation = getMousePixelLocation(mouseEvent);
+				int tileX = mouseLocation.x / Constant.TILE_WIDTH;
+				int tileY = mouseLocation.y / Constant.TILE_HEIGHT;
+				int index = levelState.bottom_layer.getTile(tileX, tileY);
+				editConfiguration.addIndexToTileCluster(index);
+			} else {
+				mouseDownLeft = true;
+				if(addObject != null) {
+					addObject = null;
+				}else {
+					float mindistance = 20;
+					GameObject closestObject = null;
+					ObjectPosition mousePosition = new ObjectPosition(mouseStart.x, mouseStart.y);
+					for(GameObject gameObject:levelState.allGameObjects) {
+						//System.out.println(gameObject.name + ": " + gameObject.position.x +"," +gameObject.position.y);
+						if(gameObject.getPosition().distanceTo(mousePosition) < mindistance) {
+							mindistance = gameObject.getPosition().distanceTo(mousePosition);
+							closestObject = gameObject;
+						}
 					}
-				}
-				if(closestObject != null)
-				{
-					addObject = closestObject;
-					mouseDownLeft = false; //no more effects after selecting an objects
+					if(closestObject != null)
+					{
+						addObject = closestObject;
+						mouseDownLeft = false; //no more effects after selecting an objects
+					}
 				}
 			}
 		}
@@ -513,10 +544,14 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 			if(mouseDownRight)
 			{
 				Layer layer = mouseDownLeft ? levelState.top_layer : levelState.bottom_layer;
-				if(tileSelectorFrame.selectedTilePattern != null)
+				if(editConfiguration.getSelectedTilePattern() != null)
 				{
 					levelState.levelStack.pushLayers();
-					tileSelectorFrame.selectedTilePattern.place(layer, tileX, tileY, true);
+					editConfiguration.getSelectedTilePattern().place(layer, tileX, tileY, true);
+					levelState.levelStack.popLayersIfNoChange();
+				}else if(editConfiguration.getSelectedTileCluster() != null) {
+					levelState.levelStack.pushLayers();
+					editConfiguration.placeSelectedTileCluster3(layer, tileX, tileY);
 					levelState.levelStack.popLayersIfNoChange();
 				}
 			}
@@ -572,6 +607,9 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 		imageGraphics.fillRect(0, 0, imageWidth, imageHeight);
 
 		drawLevel(imageGraphics, imageWidth, imageHeight);
+		if(editClusters) {
+			drawClusters(imageGraphics, editConfiguration, levelState.bottom_layer, imageWidth, imageHeight, screenx, screeny);
+		}
 		
 		imageGraphics.dispose();
 
@@ -583,6 +621,34 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 		levelState.draw(imageGraphics, imageWidth, imageHeight, screenx, screeny, 0, false);
 		if(mapSelection != null)
 			mapSelection.draw(imageGraphics, screenx, screeny);
+	}
+
+	private static void drawClusters(Graphics2D imageGraphics, EditConfiguration editConfiguration, Layer layer, int imageWidth, int imageHeight,
+			int screenx, int screeny) {
+		//Draw borders, but only if the border is between different clusters
+		int tileswidth = imageWidth/16 + 2;
+		int tilesheight = imageHeight/16 + 2;
+		int screenblockx=screenx/16,screenblocky=screeny/16;
+		int ystart = screenblocky, yend = screenblocky+tilesheight;
+		int maxwidth = layer.getWidth();
+		int maxheight = layer.getHeight(); 
+		if(ystart<0)ystart=0;
+		if(yend > maxheight)yend = maxheight;
+		int xstart = screenblockx, xend = screenblockx+tileswidth;
+		if(xstart<0)xstart=0;
+		if(xend>maxwidth)xend=maxwidth;
+		for(int y=ystart;y<yend;y++)
+		{
+			for(int x=xstart;x<xend;x++)
+			{
+				int index = layer.getTile(x, y);
+				TileCluster foundTileCluster = editConfiguration.findClusterForTileIndex(index);
+				if(foundTileCluster != null) {
+					imageGraphics.setColor(foundTileCluster.color);
+					imageGraphics.drawRect(x*16-screenx+2, y*16-screeny+2, 12, 12);
+				}
+			}
+		}
 	}
 
 }

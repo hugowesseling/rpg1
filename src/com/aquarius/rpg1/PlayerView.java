@@ -46,8 +46,9 @@ public class PlayerView extends LevelView{
 	private Player player;
 
 	
-	public PlayerView(LevelState levelState, TileSelectorFrame tileSelectorFrame) {
-		super(levelState, tileSelectorFrame);
+	public PlayerView(LevelState levelState, EditConfiguration editConfiguration) {
+		super(levelState, editConfiguration);
+		frame.setTitle("Player view");
 
 		dialogue = null;
 		player = levelState.player;

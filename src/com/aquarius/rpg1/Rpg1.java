@@ -229,10 +229,12 @@ public class Rpg1 implements Runnable {
 
 	private LevelState exampleLevelState;
 	private LevelView exampleLevelView;
+	private EditConfiguration editConfiguration;
 	public Rpg1()
 	{
 		allViews = new ArrayList<>();
-		tileSelectorFrame = new TileSelectorFrame("TileSet");
+		editConfiguration = new EditConfiguration();
+		tileSelectorFrame = new TileSelectorFrame("TileSet", editConfiguration);
 
 		System.out.println("Character sub classes: " + String.join(", ", Resources.characterSubClasses.keySet()));
 		
@@ -242,12 +244,12 @@ public class Rpg1 implements Runnable {
 		levelState = new LevelState();
 		levelState.deleteFilesInUserFolder();
 		levelState.resetToBeginOfGame();
-		playerView = new PlayerView(levelState, tileSelectorFrame);
+		playerView = new PlayerView(levelState, editConfiguration);
 		allViews.add(playerView);
 		
 		exampleLevelState = new LevelState();
 		exampleLevelState.loadLevel("house1_500_500.rpg1");
-		exampleLevelView = new LevelView(exampleLevelState, tileSelectorFrame);
+		exampleLevelView = new LevelView(exampleLevelState, editConfiguration);
 		allViews.add(exampleLevelView);
 	}
 	public void start()

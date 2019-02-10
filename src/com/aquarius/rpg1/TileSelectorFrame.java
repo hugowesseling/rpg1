@@ -43,7 +43,6 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private boolean mouseDownLeft = false, mouseDownRight = false, mouseDownMid = false;
 	private Int2d mouseStart = null;
     private EditMode editMode;
-	public TilePattern selectedTilePattern = null;
 	TileSet currentTileSet;
 	private JFrame jFrame;
 	private static int drawCounter = 0;
@@ -51,11 +50,13 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 	private TileIndexChoosingLabel insideChoosingLabel;
 	private TileIndexChoosingLabel outsideChoosingLabel;
 	private Selection tileSelection;
+	private EditConfiguration editConfiguration;
 
-    public TileSelectorFrame(String name)
+    public TileSelectorFrame(String name, EditConfiguration editConfiguration)
 	{
 		editMode = EditMode.SELECT_TILES;
 		tileSelection = null;
+		this.editConfiguration = editConfiguration;
 		
 		jFrame=new JFrame(name);
 		
@@ -86,7 +87,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				  }else
 				  {
 					  editMode = EditMode.SELECT_TILES;
-					  selectedTilePattern = null;
+					  editConfiguration.clearSelectedTilePattern();
 				  }
 	        	  System.out.println("tileSelectionModeActive: " + editMode);
 	        	  redrawNeeded = true;
@@ -168,9 +169,9 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		
 		JLabel tilePatternsLabel = new JLabel("TilePattern:");
 		menuBar.add(tilePatternsLabel);
-		insideChoosingLabel = new TileIndexChoosingLabel("inside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.insideTileIndex =  ae.getID(); }); 
+		insideChoosingLabel = new TileIndexChoosingLabel("inside", jFrame, (ae)->{ if(editConfiguration.getSelectedTilePattern()!=null)editConfiguration.getSelectedTilePattern().insideTileIndex =  ae.getID(); }); 
 		menuBar.add(insideChoosingLabel);
-		outsideChoosingLabel = new TileIndexChoosingLabel("outside", jFrame, (ae)->{ if(selectedTilePattern!=null)selectedTilePattern.outsideTileIndex = ae.getID(); });
+		outsideChoosingLabel = new TileIndexChoosingLabel("outside", jFrame, (ae)->{ if(editConfiguration.getSelectedTilePattern()!=null)editConfiguration.getSelectedTilePattern().outsideTileIndex = ae.getID(); });
 		menuBar.add(outsideChoosingLabel);
 		
 		jFrame.setJMenuBar(menuBar);
@@ -253,13 +254,13 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 		if(editMode == EditMode.TILE_PATTERN_EDIT)
 		{
 			imageG.setColor(Color.RED);
-			selectedTilePattern.draw(imageG, currentTileSet.index);
+			editConfiguration.getSelectedTilePattern().draw(imageG, currentTileSet.index);
 		}
 		if(editMode == EditMode.TILE_PATTERN_COLORING)
 		{
 			Composite backupComposite = imageG.getComposite();
 			imageG.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)); //alpha));
-			selectedTilePattern.drawColorHash(imageG);
+			editConfiguration.getSelectedTilePattern().drawColorHash(imageG);
 			imageG.setComposite(backupComposite);
 		}
 		if(tileSelection != null)
@@ -311,10 +312,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 
 		if((mouseEvent.getModifiers() & ActionEvent.CTRL_MASK) != 0)
 		{
-			if(selectedTilePattern != null)
+			if(editConfiguration.getSelectedTilePattern() != null)
 			{
 				// Copy selected tilepattern translated from top-left most to mouseStart
-				currentTileSet.tilePatterns.add(selectedTilePattern.cloneTranslated(tileX, tileY));
+				currentTileSet.tilePatterns.add(editConfiguration.getSelectedTilePattern().cloneTranslated(tileX, tileY));
 			}
 		}else
 		{
@@ -327,9 +328,9 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 					tilePattern.addTile(new TilePatternTile(tileIndex));
 					currentTileSet.tilePatterns.add(tilePattern);
 				}
-				selectedTilePattern  = tilePattern;
-				insideChoosingLabel.setTileIndex(selectedTilePattern.insideTileIndex);
-				outsideChoosingLabel.setTileIndex(selectedTilePattern.outsideTileIndex);
+				editConfiguration.setSelectedTilePattern(tilePattern);
+				insideChoosingLabel.setTileIndex(editConfiguration.getSelectedTilePattern().insideTileIndex);
+				outsideChoosingLabel.setTileIndex(editConfiguration.getSelectedTilePattern().outsideTileIndex);
 				for(int i=0;i<currentTileSet.tilePatterns.size();i++)
 					if(currentTileSet.tilePatterns.get(i)==tilePattern)
 						System.out.println("Selected tile pattern: "+i);
@@ -337,10 +338,10 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 			}else
 			if(editMode == EditMode.TILE_PATTERN_EDIT)
 			{
-				if(selectedTilePattern.isTileInTilePattern(tileIndex))
-					selectedTilePattern.removeTileFromPattern(tileIndex);
+				if(editConfiguration.getSelectedTilePattern().isTileInTilePattern(tileIndex))
+					editConfiguration.getSelectedTilePattern().removeTileFromPattern(tileIndex);
 				else
-					selectedTilePattern.addTile(new TilePatternTile(tileIndex));
+					editConfiguration.getSelectedTilePattern().addTile(new TilePatternTile(tileIndex));
 			}
 			mouseDragged(mouseEvent);
 		}
@@ -406,7 +407,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				int tileThirdY = (mouseLocation.y % Constant.TILE_HEIGHT) * 3 / Constant.TILE_HEIGHT;
 				System.out.println("Third position: " + tileIndex + ":" + tileThirdX + "," + tileThirdY);
 				
-				selectedTilePattern.changeColor(tileIndex, tileThirdX, tileThirdY, newState);
+				editConfiguration.getSelectedTilePattern().changeColor(tileIndex, tileThirdX, tileThirdY, newState);
 			}
 		}
   	  	redrawNeeded = true;
