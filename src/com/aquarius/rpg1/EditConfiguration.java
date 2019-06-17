@@ -1,7 +1,9 @@
 package com.aquarius.rpg1;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class EditConfiguration {
 
@@ -101,6 +103,51 @@ public class EditConfiguration {
 				}
 			}
 		}
+	}
+	
+	public void placeBestTileClusterMiddleAndSurroundings(Layer layer, int tileX, int tileY) {
+		
+		int fitScore, maxFitScore = 0, maxFitScoreIndex = -1;
+		int[][] tiles_copy = layer.cloneTiles();
+		for(int index:selectedTileCluster.tileIndices) {
+			layer.setTiles(Layer.clone2dArray(tiles_copy));
+			fitScore = setSpecificAndCalcScore(layer, tileX, tileY, index);
+			if(fitScore>maxFitScore){
+				maxFitScore = fitScore;
+				maxFitScoreIndex = index;
+			}			
+		}
+		setSpecificAndCalcScore(layer, tileX, tileY, maxFitScoreIndex);
+	}
+
+	private int setSpecificAndCalcScore(Layer layer, int tileX, int tileY, int index) {
+		int fitScore;
+		layer.setTileIndexForCheckedXY(tileX, tileY, index);
+		for(int xd = -1; xd<2; xd++) {
+			int xs = tileX + xd;
+			if(xs>=0 && xs<layer.getWidth()) {
+				for(int yd= -1; yd<2; yd++) {
+					int ys = tileY + yd;
+					if(!(xd == 0 && yd == 0) && ys>=0 && ys<layer.getHeight()) {
+						int tileIndex = connectionGraph.choosebestFittingIndex(layer, xs, ys);
+						layer.setTileIndexForCheckedXY(xs, ys, tileIndex);
+					}
+				}
+			}
+		}
+		fitScore = 0;
+		for(int xd = -1; xd<2; xd++) {
+			int xs = tileX + xd;
+			if(xs>=0 && xs<layer.getWidth()) {
+				for(int yd= -1; yd<2; yd++) {
+					int ys = tileY + yd;
+					if(!(xd == 0 && yd == 0) && ys>=0 && ys<layer.getHeight()) {
+						fitScore+=connectionGraph.calculateFitScore(layer.getTile(xs, ys), layer, xs,ys);
+					}
+				}
+			}
+		}
+		return fitScore;
 	}
 
 }

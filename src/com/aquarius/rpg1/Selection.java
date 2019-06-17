@@ -36,4 +36,14 @@ public class Selection {
 		}
 		return new Layer(theClone);
 	}
+	
+	Layer copyFromTileset(TileSet tileSet){
+		int [][] theClone = new int[bottomright.x - topleft.x + 1][bottomright.y - topleft.y +1];
+		for(int x = topleft.x; x <= bottomright.x; x++){
+			for(int y = topleft.y; y <= bottomright.y; y++){
+				theClone[x - topleft.x][y - topleft.y] = tileSet.getTileIndexFromXY(x,y); 	
+			}
+		}
+		return new Layer(theClone);
+	}
 }

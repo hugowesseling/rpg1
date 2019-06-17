@@ -398,6 +398,7 @@ public class TileSelectorFrame extends Component implements MouseListener, Mouse
 				int tileY1 = mouseStart.y / Constant.TILE_HEIGHT;
 				
 				tileSelection = new Selection(tileX, tileY, tileX1, tileY1);
+				new ClipBoard(tileSelection, currentTileSet); 
 				System.out.println("Topleft index: " + currentTileSet.getTileIndexFromXY(tileSelection.topleft.x, tileSelection.topleft.y));
 			}else
 			if(editMode == EditMode.TILE_PATTERN_COLORING)

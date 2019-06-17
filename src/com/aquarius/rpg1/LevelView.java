@@ -531,17 +531,20 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 			mapSelection = new Selection(tileXStart, tileYStart, tileX, tileY);
 			new ClipBoard(mapSelection, levelState.bottom_layer, levelState.top_layer);
 		}else
-		if(Input.instance.buttons[Input.CONTROL] && ( mouseDownRight))
+		if(mouseDownRight || mouseDownLeft)
 		{
-			if(ClipBoard.instance != null)
+			if(Input.instance.buttons[Input.CONTROL])
 			{
-				levelState.levelStack.pushLayers();
-				ClipBoard.instance.copyToLayer(levelState.bottom_layer, levelState.top_layer, tileX, tileY);
-				levelState.levelStack.popLayersIfNoChange();
-			}
-		}else
-		{
-			if(mouseDownRight)
+				if(ClipBoard.instance != null)
+				{
+					levelState.levelStack.pushLayers();
+					ClipBoard.instance.copyToLayer(
+							mouseDownRight?levelState.bottom_layer:null, 
+							mouseDownLeft?levelState.top_layer:null,
+							tileX, tileY);
+					levelState.levelStack.popLayersIfNoChange();
+				}
+			}else
 			{
 				Layer layer = mouseDownLeft ? levelState.top_layer : levelState.bottom_layer;
 				if(editConfiguration.getSelectedTilePattern() != null)
@@ -551,7 +554,8 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 					levelState.levelStack.popLayersIfNoChange();
 				}else if(editConfiguration.getSelectedTileCluster() != null) {
 					levelState.levelStack.pushLayers();
-					editConfiguration.placeSelectedTileCluster3(layer, tileX, tileY);
+					//editConfiguration.placeSelectedTileCluster3(layer, tileX, tileY);
+					editConfiguration.placeBestTileClusterMiddleAndSurroundings(layer, tileX, tileY);
 					levelState.levelStack.popLayersIfNoChange();
 				}
 			}

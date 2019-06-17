@@ -54,7 +54,10 @@ public class ConnectionGraph {
 						int index2 = layer.getTile(xs, ys);
 						HashSet<Integer> connections = node.getConnectionWithoutXYCheck(xd+1, yd+1);
 						if(connections.contains(index2)) {
-							totalScore++;
+							if(xd==0 || yd==0)
+								totalScore+=2;
+							else
+								totalScore++;
 						}
 					}
 				}

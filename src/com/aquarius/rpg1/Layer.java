@@ -247,7 +247,7 @@ public class Layer {
 		return clone2dArray(tiles);
 	}
 
-	private static int[][] clone2dArray(int[][] array2d)
+	public static int[][] clone2dArray(int[][] array2d)
 	{
 		int [][] theClone = new int[array2d.length][];
 		for(int i = 0; i < array2d.length; i++)
