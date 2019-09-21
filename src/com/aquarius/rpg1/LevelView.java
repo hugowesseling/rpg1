@@ -105,6 +105,23 @@ public class LevelView extends JComponent implements KeyListener, MouseListener,
 		});
 		fileMenu.add(prepareRemovalMenuItem);
 		
+
+		JMenuItem loadMenuItem = new JMenuItem("Load"); 
+		loadMenuItem.addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				System.out.println("Load clicked");
+				String fileName = levelState.getLatestLevelFileName();
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				int retVal = fc.showOpenDialog(frame);
+				if(retVal == JFileChooser.APPROVE_OPTION) {
+					levelState.loadLevel(fc.getSelectedFile().getPath());
+	            }
+				
+			}
+		});
+		fileMenu.add(loadMenuItem);
+
 		JMenuItem saveMenuItem = new JMenuItem("Save"); 
 		saveMenuItem.addMouseListener(new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) {
