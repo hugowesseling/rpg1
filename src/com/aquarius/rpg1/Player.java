@@ -20,6 +20,7 @@ public class Player extends GameObject {
 	private int itemAbovePlayerTimer = 0;
 	private int cooldown = 0;
 	private int walkSoundCounter = 0;
+	private int dx = 0, dy = 0;
 	public Player(ObjectDrawer objectDrawer, ObjectPosition position, Direction direction) {
 		super("player", objectDrawer, position, direction);
 		health = PLAYER_BEGIN_HEALTH;
@@ -131,27 +132,35 @@ public class Player extends GameObject {
 	}
 	
 	public void inputPlayerMovement(Input input, LevelState levelState) {
-		int dx = 0, dy = 0;
-		if(input.buttons[Input.LEFT])
-		{
-			dx = -2;
+		int ddx=0,ddy=0;
+		if(input.buttons[Input.LEFT]) {
+			ddx= -1;
 			setDirection(Direction.WEST);
 		}
-		if(input.buttons[Input.RIGHT])
-		{
-			dx = 2;
+		if(input.buttons[Input.RIGHT]){
+			ddx = 1;
 			setDirection(Direction.EAST);
 		}
-		if(input.buttons[Input.UP])
-		{
-			dy = -2;
+		if(input.buttons[Input.UP]){
+			ddy = -1;
 			setDirection(Direction.NORTH);
 		}
-		if(input.buttons[Input.DOWN])
-		{
-			dy = 2;
+		if(input.buttons[Input.DOWN]){
+			ddy = 1;
 			setDirection(Direction.SOUTH);
 		}
+		if(ddx == 0){
+			ddx = dx>0?-1:dx<0?1:0;
+		}
+		if(ddy == 0){
+			ddy = dy>0?-1:dy<0?1:0;
+		}
+		dx += ddx;
+		if(dx<-4){dx=-4; ddx=0;}
+		if(dx>4) {dx=4;  ddx=0;}
+		dy += ddy;
+		if(dy<-4){dy=-4; ddy=0;}
+		if(dy>4) {dy=4;  ddy=0;}
 		//Add dx,dy from colliding with other characters
 		int bouncedx = 0, bouncedy = 0, bouncecount =0;
 		for(GameObject gameObject: levelState.allGameObjects) {

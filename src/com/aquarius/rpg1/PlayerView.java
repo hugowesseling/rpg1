@@ -204,11 +204,11 @@ public class PlayerView extends LevelView{
 
 		if(screenx<0)screenx=0;
 		if(screeny<0)screeny=0;
-		if(screenx > levelState.getWidth() * Constant.TILE_WIDTH - imageWidth) {
-			screenx = levelState.getWidth()*Constant.TILE_WIDTH - imageWidth;
+		if(screenx > (levelState.getWidth()+1) * Constant.TILE_WIDTH - imageWidth) {
+			screenx = (levelState.getWidth()+1)*Constant.TILE_WIDTH - imageWidth;
 		}
-		if(screeny > levelState.getHeight() * Constant.TILE_HEIGHT - imageHeight) {
-			screeny = levelState.getHeight() * Constant.TILE_HEIGHT - imageHeight;
+		if(screeny > (levelState.getHeight()+1) * Constant.TILE_HEIGHT - imageHeight) {
+			screeny = (levelState.getHeight()+1) * Constant.TILE_HEIGHT - imageHeight;
 		}				
 	}
 	@Override
